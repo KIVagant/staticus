@@ -1,0 +1,18 @@
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url":  "https://github.com/newage/AudioManager.git"
+    }
+  ],
+  "require": {
+    "newage/AudioManager": "0.0.1",
+    "vlucas/phpdotenv": "2.2"
+  },
+  "autoload" : {
+    "files": [
+      "library/Common/Config/env.php",
+      "library/Common/Debug/debug.php"
+    ]
+  }
+}
