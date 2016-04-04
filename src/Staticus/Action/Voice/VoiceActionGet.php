@@ -1,6 +1,7 @@
 <?php
-namespace Staticus\Action;
+namespace Staticus\Action\Voice;
 
+use Staticus\Action\Voice\VoiceActionAbstract;
 use Zend\Diactoros\Response\EmptyResponse;
 
 class VoiceActionGet extends VoiceActionAbstract

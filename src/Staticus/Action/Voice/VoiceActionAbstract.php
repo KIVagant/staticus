@@ -1,8 +1,9 @@
 <?php
-namespace Staticus\Action;
+namespace Staticus\Action\Voice;
 
 use AudioManager\Manager;
 use Common\Config\Config;
+use Staticus\Action\StaticActionAbstract;
 use Staticus\Exceptions\ErrorException;
 use Staticus\Exceptions\WrongRequestException;
 use Zend\Diactoros\Response\EmptyResponse;

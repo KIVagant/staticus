@@ -1,6 +1,7 @@
 <?php
-namespace Staticus\Action;
+namespace Staticus\Action\Voice;
 
+use Staticus\Action\Voice\VoiceActionAbstract;
 use Staticus\Exceptions\ErrorException;
 use Zend\Diactoros\Response\EmptyResponse;
 

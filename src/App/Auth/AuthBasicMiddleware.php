@@ -47,7 +47,7 @@ class AuthBasicMiddleware implements MiddlewareInterface
                 }
             }
 
-            return new EmptyResponse(401, ['WWW-Authenticate' => 'Basic realm="My Realm"']);
+            return new EmptyResponse(401, ['WWW-Authenticate' => 'Basic realm="Staticus"']);
         }
 
         return $next($request, $response);

@@ -4,9 +4,9 @@ return [
     'dependencies' => [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
-            Staticus\Action\VoiceActionGet::class => Staticus\Action\VoiceActionGet::class,
-            Staticus\Action\VoiceActionPost::class => Staticus\Action\VoiceActionPost::class,
-            Staticus\Action\VoiceActionDelete::class => Staticus\Action\VoiceActionDelete::class,
+            \Staticus\Action\Voice\VoiceActionGet::class => \Staticus\Action\Voice\VoiceActionGet::class,
+            \Staticus\Action\Voice\VoiceActionPost::class => \Staticus\Action\Voice\VoiceActionPost::class,
+            \Staticus\Action\Voice\VoiceActionDelete::class => \Staticus\Action\Voice\VoiceActionDelete::class,
             AudioManager\Manager::class => AudioManager\Manager::class,
         ],
         'factories' => [
@@ -26,19 +26,19 @@ return [
         [
             'name' => 'get-voice',
             'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}',
-            'middleware' => Staticus\Action\VoiceActionGet::class,
+            'middleware' => \Staticus\Action\Voice\VoiceActionGet::class,
             'allowed_methods' => ['GET'],
         ],
         [
             'name' => 'post-voice',
             'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}', // ?recreate=1 is allowed here
-            'middleware' => Staticus\Action\VoiceActionPost::class,
+            'middleware' => \Staticus\Action\Voice\VoiceActionPost::class,
             'allowed_methods' => ['POST'],
         ],
         [
             'name' => 'delete-voice',
             'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}',
-            'middleware' => Staticus\Action\VoiceActionDelete::class,
+            'middleware' => \Staticus\Action\Voice\VoiceActionDelete::class,
             'allowed_methods' => ['DELETE'],
         ],
     ],
