@@ -2,6 +2,8 @@
 
 return [];
 //
+// $ composer require "zendframework/zend-expressive-platesrenderer": "^1.0"
+//
 //return [
 //    'dependencies' => [
 //        'factories' => [
