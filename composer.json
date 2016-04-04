@@ -23,8 +23,6 @@
     "zendframework/zend-expressive-helpers": "^2.0",
     "zendframework/zend-stdlib": "~2.7",
     "zendframework/zend-expressive-fastroute": "^1.0",
-    "zendframework/zend-servicemanager": "^2.7.3 || ^3.0",
-    "ocramius/proxy-manager": "^1.0 || ^2.0",
     "zendframework/zend-expressive-platesrenderer": "^1.0",
     "aura/di": "^3.1"
   },
