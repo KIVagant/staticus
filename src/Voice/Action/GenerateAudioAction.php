@@ -25,7 +25,6 @@ class GenerateAudioAction
      * @param callable|null $next
      * @return EmptyResponse
      * @throws \Exception
-     * TODO Проверять авторизационный токен перед вызовом провайдеров или возвращать 404: ~$_SERVER['X-AUTH-TOKEN'] (Middleware?)
      */
     public function __invoke(
         ServerRequestInterface $request,
@@ -45,7 +44,13 @@ class GenerateAudioAction
             $textHash = md5($text);
             $voiceFilePath = $cacheDir . $textHash . '.' . $extension;
             if (!file_exists($voiceFilePath)) {
-                $this->generate($text, $voiceFilePath);
+                // TODO: Перенести в Middleware для всех проксиков
+                $authToken = $request->getHeaderLine('authorization');
+                if ($authToken && 'Basic ' . env('AUTH_TOKEN') === $authToken) {
+                    $this->generate($text, $voiceFilePath);
+                } else {
+                    $this->throwError('Access denied');
+                }
             }
             $mime = mime_content_type($voiceFilePath);
 
@@ -55,7 +60,6 @@ class GenerateAudioAction
                 // 'Content-Disposition' => 'attachment; filename=' . basename($file)
             ]);
         } catch (\Exception $e) {
-            throw $e;// TODO: Save Exceptions to log
             return new EmptyResponse(404);
         }
     }

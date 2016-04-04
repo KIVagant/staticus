@@ -42,7 +42,9 @@ location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
 
 ## Пример
 
-*Примечание: примеры показаны с использованием утилиты [jkbrzt/httpie](https://github.com/jkbrzt/httpie)*
+*Примечание:*
+- примеры показаны с использованием утилиты [jkbrzt/httpie](https://github.com/jkbrzt/httpie)
+- если не переданы данные авторизации, генерация новых файлов не бует запущена.
 
 ### Первый запрос
 
@@ -51,7 +53,7 @@ location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
 - TODO: и прописывает связь запроса и файла, чтоб позволить поиск и фильтрацию файлов.
 
 ```
-➜  fuse git:(master) ✗ http -h http://fuse.dev:8080/Google.mp3
+➜  fuse git:(master) ✗ http --auth Developer:12345 -h http://fuse.dev:8080/Google.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -70,7 +72,7 @@ X-Proxy-Cache: MISS
 Nginx отдаёт файл из собственного кеша, уже не обращаясь на proxy_pass.
 
 ```
-➜  fuse git:(master) ✗ http -h http://fuse.dev:8080/Google.mp3
+➜  fuse git:(master) ✗ http --auth Developer:12345 -h http://fuse.dev:8080/Google.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
