@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Action;
 
+use Staticus\Exceptions\ErrorException;
 use Staticus\Exceptions\WrongRequestException;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Diactoros\Response\JsonResponse;
@@ -9,9 +10,11 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class StaticActionAbstract
 {
-    protected static $defaultHeaders = [
-        'Content-Type' => 'audio/mpeg',
-    ];
+    protected static $defaultHeaders = [];
+    /**
+     * @var mixed
+     */
+    protected $generator;
     /**
      * @var string
      */
@@ -62,7 +65,7 @@ abstract class StaticActionAbstract
         $this->response = $response;
         $this->next = $next;
         try {
-            $cacheDir = $this->config['cache_dir'] . $this->providerName . '/';
+            $cacheDir = $this->config['cache_dir'] . strtolower($this->providerName) . '/';
             $this->prepareParamText($request);
 
             $extension = $this->config['file_extension'];
@@ -74,7 +77,9 @@ abstract class StaticActionAbstract
             return new EmptyResponse(400, static::$defaultHeaders);
         }
     }
+
     abstract protected function action();
+    abstract protected function generate($text, $filePath);
 
     protected function getRealClassName($obj)
     {
@@ -116,5 +121,55 @@ abstract class StaticActionAbstract
         }
         $this->text = $text;
         $this->textHash = md5($text);
+    }
+    /**
+     * @param $filePath
+     * @param $image
+     */
+    protected function writeFile($filePath, $image)
+    {
+        if (!file_put_contents($filePath, $image)) {
+            throw new ErrorException('File cannot be written to path ' . $filePath);
+        }
+        if (!chmod($filePath, '0766')) {
+            throw new ErrorException('Cannot setup file permissions for ' . $filePath);
+        }
+    }
+    protected function getAction()
+    {
+        if (file_exists($this->filePath)) {
+
+            return $this->XAccelRedirect($this->filePath);
+        }
+
+        return new EmptyResponse(404, static::$defaultHeaders);
+    }
+    protected function postAction()
+    {
+        $params = $this->request->getQueryParams('recreate');
+        if (!file_exists($this->filePath) || !empty($params['recreate'])) {
+            $content = $this->generate($this->text, $this->filePath);
+            $this->writeFile($this->filePath, $content);
+
+            // HTTP 201 Created
+            return new EmptyResponse(201, static::$defaultHeaders);
+        }
+
+        // HTTP 304 Not Modified
+        return new EmptyResponse(304, static::$defaultHeaders);
+    }
+    protected function deleteAction()
+    {
+        // HTTP 204 No content
+        if (file_exists($this->filePath)) {
+            if (unlink($this->filePath)) {
+
+                return new EmptyResponse(204, static::$defaultHeaders);
+            } else {
+                throw new ErrorException('The file cannot be removed: ' . $this->filePath);
+            }
+        }
+
+        return new EmptyResponse(204, static::$defaultHeaders);
     }
 }

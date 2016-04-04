@@ -16,6 +16,7 @@ $dotenv->load();
 
 define('DATA_DIR', 'data/');
 define('VOICE_FILE_EXTENSION', 'mp3');
+define('FRACTAL_FILE_EXTENSION', 'png');
 
 /** @var \Interop\Container\ContainerInterface $container */
 $container = require 'config/container.php';

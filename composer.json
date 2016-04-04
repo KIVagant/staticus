@@ -38,7 +38,8 @@
     "psr-4": {
       "App\\": "src/App/",
       "Common\\": "src/Common/",
-      "Staticus\\": "src/Staticus/"
+      "Staticus\\": "src/Staticus/",
+      "FractalManager\\": "src/FractalManager/"
     }
   },
   "autoload-dev": {
