@@ -40,20 +40,20 @@ location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
 
 На клиенте всё выглядит так, как будто просто получен статический файл.
 
-## Пример
+## Примеры
 
 *Примечание:*
 - примеры показаны с использованием утилиты [jkbrzt/httpie](https://github.com/jkbrzt/httpie)
-- если не переданы данные авторизации, генерация новых файлов не бует запущена.
+- если не переданы данные авторизации, генерация и удалениеновых файлов не будет выполнена.
 
-### Первый запрос
+### GET /*.mp3
 
-- Вызывается бекенд, который обращается к провайдеру озвучки.
-- Полученный результат бекенд кеширует в своей папке.
-- TODO: и прописывает связь запроса и файла, чтоб позволить поиск и фильтрацию файлов.
+- Бекенд проверяет существование файла
+- Если найден — сообщит Nginx-у конечный URL, который будет закеширован
 
+#### Первый запрос (без кеша)
 ```
-➜  fuse git:(master) ✗ http --auth Developer:12345 -h http://fuse.dev:8080/Google.mp3
+$ http --auth Developer:12345 -h GET http://fuse.dev:8080/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -67,12 +67,12 @@ Server: nginx/1.9.7
 X-Proxy-Cache: MISS
 ```
 
-### Второй запрос
+#### Второй запрос (кеширован)
 
 Nginx отдаёт файл из собственного кеша, уже не обращаясь на proxy_pass.
 
 ```
-➜  fuse git:(master) ✗ http --auth Developer:12345 -h http://fuse.dev:8080/Google.mp3
+$ http --auth Developer:12345 -h GET http://fuse.dev:8080/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -84,4 +84,76 @@ ETag: "5701963e-1328"
 Last-Modified: Sun, 03 Apr 2016 22:16:30 GMT
 Server: nginx/1.9.7
 X-Proxy-Cache: HIT
+```
+
+### POST /*.mp3
+
+*Примечание:* параметр recreate всегда вызовет перегенерацию
+
+- Бекенд проверяет существование файла.
+- Если найден (и нет флага recreate), вернёт HTTP 304 Not Modified.
+- Если не найден, обращается к провайдеру озвучки.
+- Полученный результат бекенд кеширует в своей папке.
+- TODO: и прописывает связь запроса и файла, чтоб позволить поиск и фильтрацию файлов.
+- Вернёт HTTP 201 Created
+
+#### Первый запрос (или требование регенерации)
+
+```
+$ http --auth Developer:12345 POST http://fuse.dev:8080/waxwing.mp3\?recreate\=1
+
+HTTP/1.1 201 Created
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 0
+Content-Type: audio/mpeg
+Date: Mon, 04 Apr 2016 20:30:37 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+```
+
+#### Второй запрос
+
+```
+$ http --auth Developer:12345 POST http://fuse.dev:8080/WaxWing.mp3
+
+HTTP/1.1 304 Not Modified
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 0
+Date: Mon, 04 Apr 2016 20:36:16 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+```
+
+### DELETE /*.mp3
+
+- Бекенд проверяет существование файла.
+- Если найден, удаляет его.
+- Возвращает 204 No content.
+
+```
+$ http --auth Developer:12345 DELETE http://fuse.dev:8080/waxwing.mp3
+
+HTTP/1.1 204 No Content
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 0
+Content-Type: audio/mpeg
+Date: Mon, 04 Apr 2016 20:40:05 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+
+$ http --auth Developer:12345 GET http://fuse.dev:8080/waxwing.mp3
+
+HTTP/1.1 404 Not Found
+Connection: keep-alive
+Content-Length: 0
+Content-Type: audio/mpeg
+Date: Mon, 04 Apr 2016 20:40:52 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
 ```

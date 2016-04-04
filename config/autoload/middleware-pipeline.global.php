@@ -8,6 +8,16 @@ return [
             Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
         ],
+        'invokables' => [
+            Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
+            App\Auth\AuthBasicMiddleware::class => App\Auth\AuthBasicMiddleware::class,
+        ],
+        // Для автоматического разрешения зависимостей на основе интерфейсов и абстракций
+        // необходимо перечислить их типы (в нашем случае они совпадают с ключами в invokables и factories)
+        // После этого эти типы можно использовать в type hinting.
+        'types' => [
+            Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\RouterInterface::class,
+        ],
     ],
     // This can be used to seed pre- and/or post-routing middleware
     'middleware_pipeline' => [
@@ -48,6 +58,7 @@ return [
             'middleware' => [
                 ApplicationFactory::ROUTING_MIDDLEWARE,
                 Helper\UrlHelperMiddleware::class,
+                App\Auth\AuthBasicMiddleware::class,
                 // Add more middleware here that needs to introspect the routing
                 // results; this might include:
                 // - route-based authentication
@@ -57,7 +68,6 @@ return [
             ],
             'priority' => 1,
         ],
-
         'error' => [
             'middleware' => [
                 // Add error middleware here.

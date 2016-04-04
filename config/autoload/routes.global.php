@@ -4,7 +4,9 @@ return [
     'dependencies' => [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
-            Voice\Action\GenerateAudioAction::class => Voice\Action\GenerateAudioAction::class,
+            Voice\Action\VoiceActionGet::class => Voice\Action\VoiceActionGet::class,
+            Voice\Action\VoiceActionPost::class => Voice\Action\VoiceActionPost::class,
+            Voice\Action\VoiceActionDelete::class => Voice\Action\VoiceActionDelete::class,
             AudioManager\Manager::class => AudioManager\Manager::class,
         ],
         'factories' => [
@@ -22,10 +24,22 @@ return [
     'routes' => [
         // TODO Добавить проксик с провайдером динамических фрактальных картинок на основе хеш-суммы ключевой фразы из запроса (один запрос — всегда одна и та же картинка)
         [
-            'name' => 'voice',
+            'name' => 'get-voice',
             'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}',
-            'middleware' => Voice\Action\GenerateAudioAction::class,
+            'middleware' => Voice\Action\VoiceActionGet::class,
             'allowed_methods' => ['GET'],
+        ],
+        [
+            'name' => 'post-voice',
+            'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}', // ?recreate=1 is allowed here
+            'middleware' => Voice\Action\VoiceActionPost::class,
+            'allowed_methods' => ['POST'],
+        ],
+        [
+            'name' => 'delete-voice',
+            'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}',
+            'middleware' => Voice\Action\VoiceActionDelete::class,
+            'allowed_methods' => ['DELETE'],
         ],
     ],
 ];
