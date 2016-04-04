@@ -8,9 +8,9 @@ return [
                 env('AUTH_DEFAULT_USER', 'Moderator:hasld1845aKAf29pp3nnzAAqkgHFjA1fEFWF3'),
             ],
             'middlewares' => [
-//                Voice\Action\VoiceActionGet::class,
-                Voice\Action\VoiceActionPost::class,
-                Voice\Action\VoiceActionDelete::class,
+//                Staticus\Action\VoiceActionGet::class,
+                Staticus\Action\VoiceActionPost::class,
+                Staticus\Action\VoiceActionDelete::class,
             ],
         ],
     ],

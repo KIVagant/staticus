@@ -38,7 +38,7 @@
     "psr-4": {
       "App\\": "src/App/",
       "Common\\": "src/Common/",
-      "Voice\\": "src/Voice/"
+      "Staticus\\": "src/Staticus/"
     }
   },
   "autoload-dev": {

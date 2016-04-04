@@ -1,11 +1,12 @@
 <?php
 
-namespace Voice\Factory;
+namespace Staticus\Factory;
 
 use AudioManager\Adapter\Google;
 use AudioManager\Adapter\Ivona;
+use Staticus\Exceptions\ErrorException;
 
-class AudioAdapterFactory
+class VoiceAdapterFactory
 {
     const VOICE_PROVIDER_GOOGLE = 'google';
     const VOICE_PROVIDER_IVONA = 'ivona';
@@ -33,7 +34,7 @@ class AudioAdapterFactory
                 $adapter->setOptions($options);
                 break;
             default:
-                throw new RuntimeException('Not implemented functionality for voice provider: ' . $adapterName);
+                throw new ErrorException('Not implemented functionality for voice provider: ' . $adapterName);
         }
 // TODO: $voiceFilePath теперь не виден снаружи
         return $adapter;

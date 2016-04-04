@@ -4,13 +4,13 @@ return [
     'dependencies' => [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
-            Voice\Action\VoiceActionGet::class => Voice\Action\VoiceActionGet::class,
-            Voice\Action\VoiceActionPost::class => Voice\Action\VoiceActionPost::class,
-            Voice\Action\VoiceActionDelete::class => Voice\Action\VoiceActionDelete::class,
+            Staticus\Action\VoiceActionGet::class => Staticus\Action\VoiceActionGet::class,
+            Staticus\Action\VoiceActionPost::class => Staticus\Action\VoiceActionPost::class,
+            Staticus\Action\VoiceActionDelete::class => Staticus\Action\VoiceActionDelete::class,
             AudioManager\Manager::class => AudioManager\Manager::class,
         ],
         'factories' => [
-            AudioManager\Adapter\AdapterInterface::class => Voice\Factory\AudioAdapterFactory::class,
+            AudioManager\Adapter\AdapterInterface::class => Staticus\Factory\VoiceAdapterFactory::class,
         ],
         // Для автоматического разрешения зависимостей на основе интерфейсов и абстракций
         // необходимо перечислить их типы (в нашем случае они совпадают с ключами в invokables и factories)
@@ -26,19 +26,19 @@ return [
         [
             'name' => 'get-voice',
             'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}',
-            'middleware' => Voice\Action\VoiceActionGet::class,
+            'middleware' => Staticus\Action\VoiceActionGet::class,
             'allowed_methods' => ['GET'],
         ],
         [
             'name' => 'post-voice',
             'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}', // ?recreate=1 is allowed here
-            'middleware' => Voice\Action\VoiceActionPost::class,
+            'middleware' => Staticus\Action\VoiceActionPost::class,
             'allowed_methods' => ['POST'],
         ],
         [
             'name' => 'delete-voice',
             'path' => '/{text:.+}.{extension:' . VOICE_FILE_EXTENSION . '}',
-            'middleware' => Voice\Action\VoiceActionDelete::class,
+            'middleware' => Staticus\Action\VoiceActionDelete::class,
             'allowed_methods' => ['DELETE'],
         ],
     ],
