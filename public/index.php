@@ -80,6 +80,13 @@ function get_text_from_uri()
 $text = get_text_from_uri();
 $textHash = md5($text);
 $voiceFilePath .= $textHash . '.' . VOICE_FILE_EXTENSION;
+
+// TODO: добавить роутинг через https://github.com/nikic/FastRoute или https://github.com/auraphp/Aura.Router
+// На основе форматов файлов и пути к ним: vocabulary/*.mp3, courses-int/hello-worldword.jpg, ...
+// Вызывать соответствующую логику обработки
+// TODO Проверять авторизационный токен перед вызовом провайдеров или возвращать 404: ~$_SERVER['X-AUTH-TOKEN']
+// TODO Добавить проксик с провайдером динамических фрактальных картинок на основе хеш-суммы ключевой фразы из запроса (один запрос — всегда одна и та же картинка)
+
 if (file_exists($voiceFilePath)) {
     file_force_download($voiceFilePath);
 } else {
