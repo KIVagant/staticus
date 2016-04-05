@@ -134,9 +134,6 @@ abstract class StaticActionAbstract
         if (!file_put_contents($filePath, $image)) {
             throw new ErrorException('File cannot be written to path ' . $filePath);
         }
-        if (!chmod($filePath, '0766')) {
-            throw new ErrorException('Cannot setup file permissions for ' . $filePath);
-        }
     }
     protected function getAction()
     {
