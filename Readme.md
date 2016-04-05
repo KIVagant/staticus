@@ -53,7 +53,7 @@ location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
 
 #### Первый запрос (без кеша)
 ```
-$ http --auth Developer:12345 -h GET http://fuse.dev:8080/waxwing.mp3
+$ http --auth Developer:12345 -h GET http://englishdom.dev/staticus/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -72,7 +72,7 @@ X-Proxy-Cache: MISS
 Nginx отдаёт файл из собственного кеша, уже не обращаясь на proxy_pass.
 
 ```
-$ http --auth Developer:12345 -h GET http://fuse.dev:8080/waxwing.mp3
+$ http --auth Developer:12345 -h GET http://englishdom.dev/staticus/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -100,7 +100,7 @@ X-Proxy-Cache: HIT
 #### Первый запрос (или требование регенерации)
 
 ```
-$ http --auth Developer:12345 POST http://fuse.dev:8080/waxwing.mp3\?recreate\=1
+$ http --auth Developer:12345 POST http://englishdom.dev/staticus/waxwing.mp3\?recreate\=1
 
 HTTP/1.1 201 Created
 Cache-Control: public
@@ -116,7 +116,7 @@ X-Powered-By: PHP/5.6.15
 #### Второй запрос
 
 ```
-$ http --auth Developer:12345 POST http://fuse.dev:8080/WaxWing.mp3
+$ http --auth Developer:12345 POST http://englishdom.dev/staticus/WaxWing.mp3
 
 HTTP/1.1 304 Not Modified
 Cache-Control: public
@@ -135,7 +135,7 @@ X-Powered-By: PHP/5.6.15
 - Возвращает 204 No content.
 
 ```
-$ http --auth Developer:12345 DELETE http://fuse.dev:8080/waxwing.mp3
+$ http --auth Developer:12345 DELETE http://englishdom.dev/staticus/waxwing.mp3
 
 HTTP/1.1 204 No Content
 Cache-Control: public
@@ -147,7 +147,7 @@ Date: Mon, 04 Apr 2016 20:40:05 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
 
-$ http --auth Developer:12345 GET http://fuse.dev:8080/waxwing.mp3
+$ http --auth Developer:12345 GET http://englishdom.dev/staticus/waxwing.mp3
 
 HTTP/1.1 404 Not Found
 Connection: keep-alive
