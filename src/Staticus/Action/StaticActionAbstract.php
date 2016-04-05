@@ -97,6 +97,9 @@ abstract class StaticActionAbstract
     protected function XAccelRedirect($path, $forceSaveDialog = false)
     {
         $mime = mime_content_type($path);
+        if (!$mime) {
+            throw new ErrorException('Mime content type can not be reached');
+        }
         $headers = [
             'X-Accel-Redirect' => '/' . $path,
             'Content-Type' => $mime,
