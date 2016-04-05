@@ -44,10 +44,6 @@ abstract class FractalActionAbstract extends StaticActionAbstract
             imagedestroy($image);
             throw new ErrorException('File cannot be written to path ' . $filePath);
         }
-        if (!chmod($filePath, '0766')) {
-            imagedestroy($image);
-            throw new ErrorException('Cannot setup file permissions for ' . $filePath);
-        }
         imagedestroy($image);
     }
 }

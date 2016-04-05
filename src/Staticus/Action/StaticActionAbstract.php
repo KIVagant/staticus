@@ -97,6 +97,9 @@ abstract class StaticActionAbstract
     protected function XAccelRedirect($path, $forceSaveDialog = false)
     {
         $mime = mime_content_type($path);
+        if (!$mime) {
+            throw new ErrorException('Mime content type can not be reached');
+        }
         $headers = [
             'X-Accel-Redirect' => '/' . $path,
             'Content-Type' => $mime,
@@ -130,9 +133,6 @@ abstract class StaticActionAbstract
     {
         if (!file_put_contents($filePath, $image)) {
             throw new ErrorException('File cannot be written to path ' . $filePath);
-        }
-        if (!chmod($filePath, '0766')) {
-            throw new ErrorException('Cannot setup file permissions for ' . $filePath);
         }
     }
     protected function getAction()
