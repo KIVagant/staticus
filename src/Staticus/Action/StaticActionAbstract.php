@@ -118,7 +118,7 @@ abstract class StaticActionAbstract
     protected function prepareParamText(ServerRequestInterface $request)
     {
         $text = $request->getAttribute('text');
-        $text = mb_strtolower(rawurldecode($text), 'UTF-8');
+        $text = trim(mb_strtolower(rawurldecode($text)), 'UTF-8');
         if (empty($text) || !preg_match('/\w+/u', $text)) {
             throw new WrongRequestException('Wrong audio request');
         }
