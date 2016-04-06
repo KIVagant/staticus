@@ -65,9 +65,9 @@ abstract class StaticActionAbstract
         $this->response = $response;
         $this->next = $next;
         try {
-            $cacheDir = $this->config['cache_dir'] . strtolower($this->providerName) . '/';
-            $this->prepareParamText($request);
+            $this->prepareParamText($request); // TODO: вынести в слой кеша в MiddleWare
 
+            $cacheDir = $this->config['cache_dir'] . strtolower($this->providerName) . '/';
             $extension = $this->config['file_extension'];
             $this->filePath = $cacheDir . $this->textHash . '.' . $extension;
 
