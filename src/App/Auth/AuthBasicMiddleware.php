@@ -16,11 +16,9 @@ use Zend\Stratigility\MiddlewareInterface;
 class AuthBasicMiddleware implements MiddlewareInterface
 {
     protected $config;
-    protected $router;
 
-    public function __construct(RouterInterface $router, Config $config)
+    public function __construct(Config $config)
     {
-        $this->router = $router;
         $this->config = $config->get('auth.basic');
     }
 
@@ -37,19 +35,14 @@ class AuthBasicMiddleware implements MiddlewareInterface
         callable $next = null
     )
     {
-        $match = $this->router->match($request);
-        if (in_array($match->getMatchedMiddleware(), $this->config['middlewares'])) {
-            $authToken = str_replace('Basic ', '', $request->getHeaderLine('authorization'));
-            foreach ($this->config['users'] as $user) {
-                if (base64_encode($user) == $authToken) {
+        $authToken = str_replace('Basic ', '', $request->getHeaderLine('authorization'));
+        foreach ($this->config['users'] as $user) {
+            if (base64_encode($user) == $authToken) {
 
-                    return $next($request, $response);
-                }
+                return $next($request, $response);
             }
-
-            return new EmptyResponse(401, ['WWW-Authenticate' => 'Basic realm="Staticus"']);
         }
 
-        return $next($request, $response);
+        return new EmptyResponse(401, ['WWW-Authenticate' => 'Basic realm="Staticus"']);
     }
 }
