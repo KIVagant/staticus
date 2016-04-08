@@ -1,11 +1,12 @@
 <?php
-namespace App\Action;
+namespace Common\Middleware;
 
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Stratigility\MiddlewareInterface;
 
-abstract class ActionAbstract
+abstract class MiddlewareAbstract implements MiddlewareInterface
 {
     /**
      * @var ServerRequestInterface

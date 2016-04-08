@@ -1,21 +1,26 @@
 <?php
 namespace Staticus\Action;
 
-use App\Action\ActionAbstract;
+use Common\Middleware\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Exceptions\ErrorException;
 use Staticus\Exceptions\WrongRequestException;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Staticus\Resource\ResourceDO;
 
-abstract class StaticActionAbstract extends ActionAbstract
+abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
 {
     protected static $defaultHeaders = [];
     /**
      * @var mixed
      */
     protected $generator;
+    /**
+     * @var ResourceDO
+     */
+    protected $resourceDO;
     /**
      * @var string
      */
@@ -32,10 +37,6 @@ abstract class StaticActionAbstract extends ActionAbstract
      * @var string
      */
     protected $textHash;
-    /**
-     * @var string
-     */
-    protected $filePath;
 
     /**
      * @param ServerRequestInterface $request
@@ -52,11 +53,8 @@ abstract class StaticActionAbstract extends ActionAbstract
     {
         parent::__invoke($request, $response, $next);
         try {
-            $this->prepareParamText($request); // TODO: вынести в слой кеша в MiddleWare
-
             $cacheDir = $this->config['cache_dir'] . strtolower($this->providerName) . '/';
-            $extension = $this->config['file_extension'];
-            $this->filePath = $cacheDir . $this->textHash . '.' . $extension;
+            $this->resourceDO->setDirectory($cacheDir);
 
             return $this->action();
         } catch (WrongRequestException $e) {
@@ -100,25 +98,13 @@ abstract class StaticActionAbstract extends ActionAbstract
         return new EmptyResponse(200, $headers);
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     */
-    protected function prepareParamText(ServerRequestInterface $request)
-    {
-        $text = $request->getAttribute('text');
-        $text = trim(mb_strtolower(rawurldecode($text)), 'UTF-8');
-        if (empty($text) || !preg_match('/\w+/u', $text)) {
-            throw new WrongRequestException('Wrong audio request');
-        }
-        $this->text = $text;
-        $this->textHash = md5($text);
-    }
 
     protected function getAction()
     {
-        if (file_exists($this->filePath)) {
+        $path = $this->resourceDO->getFilePath();
+        if (file_exists($path)) {
 
-            return $this->XAccelRedirect($this->filePath);
+            return $this->XAccelRedirect($path);
         }
 
         /** @see \Zend\Diactoros\Response::$phrases */
@@ -127,11 +113,12 @@ abstract class StaticActionAbstract extends ActionAbstract
     protected function postAction()
     {
         $params = $this->request->getQueryParams('recreate');
-        if (!file_exists($this->filePath) || !empty($params['recreate'])) {
-            $body = $this->generate($this->text, $this->filePath);
+        $path = $this->resourceDO->getFilePath();
+        if (!file_exists($path) || !empty($params['recreate'])) {
+            $body = $this->generate($this->text, $path);
 
             /** @see \Zend\Diactoros\Response::$phrases */
-            return new FileContentResponse($this->filePath, $body, 201, static::$defaultHeaders);
+            return new FileContentResponse($body, 201, static::$defaultHeaders);
         }
 
         /** @see \Zend\Diactoros\Response::$phrases */
@@ -139,13 +126,14 @@ abstract class StaticActionAbstract extends ActionAbstract
     }
     protected function deleteAction()
     {
-        if (file_exists($this->filePath)) {
-            if (unlink($this->filePath)) {
+        $path = $this->resourceDO->getFilePath();
+        if (file_exists($path)) {
+            if (unlink($path)) {
 
                 /** @see \Zend\Diactoros\Response::$phrases */
                 return new EmptyResponse(204, static::$defaultHeaders);
             } else {
-                throw new ErrorException('The file cannot be removed: ' . $this->filePath);
+                throw new ErrorException('The file cannot be removed: ' . $path);
             }
         }
 

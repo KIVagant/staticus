@@ -16,10 +16,6 @@ class FileContentResponse extends Response
      * @var resource
      */
     protected $resource;
-    /**
-     * @var string
-     */
-    protected $path;
 
     /**
      * @return resource
@@ -30,24 +26,14 @@ class FileContentResponse extends Response
     }
 
     /**
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
      * Create an empty response with the given status code.
      *
-     * @param string $path
      * @param null $content
      * @param int $status Status code for the response, if any.
      * @param array $headers Headers for the response, if any.
      */
-    public function __construct($path = '', $content = null, $status = 204, array $headers = [])
+    public function __construct($content = null, $status = 204, array $headers = [])
     {
-        $this->path = $path;
         $body = $this->createBody($content);
         parent::__construct($body, $status, $headers);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Staticus\Factory;
+namespace Staticus\Action\Voice;
 
 use AudioManager\Adapter\Google;
 use AudioManager\Adapter\Ivona;
@@ -36,7 +36,7 @@ class VoiceAdapterFactory
             default:
                 throw new ErrorException('Not implemented functionality for voice provider: ' . $adapterName);
         }
-// TODO: $voiceFilePath теперь не виден снаружи
+
         return $adapter;
     }
 }

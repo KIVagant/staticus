@@ -3,16 +3,19 @@ namespace Staticus\Action\Voice;
 
 use AudioManager\Manager;
 use Common\Config\Config;
-use Staticus\Action\StaticActionAbstract;
+use Staticus\Action\StaticMiddlewareAbstract;
 use Staticus\Exceptions\ErrorException;
+use Staticus\Resource\ResourceDO;
 
-abstract class VoiceActionAbstract extends StaticActionAbstract
+abstract class VoiceActionAbstract extends StaticMiddlewareAbstract
 {
     protected static $defaultHeaders = [
         'Content-Type' => 'audio/mpeg',
     ];
-    public function __construct(Manager $manager, Config $config)
+
+    public function __construct(ResourceDO $resourceDO, Manager $manager, Config $config)
     {
+        $this->resourceDO = $resourceDO;
         $this->generator = $manager;
         $this->providerName = $this->getRealClassName($this->generator->getAdapter());
         $this->config = $config->get('voice');

@@ -5,7 +5,6 @@ use Common\Config\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\EmptyResponse;
-use Zend\Expressive\Router\RouterInterface;
 use Zend\Stratigility\MiddlewareInterface;
 
 /**
