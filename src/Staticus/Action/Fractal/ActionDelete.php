@@ -5,6 +5,8 @@ class ActionDelete extends FractalActionAbstract
 {
     protected function action()
     {
-        return $this->deleteAction();
+        $this->response = $this->deleteAction();
+
+        return $this->next();
     }
 }

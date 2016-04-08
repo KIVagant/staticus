@@ -1,14 +1,15 @@
 <?php
 namespace Staticus\Action;
 
+use App\Action\ActionAbstract;
+use App\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Exceptions\ErrorException;
 use Staticus\Exceptions\WrongRequestException;
 use Zend\Diactoros\Response\EmptyResponse;
-use Zend\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-abstract class StaticActionAbstract
+abstract class StaticActionAbstract extends ActionAbstract
 {
     protected static $defaultHeaders = [];
     /**
@@ -35,18 +36,6 @@ abstract class StaticActionAbstract
      * @var string
      */
     protected $filePath;
-    /**
-     * @var ServerRequestInterface
-     */
-    protected $request;
-    /**
-     * @var ResponseInterface
-     */
-    protected $response;
-    /**
-     * @var callable
-     */
-    protected $next;
 
     /**
      * @param ServerRequestInterface $request
@@ -61,9 +50,7 @@ abstract class StaticActionAbstract
         callable $next = null
     )
     {
-        $this->request = $request;
-        $this->response = $response;
-        $this->next = $next;
+        parent::__invoke($request, $response, $next);
         try {
             $this->prepareParamText($request); // TODO: вынести в слой кеша в MiddleWare
 
@@ -74,6 +61,7 @@ abstract class StaticActionAbstract
             return $this->action();
         } catch (WrongRequestException $e) {
 
+            /** @see \Zend\Diactoros\Response::$phrases */
             return new EmptyResponse(400, static::$defaultHeaders);
         }
     }
@@ -125,16 +113,7 @@ abstract class StaticActionAbstract
         $this->text = $text;
         $this->textHash = md5($text);
     }
-    /**
-     * @param $filePath
-     * @param $image
-     */
-    protected function writeFile($filePath, $image)
-    {
-        if (!file_put_contents($filePath, $image)) {
-            throw new ErrorException('File cannot be written to path ' . $filePath);
-        }
-    }
+
     protected function getAction()
     {
         if (file_exists($this->filePath)) {
@@ -142,34 +121,35 @@ abstract class StaticActionAbstract
             return $this->XAccelRedirect($this->filePath);
         }
 
+        /** @see \Zend\Diactoros\Response::$phrases */
         return new EmptyResponse(404, static::$defaultHeaders);
     }
     protected function postAction()
     {
         $params = $this->request->getQueryParams('recreate');
         if (!file_exists($this->filePath) || !empty($params['recreate'])) {
-            $content = $this->generate($this->text, $this->filePath);
-            $this->writeFile($this->filePath, $content);
+            $body = $this->generate($this->text, $this->filePath);
 
-            // HTTP 201 Created
-            return new EmptyResponse(201, static::$defaultHeaders);
+            /** @see \Zend\Diactoros\Response::$phrases */
+            return new FileContentResponse($this->filePath, $body, 201, static::$defaultHeaders);
         }
 
-        // HTTP 304 Not Modified
+        /** @see \Zend\Diactoros\Response::$phrases */
         return new EmptyResponse(304, static::$defaultHeaders);
     }
     protected function deleteAction()
     {
-        // HTTP 204 No content
         if (file_exists($this->filePath)) {
             if (unlink($this->filePath)) {
 
+                /** @see \Zend\Diactoros\Response::$phrases */
                 return new EmptyResponse(204, static::$defaultHeaders);
             } else {
                 throw new ErrorException('The file cannot be removed: ' . $this->filePath);
             }
         }
 
+        /** @see \Zend\Diactoros\Response::$phrases */
         return new EmptyResponse(204, static::$defaultHeaders);
     }
 }

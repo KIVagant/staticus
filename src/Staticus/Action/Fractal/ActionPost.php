@@ -5,6 +5,8 @@ class ActionPost extends FractalActionAbstract
 {
     protected function action()
     {
-        return $this->postAction();
+        $this->response = $this->postAction();
+
+        return $this->next();
     }
 }

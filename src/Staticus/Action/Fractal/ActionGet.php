@@ -5,6 +5,8 @@ class ActionGet extends FractalActionAbstract
 {
     protected function action()
     {
-        return $this->getAction();
+        $this->response = $this->getAction();
+
+        return $this->next();
     }
 }

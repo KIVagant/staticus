@@ -1,8 +1,6 @@
 <?php
 namespace Common\Config;
 
-use Interop\Container\ContainerInterface;
-
 class Config
 {
     protected $config = [];

@@ -5,6 +5,8 @@ class ActionDelete extends VoiceActionAbstract
 {
     protected function action()
     {
-        return $this->deleteAction();
+        $this->response = $this->deleteAction();
+
+        return $this->next();
     }
 }

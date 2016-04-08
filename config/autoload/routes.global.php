@@ -42,6 +42,7 @@ return [
             'middleware' => [
                 App\Auth\AuthBasicMiddleware::class,
                 Staticus\Action\Voice\ActionPost::class,
+                App\Resources\SaveFileMiddleware::class,
             ],
             'allowed_methods' => ['POST'],
         ],
@@ -63,11 +64,12 @@ return [
         [
             'name' => 'post-fractal',
             'path' => '/fractal/{text:.+}.{extension:' . FRACTAL_FILE_EXTENSION . '}',
+            'allowed_methods' => ['POST'],
             'middleware' => [
                 App\Auth\AuthBasicMiddleware::class,
                 Staticus\Action\Fractal\ActionPost::class,
+                App\Resources\SaveJpgMiddleware::class,
             ],
-            'allowed_methods' => ['POST'],
         ],
         [
             'name' => 'delete-fractal',

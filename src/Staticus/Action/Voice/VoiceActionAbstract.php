@@ -5,10 +5,6 @@ use AudioManager\Manager;
 use Common\Config\Config;
 use Staticus\Action\StaticActionAbstract;
 use Staticus\Exceptions\ErrorException;
-use Zend\Diactoros\Response\EmptyResponse;
-use Zend\Diactoros\Response\JsonResponse;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 abstract class VoiceActionAbstract extends StaticActionAbstract
 {

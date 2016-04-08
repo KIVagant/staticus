@@ -14,7 +14,7 @@ require 'vendor/autoload.php';
 $dotenv = new Dotenv\Dotenv('./');
 $dotenv->load();
 
-define('DATA_DIR', 'data/');
+define('DATA_DIR', env('DATA_DIR', 'data/'));
 define('VOICE_FILE_EXTENSION', 'mp3');
 define('FRACTAL_FILE_EXTENSION', 'png');
 
