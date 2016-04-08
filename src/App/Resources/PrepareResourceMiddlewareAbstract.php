@@ -1,17 +1,23 @@
 <?php
-namespace Staticus\Resource;
+namespace App\Resources;
 
+use Common\Config\Config;
 use Common\Middleware\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PrepareResourceMiddleware extends MiddlewareAbstract
+abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
 {
     private $resourceDO;
+    /**
+     * @var Config
+     */
+    private $config;
 
-    public function __construct(ResourceDO $resourceDO)
+    public function __construct(ResourceDOInterface $resourceDO, Config $config)
     {
         $this->resourceDO = $resourceDO;
+        $this->config = $config;
     }
 
     public function __invoke(
@@ -49,8 +55,10 @@ class PrepareResourceMiddleware extends MiddlewareAbstract
         $version = $this->request->getAttribute('v');
         $author = $this->request->getAttribute('author');
         $author = $this->cleanup($author);
+        $cacheDir = $this->config->get('data_dir');
         $this->resourceDO
             ->reset()
+            ->setBaseDirectory($cacheDir)
             ->setName($name)
             ->setNameAlternative($alt)
             ->setType($type)

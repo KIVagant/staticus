@@ -8,6 +8,12 @@ Nginx должен быть настроен таким образом, чтоб
 обеспечивая максимальную скорость повторной отдачи.
 
 ## Contents
+
+<!---
+see: https://github.com/aslushnikov/table-of-contents-preprocessor
+md-toc-filter ./Readme.md > Readme2.md
+-->
+
 - [Staticus](#staticus)
     - [Contents](#contents)
     - [Disclaimer](#disclaimer)
@@ -15,16 +21,17 @@ Nginx должен быть настроен таким образом, чтоб
     - [Query structure](#query-structure)
     - [All Types](#all-types)
         - [Параметры:](#)
-            - [alt: альтернативное имя ресурса](#alt---)
-            - [var: вариант ресурса](#var--)
-            - [v: версия ресурса](#v--)
-            - [destroy: уничтожить](#destroy-)
-            - [author: автор изменения](#author--)
+            - [alt: string, alternative resource name](#alt-string-alternative-resource-name)
+            - [var: string, resource variant name](#var-string-resource-variant-name)
+            - [v: integer, version id](#v-integer-version-id)
+            - [destroy: bool, remove without backup](#destroy-bool-remove-without-backup)
+            - [author: string, author](#author-string-author)
     - [JPG Type](#jpg-type)
         - [Особые параметры:](#-)
-            - [size=WxH размер изображения](#sizewxh--)
+            - [size=WxH, string, image dimension](#sizewxh-string-image-dimension)
             - [variant=fractal фрактальный вариант изображения](#variantfractal---)
             - [variant=auto[:id] автоматически найденный вариант](#variantautoid---)
+            - [filters[]=filtername, string, postprocessing filters](#filtersfiltername-string-postprocessing-filters)
     - [MP3 Type](#mp3-type)
         - [GET /*.mp3](#get-mp3)
             - [Первый запрос (без кеша)](#---)
@@ -99,7 +106,7 @@ PUT не поддерживается.
 
 ### Параметры:
 
-#### alt: альтернативное имя ресурса
+#### alt: string, alternative resource name
 
 *Этот может параметр по-разному обрабатываться для разных типов.*
 
@@ -109,14 +116,14 @@ PUT не поддерживается.
 
 Ресурсы car.jpg, car.jpg?alt=вагон и car.jpg?alt=машина считаются *разными ресурсами*.
 
-#### var: вариант ресурса
+#### var: string, resource variant name
 
 По-умолчанию используется вариант default (зарезервированное имя, которое не обязательно передавать).
 Для некоторых ресурсов может понадобиться хранение или генерация разных уникальных вариантов.
 Например, пользователь может загрузить собственный вариант ресурса или ресурс может быть сразу генерирован
 в нескольких вариантах.
 
-#### v: версия ресурса
+#### v: integer, version id
 
 Каждый вариант ресурса содержит собственные версии.
 По-умолчанию используется нулевая версия, которая отражает последнее актуальное состояние ресурса.
@@ -132,7 +139,7 @@ PUT не поддерживается.
 
 Чтобы удалить ресурс полностью, нужно добавить параметр **destroy**.
 
-#### destroy: уничтожить
+#### destroy: bool, remove without backup
 
 - Если при удалении ресурса *версии по-умолчанию* в *варианте по-умолчанию* передать параметр destroy — ресурс будет
 удалён во всех вариантах и версиях.
@@ -141,15 +148,24 @@ PUT не поддерживается.
 - Если при удалении ресурса указана определенная версия (для любого варианта) и передан параметр destroy,
   будет удалена только указанная версия этого варианта, т.е. параметр destroy не окажет никакого влияния на поведение.
 
-#### author: автор изменения
+#### author: string, author
 
 Строка с информацией об авторе изменения в произвольном строковом формате. Требуется только для журналирования.
+
+## Path structure
+
+- **/type/variant/version/[size/][other-type-specified/]uuid.type**
+- /jpg/def/0/0/22af64.jpg
+- /jpg/user1534/3/0/22af64.jpg
+- /jpg/fractal/0/30x40/22af64.jpg
+- /mp3/def/1/22af64.mp3
+- /mp3/ivona/0/22af64.mp3
 
 ## JPG Type
 
 ### Особые параметры:
 
-#### size=WxH размер изображения
+#### size=WxH, string, image dimension
 
 Для jpg поддерживается автоматическая обрезка изображений при выдаче.
 Чтобы изображения обрезались, в конфигурационном файле должны быть зарегистрированы все разрешенные размеры.
@@ -166,6 +182,10 @@ PUT не поддерживается.
 Если не указан идентификатор, вернётся нулевой вариант (первый из найденных).
 Если не существует варианта изображения по-умолчанию, нулевой вариант из автоматически генерированных будет скопирован
 как вариант по-умолчанию.
+
+#### filters[]=filtername, string, postprocessing filters
+
+TODO: filters support
 
 ## MP3 Type
 
@@ -279,4 +299,16 @@ Content-Type: audio/mpeg
 Date: Mon, 04 Apr 2016 20:40:52 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
+```
+
+
+
+
+
+```
+scheme:[//[user:password@]host[:port]][/path-to-home]/resource.type[?parameters]
+$ http --auth Developer:12345 POST http://englishdom.dev/staticus/waxwing.mp3\?recreate\=1
+
+
+
 ```

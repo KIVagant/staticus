@@ -1,29 +1,31 @@
 <?php
 namespace Staticus\Action\Fractal;
 
+use App\Resources\ResourceDOInterface;
+use App\Resources\ResourceImageDO;
 use Common\Config\Config;
 use FractalManager\Manager;
 use Staticus\Action\StaticMiddlewareAbstract;
-use Staticus\Resource\ResourceDO;
 
 abstract class FractalActionAbstract extends StaticMiddlewareAbstract
 {
-    public function __construct(ResourceDO $resourceDO, Manager $manager, Config $config)
+    public function __construct(ResourceImageDO $resourceDO, Manager $manager, Config $config)
     {
         $this->resourceDO = $resourceDO;
         $this->generator = $manager;
         $this->providerName = $this->getRealClassName($this->generator->getAdapter());
-        $this->config = $config->get('fractal');
+        $this->config = $config;
     }
 
     /**
-     * @param $text
+     * @param ResourceDOInterface $resourceDO
      * @param $filePath
      * @return mixed
+     * @internal param $text
      */
-    protected function generate($text, $filePath)
+    protected function generate(ResourceDOInterface $resourceDO, $filePath)
     {
-        $content = $this->generator->generate($text);
+        $content = $this->generator->generate($resourceDO->getName() . ' ' . $resourceDO->getNameAlternative());
 
         return $content;
     }

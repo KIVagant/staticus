@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Action;
 
+use App\Resources\ResourceDOInterface;
 use Common\Middleware\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Exceptions\ErrorException;
@@ -8,7 +9,7 @@ use Staticus\Exceptions\WrongRequestException;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Staticus\Resource\ResourceDO;
+use App\Resources\File\ResourceFileDO;
 
 abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
 {
@@ -18,7 +19,7 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
      */
     protected $generator;
     /**
-     * @var ResourceDO
+     * @var ResourceFileDO
      */
     protected $resourceDO;
     /**
@@ -29,14 +30,6 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
      * @var array
      */
     protected $config;
-    /**
-     * @var string
-     */
-    protected $text;
-    /**
-     * @var string
-     */
-    protected $textHash;
 
     /**
      * @param ServerRequestInterface $request
@@ -53,8 +46,6 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     {
         parent::__invoke($request, $response, $next);
         try {
-            $cacheDir = $this->config['cache_dir'] . strtolower($this->providerName) . '/';
-            $this->resourceDO->setDirectory($cacheDir);
 
             return $this->action();
         } catch (WrongRequestException $e) {
@@ -65,7 +56,7 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     }
 
     abstract protected function action();
-    abstract protected function generate($text, $filePath);
+    abstract protected function generate(ResourceDOInterface $resourceDO, $filePath);
 
     protected function getRealClassName($obj)
     {
@@ -78,9 +69,12 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     }
 
     /**
+     * @param $path
+     * @param string $filename Filename for saving dialog on the client-side
+     * @param bool $forceSaveDialog
      * @return EmptyResponse
      */
-    protected function XAccelRedirect($path, $forceSaveDialog = false)
+    protected function XAccelRedirect($path, $filename = '', $forceSaveDialog = false)
     {
         $mime = mime_content_type($path);
         if (!$mime) {
@@ -92,7 +86,10 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
             // '' =>
         ];
         if ($forceSaveDialog) {
-            $headers['Content-Disposition'] = 'attachment; filename=' . basename($this->text);
+            if (empty($filename)) {
+                $filename = basename($path);
+            }
+            $headers['Content-Disposition'] = 'attachment; filename=' . $filename;
         }
 
         return new EmptyResponse(200, $headers);
@@ -101,10 +98,11 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
 
     protected function getAction()
     {
-        $path = $this->resourceDO->getFilePath();
-        if (file_exists($path)) {
+        $filePath = $this->resourceDO->getFilePath();
+        $filename = $this->resourceDO->getName() . '.' . $this->resourceDO->getType();
+        if (file_exists($filePath)) {
 
-            return $this->XAccelRedirect($path);
+            return $this->XAccelRedirect($filePath, $filename, false);
         }
 
         /** @see \Zend\Diactoros\Response::$phrases */
@@ -113,9 +111,9 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     protected function postAction()
     {
         $params = $this->request->getQueryParams('recreate');
-        $path = $this->resourceDO->getFilePath();
-        if (!file_exists($path) || !empty($params['recreate'])) {
-            $body = $this->generate($this->text, $path);
+        $filePath = $this->resourceDO->getFilePath();
+        if (!file_exists($filePath) || !empty($params['recreate'])) {
+            $body = $this->generate($this->resourceDO, $filePath);
 
             /** @see \Zend\Diactoros\Response::$phrases */
             return new FileContentResponse($body, 201, static::$defaultHeaders);
@@ -126,14 +124,14 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     }
     protected function deleteAction()
     {
-        $path = $this->resourceDO->getFilePath();
-        if (file_exists($path)) {
-            if (unlink($path)) {
+        $filePath = $this->resourceDO->getFilePath();
+        if (file_exists($filePath)) {
+            if (unlink($filePath)) {
 
                 /** @see \Zend\Diactoros\Response::$phrases */
                 return new EmptyResponse(204, static::$defaultHeaders);
             } else {
-                throw new ErrorException('The file cannot be removed: ' . $path);
+                throw new ErrorException('The file cannot be removed: ' . $filePath);
             }
         }
 

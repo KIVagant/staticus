@@ -1,11 +1,11 @@
 <?php
-namespace Staticus\Resource;
+namespace App\Resources;
 
 /**
  * Domain Object
- * @package Staticus\Resource
+ * @package App\Resources\File
  */
-class ResourceDO
+abstract class ResourceFileDOAbstract implements ResourceDOInterface
 {
     protected $uuid;
     protected $name;
@@ -14,7 +14,11 @@ class ResourceDO
     protected $variant;
     protected $version;
     protected $author;
-    protected $directory;
+    /**
+     * Path to base directory (without dynamic path part)
+     * @var string
+     */
+    protected $baseDirectory;
     protected $filePath;
     public function reset()
     {
@@ -22,10 +26,10 @@ class ResourceDO
         $this->name = '';
         $this->nameAlternative = '';
         $this->type = '';
-        $this->variant = 'default';
-        $this->version = 0;
+        $this->variant = self::DEFAULT_VARIANT;
+        $this->version = self::DEFAULT_VERSION;
         $this->author = '';
-        $this->directory = '';
+        $this->baseDirectory = '';
         $this->filePath = '';
 
         return $this;
@@ -39,9 +43,20 @@ class ResourceDO
     {
         $this->uuid = md5($this->name . $this->nameAlternative);
     }
+
+    /**
+     * /type/variant/version/[other-type-specified/]uuid.type
+     * /mp3/default/1/22af64.mp3
+     * /mp3/ivona/0/22af64.mp3
+     */
     protected function setFilePath()
     {
-        $this->filePath = $this->directory . $this->uuid . '.' . $this->type;
+
+        $this->filePath = $this->getBaseDirectory()
+            . $this->getType() . DIRECTORY_SEPARATOR
+            . $this->getVariant() . DIRECTORY_SEPARATOR
+            . $this->getVersion() . DIRECTORY_SEPARATOR
+            . $this->getUuid() . '.' . $this->getType();
     }
 
     /**
@@ -49,6 +64,9 @@ class ResourceDO
      */
     public function getUuid()
     {
+        if (!$this->uuid) {
+            $this->setUuid();
+        }
         return $this->uuid;
     }
     /**
@@ -61,11 +79,11 @@ class ResourceDO
 
     /**
      * @param string $name
-     * @return ResourceDO
+     * @return ResourceFileDO
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = (string)$name;
         $this->setUuid();
         $this->setFilePath();
 
@@ -82,11 +100,11 @@ class ResourceDO
 
     /**
      * @param string $nameAlternative
-     * @return ResourceDO
+     * @return ResourceFileDO
      */
     public function setNameAlternative($nameAlternative)
     {
-        $this->nameAlternative = $nameAlternative;
+        $this->nameAlternative = (string)$nameAlternative;
         $this->setUuid();
         $this->setFilePath();
 
@@ -103,11 +121,11 @@ class ResourceDO
 
     /**
      * @param string $type
-     * @return ResourceDO
+     * @return ResourceFileDO
      */
     public function setType($type)
     {
-        $this->type = $type;
+        $this->type = (string)$type;
         $this->setFilePath();
 
         return $this;
@@ -118,16 +136,20 @@ class ResourceDO
      */
     public function getVariant()
     {
+        if (empty($this->variant)) {
+            $this->setVariant();
+        }
+
         return $this->variant;
     }
 
     /**
      * @param string $variant
-     * @return ResourceDO
+     * @return ResourceFileDO
      */
-    public function setVariant($variant)
+    public function setVariant($variant = self::DEFAULT_VARIANT)
     {
-        $this->variant = $variant;
+        $this->variant = (string)$variant;
         $this->setFilePath();
 
         return $this;
@@ -138,16 +160,19 @@ class ResourceDO
      */
     public function getVersion()
     {
+        if (self::DEFAULT_VERSION !== $this->version && empty($this->version)) {
+            $this->setVersion();
+        }
         return $this->version;
     }
 
     /**
      * @param int $version
-     * @return ResourceDO
+     * @return ResourceFileDO
      */
-    public function setVersion($version)
+    public function setVersion($version = self::DEFAULT_VERSION)
     {
-        $this->version = $version;
+        $this->version = (int)$version;
         $this->setFilePath();
 
         return $this;
@@ -163,11 +188,11 @@ class ResourceDO
 
     /**
      * @param string $author
-     * @return ResourceDO
+     * @return ResourceFileDO
      */
     public function setAuthor($author)
     {
-        $this->author = $author;
+        $this->author = (string)$author;
 
         return $this;
     }
@@ -183,18 +208,18 @@ class ResourceDO
     /**
      * @return mixed
      */
-    public function getDirectory()
+    public function getBaseDirectory()
     {
-        return $this->directory;
+        return $this->baseDirectory;
     }
 
     /**
      * @param string $dir
-     * @return ResourceDO
+     * @return ResourceFileDO
      */
-    public function setDirectory($dir)
+    public function setBaseDirectory($dir)
     {
-        $this->directory = $dir;
+        $this->baseDirectory = (string)$dir;
         $this->setFilePath();
 
         return $this;

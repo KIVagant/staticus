@@ -1,5 +1,4 @@
 <?php
-use Zend\Expressive\AppFactory;
 define('REQUEST_MICROTIME', microtime(true));
 chdir(dirname(__DIR__));
 
