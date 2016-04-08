@@ -300,15 +300,3 @@ Date: Mon, 04 Apr 2016 20:40:52 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
 ```
-
-
-
-
-
-```
-scheme:[//[user:password@]host[:port]][/path-to-home]/resource.type[?parameters]
-$ http --auth Developer:12345 POST http://englishdom.dev/staticus/waxwing.mp3\?recreate\=1
-
-
-
-```

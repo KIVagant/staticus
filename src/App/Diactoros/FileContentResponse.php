@@ -16,6 +16,10 @@ class FileContentResponse extends Response
      * @var resource
      */
     protected $resource;
+
+    /**
+     * @var string
+     */
     protected $content;
 
     /**
@@ -27,7 +31,7 @@ class FileContentResponse extends Response
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getContent()
     {

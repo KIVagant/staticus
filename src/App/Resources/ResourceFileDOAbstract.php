@@ -15,6 +15,11 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
     protected $version;
     protected $author;
     /**
+     * Set to true if resource needs to be recreated
+     * @var bool
+     */
+    protected $recreate = false;
+    /**
      * Path to base directory (without dynamic path part)
      * @var string
      */
@@ -31,6 +36,7 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
         $this->author = '';
         $this->baseDirectory = '';
         $this->filePath = '';
+        $this->recreate = false;
 
         return $this;
     }
@@ -44,19 +50,23 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
         $this->uuid = md5($this->name . $this->nameAlternative);
     }
 
+    protected function setFilePath()
+    {
+        $this->filePath = $this->generateFilePath();
+    }
+
     /**
      * /type/variant/version/[other-type-specified/]uuid.type
      * /mp3/default/1/22af64.mp3
      * /mp3/ivona/0/22af64.mp3
      */
-    protected function setFilePath()
+    public function generateFilePath()
     {
-
-        $this->filePath = $this->getBaseDirectory()
-            . $this->getType() . DIRECTORY_SEPARATOR
-            . $this->getVariant() . DIRECTORY_SEPARATOR
-            . $this->getVersion() . DIRECTORY_SEPARATOR
-            . $this->getUuid() . '.' . $this->getType();
+        return $this->getBaseDirectory()
+        . $this->getType() . DIRECTORY_SEPARATOR
+        . $this->getVariant() . DIRECTORY_SEPARATOR
+        . $this->getVersion() . DIRECTORY_SEPARATOR
+        . $this->getUuid() . '.' . $this->getType();
     }
 
     /**
@@ -221,6 +231,25 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
     {
         $this->baseDirectory = (string)$dir;
         $this->setFilePath();
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRecreate()
+    {
+        return $this->recreate;
+    }
+
+    /**
+     * @param boolean $recreate
+     * @return ResourceFileDOAbstract
+     */
+    public function setRecreate($recreate = false)
+    {
+        $this->recreate = $recreate;
 
         return $this;
     }

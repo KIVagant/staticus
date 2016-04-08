@@ -17,20 +17,20 @@ abstract class SaveImageMiddlewareAbstract extends SaveResourceMiddlewareAbstrac
             $defaultDO->setVersion();
             $defaultDO->setWidth();
             $defaultDO->setHeight();
-            $this->copyFileIfNotExist($resourceDO->getFilePath(), $defaultDO->getFilePath());
+            $this->copyResource($resourceDO, $defaultDO);
         }
         if (ResourceFileDO::DEFAULT_VERSION !== $resourceDO->getVersion()) {
             $defaultDO = clone $resourceDO;
             $defaultDO->setVersion();
             $defaultDO->setWidth();
             $defaultDO->setHeight();
-            $this->copyFileIfNotExist($resourceDO->getFilePath(), $defaultDO->getFilePath());
+            $this->copyResource($resourceDO, $defaultDO);
         }
         if (ResourceImageDO::DEFAULT_SIZE !== $resourceDO->getSize()) {
             $defaultDO = clone $resourceDO;
             $defaultDO->setWidth();
             $defaultDO->setHeight();
-            $this->copyFileIfNotExist($resourceDO->getFilePath(), $defaultDO->getFilePath());
+            $this->copyResource($resourceDO, $defaultDO);
         }
     }
 }

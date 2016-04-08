@@ -91,6 +91,11 @@ interface ResourceDOInterface
     public function getFilePath();
 
     /**
+     * @return string
+     */
+    public function generateFilePath();
+
+    /**
      * @return mixed
      */
     public function getBaseDirectory();
@@ -100,4 +105,15 @@ interface ResourceDOInterface
      * @return ResourceDOInterface
      */
     public function setBaseDirectory($dir);
+
+    /**
+     * @return boolean
+     */
+    public function isRecreate();
+
+    /**
+     * @param boolean $recreate
+     * @return ResourceDOInterface
+     */
+    public function setRecreate($recreate = false);
 }

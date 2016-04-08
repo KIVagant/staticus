@@ -1,6 +1,10 @@
 <?php
 namespace App\Resources;
 
+use App\Resources\Commands\BackupResourceCommand;
+use App\Resources\Commands\CopyResourceCommand;
+use App\Resources\Commands\DeleteSafetyResourceCommand;
+use App\Resources\Commands\DestroyResourceCommand;
 use App\Resources\File\ResourceFileDO;
 use Common\Middleware\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
@@ -53,15 +57,13 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         $this->setHeaders();
         $resourceStream = $response->getResource();
         if (is_resource($resourceStream)) {
-            $this->createDirectory(dirname($filePath));
-            $this->writeFile($filePath, $resourceStream);
+            $this->save($resourceDO, $resourceStream);
         } else {
             if (!$resourceStream instanceof StreamInterface) {
                 throw new WrongResponseException('Empty body for generated file. Request: ' . $resourceDO->getName());
             }
             $body = $response->getContent();
-            $this->createDirectory(dirname($filePath));
-            $this->writeFile($filePath, $body);
+            $this->save($resourceDO, $body);
         }
         $this->copyFileToDefaults($resourceDO);
 
@@ -75,19 +77,11 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         }
     }
 
-    /**
-     * @param $fromFullPath
-     * @param $toFullPath
-     * @return bool
-     * @throws SaveResourceErrorException
-     */
-    protected function copyFileIfNotExist($fromFullPath, $toFullPath)
+    protected function copyResource(ResourceDOInterface $originResourceDO, ResourceDOInterface $newResourceDO)
     {
-        if (!is_file($toFullPath)) {
-            return $this->copyFile($fromFullPath, $toFullPath);
-        }
+        $command = new CopyResourceCommand($originResourceDO, $newResourceDO);
 
-        return true;
+        return $command->run();
     }
 
     /**
@@ -118,6 +112,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 
     /**
      * @param $directory
+     * @deprecated
      */
     protected function createDirectory($directory)
     {
@@ -132,12 +127,42 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             $defaultDO = clone $resourceDO;
             $defaultDO->setVariant();
             $defaultDO->setVersion();
-            $this->copyFileIfNotExist($resourceDO->getFilePath(), $defaultDO->getFilePath());
+            $this->copyResource($resourceDO, $defaultDO);
         }
         if (ResourceFileDO::DEFAULT_VERSION !== $resourceDO->getVersion()) {
             $defaultDO = clone $resourceDO;
             $defaultDO->setVersion();
-            $this->copyFileIfNotExist($resourceDO->getFilePath(), $defaultDO->getFilePath());
+            $this->copyResource($resourceDO, $defaultDO);
+        }
+    }
+
+    /**
+     * @param ResourceDOInterface $resourceDO
+     * @param string|resource $content
+     */
+    protected function save(ResourceDOInterface $resourceDO, $content)
+    {
+        $newResourceVerDO = null;
+        $filePath = $resourceDO->getFilePath();
+        $this->createDirectory(dirname($filePath));
+        // backups don't needs if this is a 'new creation' command
+        if ($resourceDO->isRecreate()) {
+            $command = new BackupResourceCommand($resourceDO);
+            $newResourceVerDO = $command->run();
+        }
+        $this->writeFile($filePath, $content);
+
+        if ($newResourceVerDO instanceof ResourceDOInterface) {
+            $newPath = $newResourceVerDO->getFilePath();
+
+            // If the newly created file is the same as the previous version, remove it immediately
+            if ($resourceDO->getVariant() === $newResourceVerDO->getVariant()
+                && filesize($filePath) === filesize($newPath)
+                && md5_file($filePath) === md5_file($newPath)
+            ) {
+                $command = new DestroyResourceCommand($newResourceVerDO);
+                $command->run(true);
+            }
         }
     }
 }

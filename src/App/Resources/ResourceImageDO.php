@@ -57,15 +57,20 @@ class ResourceImageDO extends ResourceFileDOAbstract implements ResourceDOInterf
         return $this;
     }
 
+    protected function setFilePath()
+    {
+        $this->filePath = $this->generateFilePath();
+    }
+
     /**
      * /type/variant/version/[size/][other-type-specified/]uuid.type
      * /jpg/default/0/0/22af64.jpg
      * /jpg/user1534/3/0/22af64.jpg
      * /jpg/fractal/0/30x40/22af64.jpg
      */
-    protected function setFilePath()
+    public function generateFilePath()
     {
-        $this->filePath = $this->getBaseDirectory()
+        return $this->getBaseDirectory()
             . $this->getType() . DIRECTORY_SEPARATOR
             . $this->getVariant() . DIRECTORY_SEPARATOR
             . $this->getVersion() . DIRECTORY_SEPARATOR

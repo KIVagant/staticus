@@ -44,17 +44,18 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         if (empty($name) || !preg_match('/\w+/u', $name)) {
             throw new WrongRequestException('Wrong resource name ' . $name);
         }
-        $alt = $this->request->getAttribute('alt');
-        $alt = $this->cleanup($alt);
         $type = $this->request->getAttribute('type');
         $type = $this->cleanup($type);
         if (empty($type) || !preg_match('/\w+/u', $name)) {
             throw new WrongRequestException('Wrong resource type ' . $name);
         }
-        $variant = $this->request->getAttribute('var');
+        $params = $this->request->getQueryParams();
+        $alt = isset($params['alt']) ? $params['alt'] : '';
+        $alt = $this->cleanup($alt);
+        $variant = isset($params['var']) ? $params['var'] : '';
         $variant = $this->cleanup($variant);
-        $version = $this->request->getAttribute('v');
-        $author = $this->request->getAttribute('author');
+        $version = isset($params['v']) ? $params['v'] : '';
+        $author = isset($params['author']) ? $params['author'] : '';
         $author = $this->cleanup($author);
         $cacheDir = $this->config->get('data_dir');
         $this->resourceDO

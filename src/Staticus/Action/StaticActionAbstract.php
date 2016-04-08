@@ -1,6 +1,8 @@
 <?php
 namespace Staticus\Action;
 
+use App\Resources\Commands\DeleteSafetyResourceCommand;
+use App\Resources\Commands\DestroyResourceCommand;
 use App\Resources\ResourceDOInterface;
 use Common\Middleware\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
@@ -98,7 +100,7 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
 
     protected function getAction()
     {
-        $filePath = realpath( $this->resourceDO->getFilePath());
+        $filePath = realpath($this->resourceDO->getFilePath());
         $filename = $this->resourceDO->getName() . '.' . $this->resourceDO->getType();
         if (file_exists($filePath)) {
 
@@ -110,9 +112,12 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     }
     protected function postAction()
     {
-        $params = $this->request->getQueryParams('recreate');
+        $params = $this->request->getQueryParams();
         $filePath = $this->resourceDO->getFilePath();
-        if (!file_exists($filePath) || !empty($params['recreate'])) {
+        $fileExists = file_exists($filePath);
+        $recreate = $fileExists && !empty($params['recreate']);
+        if (!$fileExists || $recreate) {
+            $this->resourceDO->setRecreate($recreate);
             $body = $this->generate($this->resourceDO, $filePath);
 
             /** @see \Zend\Diactoros\Response::$phrases */
@@ -124,15 +129,13 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     }
     protected function deleteAction()
     {
-        $filePath = $this->resourceDO->getFilePath();
-        if (file_exists($filePath)) {
-            if (unlink($filePath)) {
-
-                /** @see \Zend\Diactoros\Response::$phrases */
-                return new EmptyResponse(204, static::$defaultHeaders);
-            } else {
-                throw new ErrorException('The file cannot be removed: ' . $filePath);
-            }
+        $params = $this->request->getQueryParams();
+        if (empty($params['destroy'])) {
+            $command = new DeleteSafetyResourceCommand($this->resourceDO);
+            $command->run();
+        } else {
+            $command = new DestroyResourceCommand($this->resourceDO);
+            $command->run();
         }
 
         /** @see \Zend\Diactoros\Response::$phrases */
