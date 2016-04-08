@@ -5,6 +5,7 @@ use Common\Config\Config;
 use Common\Middleware\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Staticus\Exceptions\WrongRequestException;
 
 abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
 {

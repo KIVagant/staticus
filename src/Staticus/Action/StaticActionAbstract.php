@@ -98,7 +98,7 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
 
     protected function getAction()
     {
-        $filePath = $this->resourceDO->getFilePath();
+        $filePath = realpath( $this->resourceDO->getFilePath());
         $filename = $this->resourceDO->getName() . '.' . $this->resourceDO->getType();
         if (file_exists($filePath)) {
 

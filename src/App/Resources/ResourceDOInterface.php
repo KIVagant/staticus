@@ -10,6 +10,9 @@ interface ResourceDOInterface
     const DEFAULT_VARIANT = 'def';
     const DEFAULT_VERSION = 0;
 
+    /**
+     * @return ResourceDOInterface
+     */
     public function reset();
 
     /**

@@ -13,9 +13,10 @@ require 'vendor/autoload.php';
 $dotenv = new Dotenv\Dotenv('./');
 $dotenv->load();
 
-define('DATA_DIR', env('DATA_DIR', 'data/'));
+define('PROJECT_DIR', dirname(__DIR__ . '../'));
+define('DATA_DIR',  env('DATA_DIR', PROJECT_DIR . DIRECTORY_SEPARATOR . 'data/'));
 define('VOICE_FILE_TYPE', 'mp3');
-define('FRACTAL_FILE_TYPE', 'png');
+define('FRACTAL_FILE_TYPE', 'jpg');
 
 /** @var \Interop\Container\ContainerInterface $container */
 $container = require 'config/container.php';

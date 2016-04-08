@@ -6,6 +6,7 @@ use Common\Middleware\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
 use App\Resources\Exceptions\SaveResourceErrorException;
 use App\Resources\Exceptions\WrongResponseException;
+use Psr\Http\Message\StreamInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -55,10 +56,12 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             $this->createDirectory(dirname($filePath));
             $this->writeFile($filePath, $resourceStream);
         } else {
-            $body = $response->getBody();
-            $contents = $body->getContents();
+            if (!$resourceStream instanceof StreamInterface) {
+                throw new WrongResponseException('Empty body for generated file. Request: ' . $resourceDO->getName());
+            }
+            $body = $response->getContent();
             $this->createDirectory(dirname($filePath));
-            $this->writeFile($filePath, $contents);
+            $this->writeFile($filePath, $body);
         }
         $this->copyFileToDefaults($resourceDO);
 

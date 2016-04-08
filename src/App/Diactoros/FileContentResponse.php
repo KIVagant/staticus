@@ -11,11 +11,12 @@ use Zend\Diactoros\Stream;
  */
 class FileContentResponse extends Response
 {
-    use MessageTrait;
+    use MessageTrait, Response\InjectContentTypeTrait;
     /**
      * @var resource
      */
     protected $resource;
+    protected $content;
 
     /**
      * @return resource
@@ -23,6 +24,22 @@ class FileContentResponse extends Response
     public function getResource()
     {
         return $this->resource;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
     }
 
     /**
@@ -44,20 +61,21 @@ class FileContentResponse extends Response
             $this->resource = $content;
             $content = null;
         }
+        $this->content = $content;
         if ($content instanceof StreamInterface) {
 
             return $content;
         } elseif (null === $content || false === $content || '' === $content) { // but not zero
-            $body = new Stream('php://temp', 'r');
+            $stream = new Stream('php://temp', 'r');
 
-            return $body;
+            return $stream;
         }
+        $stream = new Stream('php://temp', 'wb+');
+        $stream->write((string)$content);
+        $stream->rewind();
+        $this->resource = $stream;
 
-        $body = new Stream('php://temp', 'wb+');
-        $body->write((string)$content);
-        $body->rewind();
-
-        return $body;
+        return $stream;
     }
 
     /**
