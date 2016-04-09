@@ -52,11 +52,6 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         if (empty($name) || !preg_match('/\w+/u', $name)) {
             throw new WrongRequestException('Wrong resource name ' . $name);
         }
-        $type = $this->request->getAttribute('type');
-        $type = $this->cleanup($type);
-        if (empty($type) || !preg_match('/\w+/u', $name)) {
-            throw new WrongRequestException('Wrong resource type ' . $name);
-        }
         $alt = static::getParamFromRequest('alt', $this->request);
         $alt = $this->cleanup($alt);
         $var = static::getParamFromRequest('var', $this->request);
@@ -76,10 +71,18 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             ->setBaseDirectory($cacheDir)
             ->setName($name)
             ->setNameAlternative($alt)
-            ->setType($type)
             ->setVariant($var)
             ->setVersion($v)
             ->setAuthor($author);
+
+        if (!$this->resourceDO->getType()) {
+            $type = $this->request->getAttribute('type');
+            $type = $this->cleanup($type);
+            if (empty($type) || !preg_match('/\w+/u', $name)) {
+                throw new WrongRequestException('Unknown resource type for ' . $name);
+            }
+            $this->resourceDO->setType($type);
+        }
     }
 
     protected function cleanup($name)

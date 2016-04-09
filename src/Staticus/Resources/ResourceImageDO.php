@@ -7,6 +7,7 @@ namespace Staticus\Resources;
  */
 abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceImageDOInterface
 {
+    const TYPE = '';
     const DEFAULT_WIDTH = 0;
     const DEFAULT_HEIGHT = 0;
     const DEFAULT_SIZE = '0';
@@ -14,9 +15,21 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     protected $height = 0;
     public function reset()
     {
+        parent::reset();
+        $this->type = static::TYPE;
         $this->width = 0;
         $this->height = 0;
-        return parent::reset();
+        return $this;
+    }
+
+    /**
+     * You can't change the concrete ImageType
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        return $this;
     }
 
     /**

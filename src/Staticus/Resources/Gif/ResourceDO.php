@@ -9,6 +9,8 @@ use Staticus\Resources\ResourceImageDO;
  */
 class ResourceDO extends ResourceImageDO
 {
+    const TYPE = 'gif';
+    protected $type = self::TYPE;
     public function getMimeType()
     {
         return 'image/gif';

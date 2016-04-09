@@ -53,7 +53,7 @@ return [
     'routes' => [
         [
             'name' => 'get-voice',
-            'path' => '/{name:.+}.{type:' . VOICE_FILE_TYPE . '}',
+            'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
                 App\Actions\Voice\ActionGet::class,
@@ -62,7 +62,7 @@ return [
         ],
         [
             'name' => 'post-voice',
-            'path' => '/{name:.+}.{type:' . VOICE_FILE_TYPE . '}', // ?recreate=1 is allowed here
+            'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}', // ?recreate=1 is allowed here
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
@@ -73,7 +73,7 @@ return [
         ],
         [
             'name' => 'delete-voice',
-            'path' => '/{name:.+}.{type:' . VOICE_FILE_TYPE . '}',
+            'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
@@ -83,7 +83,7 @@ return [
         ],
         [
             'name' => 'get-fractal',
-            'path' => '/fractal/{name:.+}.{type:' . FRACTAL_FILE_TYPE . '}',
+            'path' => '/fractal/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
                 App\Actions\Fractal\ActionGet::class,
@@ -92,7 +92,7 @@ return [
         ],
         [
             'name' => 'post-fractal',
-            'path' => '/fractal/{name:.+}.{type:' . FRACTAL_FILE_TYPE . '}',
+            'path' => '/fractal/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'allowed_methods' => ['POST'],
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
@@ -103,7 +103,7 @@ return [
         ],
         [
             'name' => 'delete-fractal',
-            'path' => '/fractal/{name:.+}.{type:' . FRACTAL_FILE_TYPE . '}',
+            'path' => '/fractal/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
