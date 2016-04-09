@@ -1,12 +1,13 @@
 <?php
 namespace Staticus\Action\Voice;
 
-class ActionDelete extends VoiceActionAbstract
-{
-    protected function action()
-    {
-        $this->response = $this->deleteAction();
+use App\Middlewares\ActionDeleteAbstract;
+use App\Resources\Mpeg\ResourceDO;
 
-        return $this->next();
+class ActionDelete extends ActionDeleteAbstract
+{
+    public function __construct(ResourceDO $resourceDO)
+    {
+        $this->resourceDO = $resourceDO;
     }
 }

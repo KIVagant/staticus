@@ -5,7 +5,7 @@ namespace App\Resources;
  * Domain Object
  * @package App\Resources\File
  */
-abstract class ResourceFileDOAbstract implements ResourceDOInterface
+abstract class ResourceDOAbstract implements ResourceDOInterface
 {
     protected $uuid;
     protected $name;
@@ -40,6 +40,7 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
 
         return $this;
     }
+    abstract public function getMimeType();
 
     public function __construct()
     {
@@ -245,7 +246,7 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
 
     /**
      * @param boolean $recreate
-     * @return ResourceFileDOAbstract
+     * @return ResourceDOAbstract
      */
     public function setRecreate($recreate = false)
     {

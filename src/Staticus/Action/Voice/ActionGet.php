@@ -1,12 +1,13 @@
 <?php
 namespace Staticus\Action\Voice;
 
-class ActionGet extends VoiceActionAbstract
-{
-    protected function action()
-    {
-        $this->response = $this->getAction();
+use App\Middlewares\ActionGetAbstract;
+use App\Resources\Mpeg\ResourceDO;
 
-        return $this->next();
+class ActionGet extends ActionGetAbstract
+{
+    public function __construct(ResourceDO $resourceDO)
+    {
+        $this->resourceDO = $resourceDO;
     }
 }

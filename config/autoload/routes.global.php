@@ -5,8 +5,11 @@ return [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
             App\Auth\AuthBasicMiddleware::class => App\Auth\AuthBasicMiddleware::class,
-            App\Resources\File\ResourceFileDO::class => App\Resources\File\ResourceFileDO::class,
-            App\Resources\ResourceImageDO::class => App\Resources\ResourceImageDO::class,
+            App\Resources\File\ResourceDO::class => App\Resources\File\ResourceDO::class,
+            App\Resources\Mpeg\ResourceDO::class => App\Resources\Mpeg\ResourceDO::class,
+            App\Resources\Gif\ResourceDO::class => App\Resources\Gif\ResourceDO::class,
+            App\Resources\Jpg\ResourceDO::class => App\Resources\Jpg\ResourceDO::class,
+            App\Resources\Png\ResourceDO::class => App\Resources\Png\ResourceDO::class,
             Staticus\Action\Voice\ActionGet::class => Staticus\Action\Voice\ActionGet::class,
             Staticus\Action\Voice\ActionPost::class => Staticus\Action\Voice\ActionPost::class,
             Staticus\Action\Voice\ActionDelete::class => Staticus\Action\Voice\ActionDelete::class,
@@ -21,6 +24,8 @@ return [
             AudioManager\Adapter\AdapterInterface::class => Staticus\Action\Voice\VoiceAdapterFactory::class,
             App\Resources\File\PrepareResourceMiddleware::class => App\Resources\File\PrepareResourceMiddlewareFactory::class,
             App\Resources\File\SaveResourceMiddleware::class => App\Resources\File\SaveResourceMiddlewareFactory::class,
+            App\Resources\Mpeg\PrepareResourceMiddleware::class => App\Resources\Mpeg\PrepareResourceMiddlewareFactory::class,
+            App\Resources\Mpeg\SaveResourceMiddleware::class => App\Resources\Mpeg\SaveResourceMiddlewareFactory::class,
             App\Resources\Gif\PrepareResourceMiddleware::class => App\Resources\Gif\PrepareResourceMiddlewareFactory::class,
             App\Resources\Gif\SaveResourceMiddleware::class => App\Resources\Gif\SaveResourceMiddlewareFactory::class,
             App\Resources\Jpg\PrepareResourceMiddleware::class => App\Resources\Jpg\PrepareResourceMiddlewareFactory::class,
@@ -33,8 +38,12 @@ return [
         // После этого эти типы можно использовать в type hinting.
         'types' => [
             App\Config\Config::class => App\Config\Config::class,
-            App\Resources\File\ResourceFileDO::class => App\Resources\File\ResourceFileDO::class,
-            App\Resources\ResourceImageDO::class => App\Resources\ResourceImageDO::class,
+            App\Resources\File\ResourceDO::class => App\Resources\File\ResourceDO::class,
+            App\Resources\ResourceImageDOInterface::class => App\Resources\Jpg\ResourceDO::class,
+            App\Resources\Mpeg\ResourceDO::class => App\Resources\Mpeg\ResourceDO::class,
+            App\Resources\Gif\ResourceDO::class => App\Resources\Gif\ResourceDO::class,
+            App\Resources\Jpg\ResourceDO::class => App\Resources\Jpg\ResourceDO::class,
+            App\Resources\Png\ResourceDO::class => App\Resources\Png\ResourceDO::class,
             AudioManager\Adapter\AdapterInterface::class => AudioManager\Adapter\AdapterInterface::class,
             AudioManager\Manager::class => AudioManager\Manager::class,
             FractalManager\Adapter\AdapterInterface::class => FractalManager\Adapter\AdapterInterface::class,
@@ -46,7 +55,7 @@ return [
             'name' => 'get-voice',
             'path' => '/{name:.+}.{type:' . VOICE_FILE_TYPE . '}',
             'middleware' => [
-                App\Resources\File\PrepareResourceMiddleware::class,
+                App\Resources\Mpeg\PrepareResourceMiddleware::class,
                 Staticus\Action\Voice\ActionGet::class,
             ],
             'allowed_methods' => ['GET'],
@@ -56,9 +65,9 @@ return [
             'path' => '/{name:.+}.{type:' . VOICE_FILE_TYPE . '}', // ?recreate=1 is allowed here
             'middleware' => [
                 App\Auth\AuthBasicMiddleware::class,
-                App\Resources\File\PrepareResourceMiddleware::class,
+                App\Resources\Mpeg\PrepareResourceMiddleware::class,
                 Staticus\Action\Voice\ActionPost::class,
-                App\Resources\File\SaveResourceMiddleware::class,
+                App\Resources\Mpeg\SaveResourceMiddleware::class,
             ],
             'allowed_methods' => ['POST'],
         ],
@@ -67,7 +76,7 @@ return [
             'path' => '/{name:.+}.{type:' . VOICE_FILE_TYPE . '}',
             'middleware' => [
                 App\Auth\AuthBasicMiddleware::class,
-                App\Resources\File\PrepareResourceMiddleware::class,
+                App\Resources\Mpeg\PrepareResourceMiddleware::class,
                 Staticus\Action\Voice\ActionDelete::class,
             ],
             'allowed_methods' => ['DELETE'],

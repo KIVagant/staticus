@@ -1,5 +1,5 @@
 <?php
-namespace App\Resources\Exceptions;
+namespace App\Diactoros\Exceptions;
 
 class WrongResponseException extends \RuntimeException
 {

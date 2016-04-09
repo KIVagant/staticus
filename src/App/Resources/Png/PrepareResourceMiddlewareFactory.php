@@ -1,7 +1,6 @@
 <?php
 namespace App\Resources\Png;
 
-use App\Resources\ResourceImageDO;
 use App\Config\Config;
 
 class PrepareResourceMiddlewareFactory
@@ -14,10 +13,10 @@ class PrepareResourceMiddlewareFactory
 
     /**
      * Final resource type is really important here! Be carefull with using ResourceDOInterface!
-     * @param ResourceFileDO $resourceDO
+     * @param ResourceDO $resourceDO
      * @param Config $config
      */
-    public function __construct(ResourceImageDO $resourceDO, Config $config)
+    public function __construct(ResourceDO $resourceDO, Config $config)
     {
         $this->resourceDO = $resourceDO;
         $this->config = $config;

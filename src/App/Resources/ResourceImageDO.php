@@ -5,13 +5,13 @@ namespace App\Resources;
  * Domain Object
  * @package App\Resources\File
  */
-class ResourceImageDO extends ResourceFileDOAbstract implements ResourceDOInterface
+abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceImageDOInterface
 {
     const DEFAULT_WIDTH = 0;
     const DEFAULT_HEIGHT = 0;
     const DEFAULT_SIZE = '0';
-    protected $width;
-    protected $height;
+    protected $width = 0;
+    protected $height = 0;
     public function reset()
     {
         $this->width = 0;
@@ -20,7 +20,7 @@ class ResourceImageDO extends ResourceFileDOAbstract implements ResourceDOInterf
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getWidth()
     {
@@ -39,7 +39,7 @@ class ResourceImageDO extends ResourceFileDOAbstract implements ResourceDOInterf
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getHeight()
     {

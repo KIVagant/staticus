@@ -1,5 +1,5 @@
 <?php
-namespace App\Resources\Gif;
+namespace App\Resources\Mpeg;
 
 use App\Config\Config;
 

@@ -5,7 +5,7 @@ class SaveResourceMiddlewareFactory
 {
     private $resourceDO;
 
-    public function __construct(ResourceFileDO $resourceDO)
+    public function __construct(ResourceDO $resourceDO)
     {
         $this->resourceDO = $resourceDO;
     }

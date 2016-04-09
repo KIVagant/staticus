@@ -336,7 +336,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 
 #### Safety deletion
 
-If Version 1 not equal to 0, then version 0 will backuped to new version 2.
+If Version 1 not equal to 0, then version 0 will backup to new version 2.
 
 ```
 $ find /var/www/cache/mp3 -type f -name *.mp3

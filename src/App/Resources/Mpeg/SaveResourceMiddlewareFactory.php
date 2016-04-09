@@ -1,5 +1,5 @@
 <?php
-namespace App\Resources\Png;
+namespace App\Resources\Mpeg;
 
 class SaveResourceMiddlewareFactory
 {

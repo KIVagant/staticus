@@ -1,12 +1,13 @@
 <?php
 namespace Staticus\Action\Fractal;
 
-class ActionGet extends FractalActionAbstract
-{
-    protected function action()
-    {
-        $this->response = $this->getAction();
+use App\Middlewares\ActionGetAbstract;
+use App\Resources\ResourceImageDOInterface;
 
-        return $this->next();
+class ActionGet extends ActionGetAbstract
+{
+    public function __construct(ResourceImageDOInterface $resourceDO)
+    {
+        $this->resourceDO = $resourceDO;
     }
 }

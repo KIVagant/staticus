@@ -1,12 +1,13 @@
 <?php
 namespace Staticus\Action\Fractal;
 
-class ActionDelete extends FractalActionAbstract
-{
-    protected function action()
-    {
-        $this->response = $this->deleteAction();
+use App\Middlewares\ActionDeleteAbstract;
+use App\Resources\ResourceImageDOInterface;
 
-        return $this->next();
+class ActionDelete extends ActionDeleteAbstract
+{
+    public function __construct(ResourceImageDOInterface $resourceDO)
+    {
+        $this->resourceDO = $resourceDO;
     }
 }

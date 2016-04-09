@@ -6,8 +6,10 @@ use App\Resources\SaveImageMiddlewareAbstract;
 
 class SaveResourceMiddleware extends SaveImageMiddlewareAbstract
 {
-    protected static $mimeType = 'image/png';
-
+    public function __construct(ResourceDO $resourceDO)
+    {
+        parent::__construct($resourceDO);
+    }
     protected function writeFile($filePath, $content)
     {
         if (!imagepng($content, $filePath)) {

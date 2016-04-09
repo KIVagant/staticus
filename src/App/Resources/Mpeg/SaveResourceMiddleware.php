@@ -1,5 +1,5 @@
 <?php
-namespace App\Resources\File;
+namespace App\Resources\Mpeg;
 
 use App\Resources\SaveResourceMiddlewareAbstract;
 

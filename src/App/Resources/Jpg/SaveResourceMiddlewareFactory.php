@@ -1,13 +1,11 @@
 <?php
 namespace App\Resources\Jpg;
 
-use App\Resources\ResourceImageDO;
-
 class SaveResourceMiddlewareFactory
 {
     private $resourceDO;
 
-    public function __construct(ResourceImageDO $resourceDO)
+    public function __construct(ResourceDO $resourceDO)
     {
         $this->resourceDO = $resourceDO;
     }

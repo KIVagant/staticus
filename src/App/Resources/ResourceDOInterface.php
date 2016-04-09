@@ -11,6 +11,10 @@ interface ResourceDOInterface
     const DEFAULT_VERSION = 0;
 
     /**
+     * @return string
+     */
+    public function getMimeType();
+    /**
      * @return ResourceDOInterface
      */
     public function reset();

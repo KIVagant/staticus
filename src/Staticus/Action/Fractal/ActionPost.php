@@ -1,12 +1,28 @@
 <?php
 namespace Staticus\Action\Fractal;
 
-class ActionPost extends FractalActionAbstract
-{
-    protected function action()
-    {
-        $this->response = $this->postAction();
+use App\Middlewares\ActionPostAbstract;
+use App\Resources\ResourceDOInterface;
+use App\Resources\ResourceImageDOInterface;
+use FractalManager\Manager;
 
-        return $this->next();
+class ActionPost extends ActionPostAbstract
+{
+    public function __construct(ResourceImageDOInterface $resourceDO, Manager $manager)
+    {
+        $this->resourceDO = $resourceDO;
+        $this->generator = $manager;
+    }
+
+    /**
+     * @param ResourceDOInterface $resourceDO
+     * @param $filePath
+     * @return mixed
+     */
+    protected function generate(ResourceDOInterface $resourceDO, $filePath)
+    {
+        $content = $this->generator->generate($resourceDO->getName() . ' ' . $resourceDO->getNameAlternative());
+
+        return $content;
     }
 }

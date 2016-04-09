@@ -5,7 +5,7 @@ use App\Config\Config;
 use App\Middlewares\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Staticus\Exceptions\WrongRequestException;
+use App\Diactoros\Exceptions\WrongRequestException;
 
 abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
 {
@@ -28,13 +28,19 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
-        $this->fillResource();
+        try {
+            $this->fillResource();
+        } catch (WrongRequestException $e) {
+
+            /** @see \Zend\Diactoros\Response::$phrases */
+            return new EmptyResponse(400);
+        }
 
         return $next($request, $response);
     }
 
     /**
-     * @throws WrongRequestException
+     * @throws \App\Dicatoros\Exceptions\WrongRequestException
      * @todo: Write separate cleanup rules for each parameter
      */
     protected function fillResource()

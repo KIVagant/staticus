@@ -4,11 +4,11 @@ namespace App\Resources;
 use App\Resources\Commands\BackupResourceCommand;
 use App\Resources\Commands\CopyResourceCommand;
 use App\Resources\Commands\DestroyEqualResourceCommand;
-use App\Resources\File\ResourceFileDO;
+use App\Resources\File\ResourceDO;
 use App\Middlewares\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
 use App\Resources\Exceptions\SaveResourceErrorException;
-use App\Resources\Exceptions\WrongResponseException;
+use App\Diactoros\Exceptions\WrongResponseException;
 use Psr\Http\Message\StreamInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -16,8 +16,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 {
-    protected static $mimeType = 'application/octet-stream';
-
     private $resourceDO;
 
     /**
@@ -102,7 +100,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     protected function setHeaders()
     {
         $fileHeaders = [
-            'Content-Type' => static::$mimeType,
+            'Content-Type' => $this->resourceDO->getMimeType(),
         ];
         $headers = $this->response->getHeaders();
         $headers = array_merge($headers, $fileHeaders);
@@ -122,13 +120,13 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 
     protected function copyFileToDefaults(ResourceDOInterface $resourceDO)
     {
-        if (ResourceFileDO::DEFAULT_VARIANT !== $resourceDO->getVariant()) {
+        if (ResourceDO::DEFAULT_VARIANT !== $resourceDO->getVariant()) {
             $defaultDO = clone $resourceDO;
             $defaultDO->setVariant();
             $defaultDO->setVersion();
             $this->copyResource($resourceDO, $defaultDO);
         }
-        if (ResourceFileDO::DEFAULT_VERSION !== $resourceDO->getVersion()) {
+        if (ResourceDO::DEFAULT_VERSION !== $resourceDO->getVersion()) {
             $defaultDO = clone $resourceDO;
             $defaultDO->setVersion();
             $this->copyResource($resourceDO, $defaultDO);
