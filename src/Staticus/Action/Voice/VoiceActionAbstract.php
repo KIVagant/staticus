@@ -3,7 +3,6 @@ namespace Staticus\Action\Voice;
 
 use App\Resources\ResourceDOInterface;
 use AudioManager\Manager;
-use Common\Config\Config;
 use Staticus\Action\StaticMiddlewareAbstract;
 use Staticus\Exceptions\ErrorException;
 use App\Resources\File\ResourceFileDO;
@@ -14,12 +13,11 @@ abstract class VoiceActionAbstract extends StaticMiddlewareAbstract
         'Content-Type' => 'audio/mpeg',
     ];
 
-    public function __construct(ResourceFileDO $resourceDO, Manager $manager, Config $config)
+    public function __construct(ResourceFileDO $resourceDO, Manager $manager)
     {
         $this->resourceDO = $resourceDO;
         $this->generator = $manager;
         $this->providerName = $this->getRealClassName($this->generator->getAdapter());
-        $this->config = $config;
     }
 
     /**

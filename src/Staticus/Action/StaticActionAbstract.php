@@ -28,10 +28,6 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
      * @var string
      */
     protected $providerName;
-    /**
-     * @var array
-     */
-    protected $config;
 
     /**
      * @param ServerRequestInterface $request

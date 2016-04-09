@@ -3,18 +3,16 @@ namespace Staticus\Action\Fractal;
 
 use App\Resources\ResourceDOInterface;
 use App\Resources\ResourceImageDO;
-use Common\Config\Config;
 use FractalManager\Manager;
 use Staticus\Action\StaticMiddlewareAbstract;
 
 abstract class FractalActionAbstract extends StaticMiddlewareAbstract
 {
-    public function __construct(ResourceImageDO $resourceDO, Manager $manager, Config $config)
+    public function __construct(ResourceImageDO $resourceDO, Manager $manager)
     {
         $this->resourceDO = $resourceDO;
         $this->generator = $manager;
         $this->providerName = $this->getRealClassName($this->generator->getAdapter());
-        $this->config = $config;
     }
 
     /**
