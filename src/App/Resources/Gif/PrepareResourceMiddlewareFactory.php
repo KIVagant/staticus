@@ -2,7 +2,7 @@
 namespace App\Resources\Gif;
 
 use App\Resources\ResourceImageDO;
-use Common\Config\Config;
+use App\Config\Config;
 
 class PrepareResourceMiddlewareFactory
 {

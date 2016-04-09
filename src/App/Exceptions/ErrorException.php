@@ -1,5 +1,5 @@
 <?php
-namespace Staticus\Exceptions;
+namespace App\Exceptions;
 
 class ErrorException extends \RuntimeException
 {

@@ -2,7 +2,7 @@
 namespace App\Resources\File;
 
 use App\Resources\PrepareResourceMiddlewareAbstract;
-use Common\Config\Config;
+use App\Config\Config;
 
 class PrepareResourceMiddleware extends PrepareResourceMiddlewareAbstract
 {

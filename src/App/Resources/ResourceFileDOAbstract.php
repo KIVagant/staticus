@@ -249,7 +249,7 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
      */
     public function setRecreate($recreate = false)
     {
-        $this->recreate = $recreate;
+        $this->recreate = (bool)$recreate;
 
         return $this;
     }

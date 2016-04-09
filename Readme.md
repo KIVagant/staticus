@@ -17,17 +17,18 @@ md-toc-filter ./Readme.md > Readme2.md
 - [Staticus](#staticus)
     - [Contents](#contents)
     - [Disclaimer](#disclaimer)
-    - [Принцип работы](#-)
+    - [The basics](#-)
     - [Query structure](#query-structure)
     - [All Types](#all-types)
         - [Параметры:](#)
-            - [alt: string, alternative resource name](#alt-string-alternative-resource-name)
             - [var: string, resource variant name](#var-string-resource-variant-name)
+            - [alt: string, alternative resource name](#alt-string-alternative-resource-name)
             - [v: integer, version id](#v-integer-version-id)
             - [destroy: bool, remove without backup](#destroy-bool-remove-without-backup)
             - [author: string, author](#author-string-author)
+    - [Path structure](#path-structure)
     - [JPG Type](#jpg-type)
-        - [Особые параметры:](#-)
+        - [Special parameters](#-)
             - [size=WxH, string, image dimension](#sizewxh-string-image-dimension)
             - [variant=fractal фрактальный вариант изображения](#variantfractal---)
             - [variant=auto[:id] автоматически найденный вариант](#variantautoid---)
@@ -35,11 +36,15 @@ md-toc-filter ./Readme.md > Readme2.md
     - [MP3 Type](#mp3-type)
         - [GET /*.mp3](#get-mp3)
             - [Первый запрос (без кеша)](#---)
-            - [Второй запрос (кеширован)](#--)
+            - [Второй запрос (кеш Nginx)](#---nginx)
         - [POST /*.mp3](#post-mp3)
-            - [Первый запрос (или требование регенерации)](#----)
-            - [Второй запрос](#-)
+            - [Создание](#)
+            - [Повторное создание](#-)
+            - [Перегенерация 1: созданный повторно файл полностью идентичен ранее имеющемуся](#-1-------)
+            - [Перегенерация 2: созданный файл отличается содержимым](#-2----)
         - [DELETE /*.mp3](#delete-mp3)
+            - [Safety deletion](#safety-deletion)
+            - [Destroying](#destroying)
 
 ## Disclaimer
 
@@ -48,7 +53,7 @@ md-toc-filter ./Readme.md > Readme2.md
 - Примеры показаны с использованием утилиты [jkbrzt/httpie](https://github.com/jkbrzt/httpie)
 - Если не переданы данные авторизации, генерация и удаление новых файлов не будет выполнена.
 
-## Принцип работы
+## The basics
 
 См. [fuse.conf](etc/nginx/conf.d/fuse.conf)
 
@@ -104,7 +109,7 @@ scheme:[//[user:password@]host[:port]][/path-to-home]/resource.type[?parameters]
 
 PUT не поддерживается.
 
-### Параметры:
+### Parameters
 
 #### var: string, resource variant name
 
@@ -171,7 +176,7 @@ PUT не поддерживается.
 
 ## JPG Type
 
-### Особые параметры:
+### Special parameters
 
 #### size=WxH, string, image dimension
 
@@ -201,10 +206,11 @@ TODO: filters support
 
 - Бекенд проверяет существование файла
 - Если найден — сообщит Nginx-у конечный URL, который будет закеширован
+- Иначе вернёт 404 Not found
 
 #### Первый запрос (без кеша)
 ```
-$ http --auth Developer:12345 -h GET http://englishdom.dev/staticus/waxwing.mp3
+$ http --verify no -h GET https://www.englishdom.dev/staticus/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -218,12 +224,12 @@ Server: nginx/1.9.7
 X-Proxy-Cache: MISS
 ```
 
-#### Второй запрос (кеширован)
+#### Второй запрос (кеш Nginx)
 
 Nginx отдаёт файл из собственного кеша, уже не обращаясь на proxy_pass.
 
 ```
-$ http --auth Developer:12345 -h GET http://englishdom.dev/staticus/waxwing.mp3
+$ http --verify no -h GET https://www.englishdom.dev/staticus/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -248,11 +254,13 @@ X-Proxy-Cache: HIT
 - TODO: и прописывает связь запроса и файла, чтоб позволить поиск и фильтрацию файлов.
 - Вернёт HTTP 201 Created
 
-#### Первый запрос (или требование регенерации)
+#### Создание
 
 ```
-$ http --auth Developer:12345 POST http://englishdom.dev/staticus/waxwing.mp3\?recreate\=1
+$ find /var/www/cache/mp3 -type f -name *.mp3
+(nothing here)
 
+$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3
 HTTP/1.1 201 Created
 Cache-Control: public
 Cache-Control: public
@@ -262,13 +270,15 @@ Content-Type: audio/mpeg
 Date: Mon, 04 Apr 2016 20:30:37 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
+
+$ find /var/www/cache/mp3 -type f -name *.mp3
+/var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 ```
 
-#### Второй запрос
+#### Повторное создание
 
 ```
-$ http --auth Developer:12345 POST http://englishdom.dev/staticus/WaxWing.mp3
-
+$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/WaxWing.mp3
 HTTP/1.1 304 Not Modified
 Cache-Control: public
 Cache-Control: public
@@ -277,17 +287,64 @@ Content-Length: 0
 Date: Mon, 04 Apr 2016 20:36:16 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
+
+find /var/www/cache/mp3 -type f -name *.mp3
+/var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
+```
+
+#### Перегенерация 1: созданный повторно файл полностью идентичен ранее имеющемуся
+
+```
+$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 recreate=1
+HTTP/1.1 304 Not Modified
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 0
+Date: Sat, 09 Apr 2016 10:08:50 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+
+$ find /var/www/cache/mp3 -type f -name *.mp3
+/var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
+```
+
+#### Перегенерация 2: созданный файл отличается содержимым
+
+```
+$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 recreate=1
+HTTP/1.1 201 Created
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 0
+Content-Type: application/octet-stream
+Date: Sat, 09 Apr 2016 10:41:39 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+
+$ find /var/www/cache/mp3 -type f -name *.mp3
+/var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
+/var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3 # automatically backuped version
 ```
 
 ### DELETE /*.mp3
 
 - Бекенд проверяет существование файла.
-- Если найден, удаляет его.
+- Если найден, создаёт резервную копию при условии, что предыдущая не-нулевая версия не идентична удаляемой.
+- Удаляет текущий оригинальный файл.
 - Возвращает 204 No content.
 
-```
-$ http --auth Developer:12345 DELETE http://englishdom.dev/staticus/waxwing.mp3
+#### Safety deletion
 
+If Version 1 not equal to 0, then version 0 will backuped to new version 2.
+
+```
+$ find /var/www/cache/mp3 -type f -name *.mp3
+/var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
+/var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3
+
+$ http --verify no --auth Developer:12345 DELETE https://www.englishdom.dev/staticus/waxwing.mp3
 HTTP/1.1 204 No Content
 Cache-Control: public
 Cache-Control: public
@@ -298,13 +355,34 @@ Date: Mon, 04 Apr 2016 20:40:05 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
 
-$ http --auth Developer:12345 GET http://englishdom.dev/staticus/waxwing.mp3
+$ find /var/www/cache/mp3 -type f -name *.mp3
+/var/www/cache/mp3/def/2/2d5080a8ea20ec175c318d65d1429e94.mp3 # automatically backuped version
+/var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3
 
+$ http --verify no GET https://www.englishdom.dev/staticus/waxwing.mp3\?nocache\=bzbzbz # skip nginx cache
 HTTP/1.1 404 Not Found
 Connection: keep-alive
 Content-Length: 0
 Content-Type: audio/mpeg
-Date: Mon, 04 Apr 2016 20:40:52 GMT
+Date: Sat, 09 Apr 2016 10:48:19 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
+```
+
+#### Destroying
+
+```
+$ http --verify no --auth Developer:12345 DELETE https://www.englishdom.dev/staticus/waxwing.mp3\?destroy\=1
+HTTP/1.1 204 No Content
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 0
+Content-Type: audio/mpeg
+Date: Sat, 09 Apr 2016 11:38:30 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+
+$ find /var/www/cache/mp3 -type f -name *.mp3
+(nothing here)
 ```

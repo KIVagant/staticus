@@ -1,8 +1,8 @@
 <?php
 namespace App\Resources;
 
-use Common\Config\Config;
-use Common\Middleware\MiddlewareAbstract;
+use App\Config\Config;
+use App\Middlewares\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Exceptions\WrongRequestException;
@@ -49,23 +49,28 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         if (empty($type) || !preg_match('/\w+/u', $name)) {
             throw new WrongRequestException('Wrong resource type ' . $name);
         }
-        $params = $this->request->getQueryParams();
-        $alt = isset($params['alt']) ? $params['alt'] : '';
+        $alt = static::getParamFromRequest('alt', $this->request);
         $alt = $this->cleanup($alt);
-        $variant = isset($params['var']) ? $params['var'] : '';
-        $variant = $this->cleanup($variant);
-        $version = isset($params['v']) ? $params['v'] : '';
-        $author = isset($params['author']) ? $params['author'] : '';
+        $var = static::getParamFromRequest('var', $this->request);
+        $var = $this->cleanup($var);
+        $v = static::getParamFromRequest('v', $this->request);
+        $author = static::getParamFromRequest('author', $this->request);
         $author = $this->cleanup($author);
+
         $cacheDir = $this->config->get('data_dir');
+        /**
+         * You shouldn't check 'recreate' and 'destroy' params here.
+         * @see \Staticus\Action\StaticMiddlewareAbstract::postAction
+         * @see \Staticus\Action\StaticMiddlewareAbstract::deleteAction
+         */
         $this->resourceDO
             ->reset()
             ->setBaseDirectory($cacheDir)
             ->setName($name)
             ->setNameAlternative($alt)
             ->setType($type)
-            ->setVariant($variant)
-            ->setVersion($version)
+            ->setVariant($var)
+            ->setVersion($v)
             ->setAuthor($author);
     }
 
@@ -74,5 +79,27 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         $name = preg_replace('/\s+/u', ' ', trim(mb_strtolower(rawurldecode((string)$name), 'UTF-8')));
 
         return $name;
+    }
+
+    /**
+     * @param $name
+     * @param ServerRequestInterface $request
+     * @return string
+     * @todo move this method somethere
+     */
+    public static function getParamFromRequest($name, ServerRequestInterface $request)
+    {
+        $paramsGET = $request->getQueryParams();
+        $paramsPOST = (array)$request->getParsedBody();
+
+        $str = isset($paramsPOST[$name])
+            ? $paramsPOST[$name]
+            : (
+                isset($paramsGET[$name])
+                ? $paramsGET[$name]
+                : ''
+            );
+
+        return $str;
     }
 }

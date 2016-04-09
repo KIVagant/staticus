@@ -4,9 +4,9 @@ namespace Staticus\Action\Fractal;
 use App\Resources\ResourceDOInterface;
 use App\Resources\ResourceImageDO;
 use FractalManager\Manager;
-use Staticus\Action\StaticMiddlewareAbstract;
+use App\Middlewares\ActionMiddlewareAbstract;
 
-abstract class FractalActionAbstract extends StaticMiddlewareAbstract
+abstract class FractalActionAbstract extends ActionMiddlewareAbstract
 {
     public function __construct(ResourceImageDO $resourceDO, Manager $manager)
     {

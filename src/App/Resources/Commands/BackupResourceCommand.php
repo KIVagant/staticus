@@ -15,13 +15,20 @@ class BackupResourceCommand implements ResourceCommandInterface
     {
         $this->resourceDO = $resourceDO;
     }
-    public function run()
+
+    /**
+     * @param null $lastVersion You can set the last existing version manually, if needed
+     * @return ResourceDOInterface|int
+     */
+    public function run($lastVersion = null)
     {
-        $uuid = $this->resourceDO->getUuid();
-        $type = $this->resourceDO->getType();
-        $variant = $this->resourceDO->getVariant();
-        $baseDir = $this->resourceDO->getBaseDirectory();
-        $lastVersion = $this->findLastExistsVersion($baseDir, $uuid, $type, $variant);
+        if (null === $lastVersion) {
+            $uuid = $this->resourceDO->getUuid();
+            $type = $this->resourceDO->getType();
+            $variant = $this->resourceDO->getVariant();
+            $baseDir = $this->resourceDO->getBaseDirectory();
+            $lastVersion = $this->findLastExistsVersion($baseDir, $uuid, $type, $variant);
+        }
 
         return $this->backupResource($lastVersion + 1);
     }

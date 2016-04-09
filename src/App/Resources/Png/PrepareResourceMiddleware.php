@@ -3,7 +3,7 @@ namespace App\Resources\Png;
 
 use App\Resources\PrepareResourceMiddlewareAbstract;
 use App\Resources\ResourceImageDO;
-use Common\Config\Config;
+use App\Config\Config;
 
 class PrepareResourceMiddleware extends PrepareResourceMiddlewareAbstract
 {

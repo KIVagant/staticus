@@ -2,7 +2,7 @@
 namespace App\Resources\Jpg;
 
 use App\Resources\ResourceImageDO;
-use Common\Config\Config;
+use App\Config\Config;
 
 class PrepareResourceMiddlewareFactory
 {

@@ -1,7 +1,7 @@
 <?php
 namespace App\Resources\File;
 
-use Common\Config\Config;
+use App\Config\Config;
 
 class PrepareResourceMiddlewareFactory
 {

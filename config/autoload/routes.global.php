@@ -32,7 +32,7 @@ return [
         // необходимо перечислить их типы (в нашем случае они совпадают с ключами в invokables и factories)
         // После этого эти типы можно использовать в type hinting.
         'types' => [
-            Common\Config\Config::class => Common\Config\Config::class,
+            App\Config\Config::class => App\Config\Config::class,
             App\Resources\File\ResourceFileDO::class => App\Resources\File\ResourceFileDO::class,
             App\Resources\ResourceImageDO::class => App\Resources\ResourceImageDO::class,
             AudioManager\Adapter\AdapterInterface::class => AudioManager\Adapter\AdapterInterface::class,

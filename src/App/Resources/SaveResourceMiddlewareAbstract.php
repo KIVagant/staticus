@@ -3,10 +3,9 @@ namespace App\Resources;
 
 use App\Resources\Commands\BackupResourceCommand;
 use App\Resources\Commands\CopyResourceCommand;
-use App\Resources\Commands\DeleteSafetyResourceCommand;
-use App\Resources\Commands\DestroyResourceCommand;
+use App\Resources\Commands\DestroyEqualResourceCommand;
 use App\Resources\File\ResourceFileDO;
-use Common\Middleware\MiddlewareAbstract;
+use App\Middlewares\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
 use App\Resources\Exceptions\SaveResourceErrorException;
 use App\Resources\Exceptions\WrongResponseException;
@@ -139,30 +138,26 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     /**
      * @param ResourceDOInterface $resourceDO
      * @param string|resource $content
+     * @return ResourceDOInterface
      */
     protected function save(ResourceDOInterface $resourceDO, $content)
     {
-        $newResourceVerDO = null;
+        $backupResourceVerDO = null;
         $filePath = $resourceDO->getFilePath();
         $this->createDirectory(dirname($filePath));
         // backups don't needs if this is a 'new creation' command
         if ($resourceDO->isRecreate()) {
             $command = new BackupResourceCommand($resourceDO);
-            $newResourceVerDO = $command->run();
+            $backupResourceVerDO = $command->run();
         }
         $this->writeFile($filePath, $content);
 
-        if ($newResourceVerDO instanceof ResourceDOInterface) {
-            $newPath = $newResourceVerDO->getFilePath();
-
+        if ($backupResourceVerDO instanceof ResourceDOInterface) {
             // If the newly created file is the same as the previous version, remove it immediately
-            if ($resourceDO->getVariant() === $newResourceVerDO->getVariant()
-                && filesize($filePath) === filesize($newPath)
-                && md5_file($filePath) === md5_file($newPath)
-            ) {
-                $command = new DestroyResourceCommand($newResourceVerDO);
-                $command->run(true);
-            }
+            $command = new DestroyEqualResourceCommand($resourceDO, $backupResourceVerDO);
+            $command->run();
         }
+
+        return $resourceDO;
     }
 }

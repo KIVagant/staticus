@@ -1,7 +1,7 @@
 <?php
 namespace App\Auth;
 
-use Common\Config\Config;
+use App\Config\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\EmptyResponse;

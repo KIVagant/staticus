@@ -4,7 +4,7 @@ namespace Staticus\Action\Voice;
 
 use AudioManager\Adapter\Google;
 use AudioManager\Adapter\Ivona;
-use Staticus\Exceptions\ErrorException;
+use App\Exceptions\ErrorException;
 
 class VoiceAdapterFactory
 {

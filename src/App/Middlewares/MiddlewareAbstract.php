@@ -1,5 +1,5 @@
 <?php
-namespace Common\Middleware;
+namespace App\Middlewares;
 
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;

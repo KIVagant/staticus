@@ -1,19 +1,19 @@
 <?php
-namespace Staticus\Action;
+namespace App\Middlewares;
 
 use App\Resources\Commands\DeleteSafetyResourceCommand;
 use App\Resources\Commands\DestroyResourceCommand;
+use App\Resources\PrepareResourceMiddlewareAbstract;
 use App\Resources\ResourceDOInterface;
-use Common\Middleware\MiddlewareAbstract;
 use App\Diactoros\FileContentResponse\FileContentResponse;
-use Staticus\Exceptions\ErrorException;
+use App\Exceptions\ErrorException;
 use Staticus\Exceptions\WrongRequestException;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Resources\File\ResourceFileDO;
 
-abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
+abstract class ActionMiddlewareAbstract extends MiddlewareAbstract
 {
     protected static $defaultHeaders = [];
     /**
@@ -71,6 +71,7 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
      * @param string $filename Filename for saving dialog on the client-side
      * @param bool $forceSaveDialog
      * @return EmptyResponse
+     * @throws ErrorException
      */
     protected function XAccelRedirect($path, $filename = '', $forceSaveDialog = false)
     {
@@ -84,7 +85,7 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
             // '' =>
         ];
         if ($forceSaveDialog) {
-            if (empty($filename)) {
+            if (!$filename) {
                 $filename = basename($path);
             }
             $headers['Content-Disposition'] = 'attachment; filename=' . $filename;
@@ -108,10 +109,10 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     }
     protected function postAction()
     {
-        $params = $this->request->getQueryParams();
         $filePath = $this->resourceDO->getFilePath();
         $fileExists = file_exists($filePath);
-        $recreate = $fileExists && !empty($params['recreate']);
+        $recreate = PrepareResourceMiddlewareAbstract::getParamFromRequest('recreate', $this->request);
+        $recreate = $fileExists && $recreate;
         if (!$fileExists || $recreate) {
             $this->resourceDO->setRecreate($recreate);
             $body = $this->generate($this->resourceDO, $filePath);
@@ -125,12 +126,12 @@ abstract class StaticMiddlewareAbstract extends MiddlewareAbstract
     }
     protected function deleteAction()
     {
-        $params = $this->request->getQueryParams();
-        if (empty($params['destroy'])) {
-            $command = new DeleteSafetyResourceCommand($this->resourceDO);
+        $destroy = PrepareResourceMiddlewareAbstract::getParamFromRequest('destroy', $this->request);
+        if ($destroy) {
+            $command = new DestroyResourceCommand($this->resourceDO);
             $command->run();
         } else {
-            $command = new DestroyResourceCommand($this->resourceDO);
+            $command = new DeleteSafetyResourceCommand($this->resourceDO);
             $command->run();
         }
 

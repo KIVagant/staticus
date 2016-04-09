@@ -3,11 +3,11 @@ namespace Staticus\Action\Voice;
 
 use App\Resources\ResourceDOInterface;
 use AudioManager\Manager;
-use Staticus\Action\StaticMiddlewareAbstract;
-use Staticus\Exceptions\ErrorException;
+use App\Middlewares\ActionMiddlewareAbstract;
+use App\Exceptions\ErrorException;
 use App\Resources\File\ResourceFileDO;
 
-abstract class VoiceActionAbstract extends StaticMiddlewareAbstract
+abstract class VoiceActionAbstract extends ActionMiddlewareAbstract
 {
     protected static $defaultHeaders = [
         'Content-Type' => 'audio/mpeg',
