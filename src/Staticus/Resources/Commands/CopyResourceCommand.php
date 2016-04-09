@@ -29,33 +29,22 @@ class CopyResourceCommand implements ResourceCommandInterface
             throw new CommandErrorException('Can\'t copy a file: ' . $originPath);
         }
         if (!is_file($newPath)) {
-            if ($this->copyFile($originPath, $newPath)) {
+            $this->copyFile($originPath, $newPath);
 
-                return $this->newResourceDO;
-            }
+            return $this->newResourceDO;
         }
 
-        return self::ALREADY_EXISTS;
+        return $this->originResourceDO;
     }
-    /**
-     * @param $fromFullPath
-     * @param $toFullPath
-     * @return bool
-     * @throws SaveResourceErrorException
-     */
+
     protected function copyFile($fromFullPath, $toFullPath)
     {
         $this->createDirectory(dirname($toFullPath));
         if (!copy($fromFullPath, $toFullPath)) {
             throw new CommandErrorException('File cannot be copied to the default path ' . $toFullPath);
         }
-
-        return self::SUCCESS;
     }
 
-    /**
-     * @param $directory
-     */
     protected function createDirectory($directory)
     {
         if (@!mkdir($directory, 0777, true) && !is_dir($directory)) {

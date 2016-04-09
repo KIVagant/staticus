@@ -32,8 +32,9 @@ abstract class ActionGetAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
+        $this->response = $this->action();
 
-        return $this->action();
+        return $this->next();
     }
 
     /**

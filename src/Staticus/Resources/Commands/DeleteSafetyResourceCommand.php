@@ -50,13 +50,12 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
                 $command($lastVersion);
             }
 
-            if ($this->deleteFile($filePath)) {
+            $this->deleteFile($filePath);
 
-                return $this->resourceDO;
-            }
+            return $this->resourceDO;
         }
 
-        return self::NOT_EXISTS;
+        return $this->resourceDO;
     }
 
     /**
@@ -67,7 +66,5 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
         if (!unlink($filePath)) {
             throw new CommandErrorException('The file cannot be removed: ' . $filePath);
         }
-
-        return self::SUCCESS;
     }
 }
