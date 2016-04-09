@@ -17,4 +17,14 @@ if ( ! function_exists('dd'))
         }
         die;
     }
+
+    /**
+     * Dump and die with var_export instead of var_dump
+     * @param $value
+     */
+    function ddc($value)
+    {
+        array_map(function($x) { var_export($x); echo PHP_EOL; }, func_get_args());
+        die;
+    }
 }
