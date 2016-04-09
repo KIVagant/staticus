@@ -2,7 +2,6 @@
 namespace Staticus\Diactoros\FileContentResponse;
 
 use Zend\Diactoros\HeaderSecurity;
-use Zend\Diactoros\MessageTrait;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Stream;
 
@@ -11,7 +10,7 @@ use Zend\Diactoros\Stream;
  */
 class FileContentResponse extends Response
 {
-    use MessageTrait, Response\InjectContentTypeTrait;
+    use Response\InjectContentTypeTrait;
     /**
      * @var resource
      */
