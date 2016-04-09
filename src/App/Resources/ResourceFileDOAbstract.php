@@ -47,7 +47,7 @@ abstract class ResourceFileDOAbstract implements ResourceDOInterface
     }
     protected function setUuid()
     {
-        $this->uuid = md5($this->name . $this->nameAlternative);
+        $this->uuid = md5($this->name);
     }
 
     protected function setFilePath()

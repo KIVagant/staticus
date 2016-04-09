@@ -28,7 +28,11 @@ abstract class VoiceActionAbstract extends StaticMiddlewareAbstract
      */
     protected function generate(ResourceDOInterface $resourceDO, $filePath)
     {
-        $content = $this->generator->read($resourceDO->getName());
+        $alternative = $resourceDO->getNameAlternative();
+        $voiceText = $alternative
+            ? $alternative
+            : $resourceDO->getName();
+        $content = $this->generator->read($voiceText);
         $headers = $this->generator->getHeaders();
         if (!isset($headers['http_code']) || $headers['http_code'] != 200) {
             throw new ErrorException(
