@@ -13,14 +13,13 @@ Nginx должен быть настроен таким образом, чтоб
 see: https://github.com/aslushnikov/table-of-contents-preprocessor
 md-toc-filter ./Readme.md > Readme2.md
 -->
-
 - [Staticus](#staticus)
     - [Contents](#contents)
     - [Disclaimer](#disclaimer)
-    - [The basics](#-)
+    - [The basics](#the-basics)
     - [Query structure](#query-structure)
     - [All Types](#all-types)
-        - [Параметры:](#)
+        - [Parameters](#parameters)
             - [var: string, resource variant name](#var-string-resource-variant-name)
             - [alt: string, alternative resource name](#alt-string-alternative-resource-name)
             - [v: integer, version id](#v-integer-version-id)
@@ -28,20 +27,20 @@ md-toc-filter ./Readme.md > Readme2.md
             - [author: string, author](#author-string-author)
     - [Path structure](#path-structure)
     - [JPG Type](#jpg-type)
-        - [Special parameters](#-)
+        - [Special parameters](#special-parameters)
             - [size=WxH, string, image dimension](#sizewxh-string-image-dimension)
-            - [variant=fractal фрактальный вариант изображения](#variantfractal---)
-            - [variant=auto[:id] автоматически найденный вариант](#variantautoid---)
+            - [variant=fractal fractal variant of the image](#variantfractal-fractal-variant-of-the-image)
+            - [variant=auto[:id] automatically found variant](#variantautoid-automatically-found-variant)
             - [filters[]=filtername, string, postprocessing filters](#filtersfiltername-string-postprocessing-filters)
     - [MP3 Type](#mp3-type)
         - [GET /*.mp3](#get-mp3)
-            - [Первый запрос (без кеша)](#---)
-            - [Второй запрос (кеш Nginx)](#---nginx)
+            - [First request (without cache)](#first-request-without-cache)
+            - [Second request (Nginx cache)](#second-request-nginx-cache)
         - [POST /*.mp3](#post-mp3)
-            - [Создание](#)
-            - [Повторное создание](#-)
-            - [Перегенерация 1: созданный повторно файл полностью идентичен ранее имеющемуся](#-1-------)
-            - [Перегенерация 2: созданный файл отличается содержимым](#-2----)
+            - [Creation](#creation)
+            - [Secondary creation](#secondary-creation)
+            - [Regeneration 1: Re-created file is identical to the existing](#regeneration-1-re-created-file-is-identical-to-the-existing)
+            - [Regeneration 2: The created file is a different](#regeneration-2-the-created-file-is-a-different)
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
@@ -184,12 +183,12 @@ PUT не поддерживается.
 Чтобы изображения обрезались, в конфигурационном файле должны быть зарегистрированы все разрешенные размеры.
 Изображение с неразрешенным размером будет обрезано к ближайшему найденному зарегистрированному *большему* размеру.
 
-#### variant=fractal фрактальный вариант изображения
+#### variant=fractal fractal variant of the image
 
 Если отправить POST-запрос на этот вариант, будет генерирована картинка с фракталом. Удобно использовать в качестве
 заглушек по-умолчанию.
 
-#### variant=auto[:id] автоматически найденный вариант
+#### variant=auto[:id] automatically found variant
 
 Варианты будут искаться через зарегистрированного провайдера изображений (поддерживается один провайдер).
 Если не указан идентификатор, вернётся нулевой вариант (первый из найденных).
@@ -208,7 +207,7 @@ TODO: filters support
 - Если найден — сообщит Nginx-у конечный URL, который будет закеширован
 - Иначе вернёт 404 Not found
 
-#### Первый запрос (без кеша)
+#### First request (without cache)
 ```
 $ http --verify no -h GET https://www.englishdom.dev/staticus/waxwing.mp3
 HTTP/1.1 200 OK
@@ -224,7 +223,7 @@ Server: nginx/1.9.7
 X-Proxy-Cache: MISS
 ```
 
-#### Второй запрос (кеш Nginx)
+#### Second request (Nginx cache)
 
 Nginx отдаёт файл из собственного кеша, уже не обращаясь на proxy_pass.
 
@@ -254,7 +253,7 @@ X-Proxy-Cache: HIT
 - TODO: и прописывает связь запроса и файла, чтоб позволить поиск и фильтрацию файлов.
 - Вернёт HTTP 201 Created
 
-#### Создание
+#### Creation
 
 ```
 $ find /var/www/cache/mp3 -type f -name *.mp3
@@ -275,7 +274,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 ```
 
-#### Повторное создание
+#### Secondary creation
 
 ```
 $ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/WaxWing.mp3
@@ -292,7 +291,7 @@ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 ```
 
-#### Перегенерация 1: созданный повторно файл полностью идентичен ранее имеющемуся
+#### Regeneration 1: Re-created file is identical to the existing
 
 ```
 $ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 recreate=1
@@ -309,7 +308,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 ```
 
-#### Перегенерация 2: созданный файл отличается содержимым
+#### Regeneration 2: The created file is a different
 
 ```
 $ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 recreate=1
