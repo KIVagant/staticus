@@ -43,10 +43,10 @@ abstract class ActionDeleteAbstract extends MiddlewareAbstract
         $destroy = PrepareResourceMiddlewareAbstract::getParamFromRequest('destroy', $this->request);
         if ($destroy) {
             $command = new DestroyResourceCommand($this->resourceDO);
-            $command->run();
+            $command();
         } else {
             $command = new DeleteSafetyResourceCommand($this->resourceDO);
-            $command->run();
+            $command();
         }
 
         /** @see \Zend\Diactoros\Response::$phrases */

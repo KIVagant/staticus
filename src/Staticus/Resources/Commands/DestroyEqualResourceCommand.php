@@ -27,7 +27,7 @@ class DestroyEqualResourceCommand implements ResourceCommandInterface
     /**
      * @return ResourceDOInterface
      */
-    public function run()
+    public function __invoke()
     {
         $originType = $this->originResourceDO->getType();
         $suspectType = $this->suspectResourceDO->getType();
@@ -39,7 +39,7 @@ class DestroyEqualResourceCommand implements ResourceCommandInterface
         ) {
             $command = new DestroyResourceCommand($this->suspectResourceDO);
 
-            return $command->run(true);
+            return $command(true);
         }
 
         return $this->originResourceDO;

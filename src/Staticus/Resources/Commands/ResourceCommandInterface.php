@@ -14,6 +14,6 @@ interface ResourceCommandInterface
      * @return int|ResourceDOInterface
      * @throws CommandErrorException
      */
-    public function run();
+    public function __invoke();
 
 }

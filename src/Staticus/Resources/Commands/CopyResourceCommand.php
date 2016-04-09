@@ -21,7 +21,7 @@ class CopyResourceCommand implements ResourceCommandInterface
         $this->originResourceDO = $originResourceDO;
         $this->newResourceDO = $newResourceDO;
     }
-    public function run()
+    public function __invoke()
     {
         $originPath = $this->originResourceDO->getFilePath();
         $newPath = $this->newResourceDO->getFilePath();

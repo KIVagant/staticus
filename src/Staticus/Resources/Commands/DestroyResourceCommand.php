@@ -20,7 +20,7 @@ class DestroyResourceCommand implements ResourceCommandInterface
      * @param bool $byPathOnly If true, no search on disk will be executed
      * @return ResourceDOInterface
      */
-    public function run($byPathOnly = false)
+    public function __invoke($byPathOnly = false)
     {
         $uuid = $this->resourceDO->getUuid();
         $type = $this->resourceDO->getType();

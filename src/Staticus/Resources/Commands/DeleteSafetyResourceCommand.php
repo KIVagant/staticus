@@ -16,7 +16,7 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
         $this->resourceDO = $resourceDO;
     }
 
-    public function run()
+    public function __invoke()
     {
         $uuid = $this->resourceDO->getUuid();
         $type = $this->resourceDO->getType();
@@ -37,7 +37,7 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
                     $lastVersionResourceDO = clone $this->resourceDO;
                     $lastVersionResourceDO->setVersion($lastVersion);
                     $command = new DestroyEqualResourceCommand($lastVersionResourceDO, $this->resourceDO);
-                    $result = $command->run();
+                    $result = $command();
                     if ($result === $this->resourceDO) {
 
                         // If the previous file version already the same, current version is already deleted
@@ -47,7 +47,7 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
                 }
 
                 $command = new BackupResourceCommand($this->resourceDO);
-                $command->run($lastVersion);
+                $command($lastVersion);
             }
 
             if ($this->deleteFile($filePath)) {

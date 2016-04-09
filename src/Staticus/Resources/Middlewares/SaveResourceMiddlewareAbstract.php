@@ -79,7 +79,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     {
         $command = new CopyResourceCommand($originResourceDO, $newResourceDO);
 
-        return $command->run();
+        return $command();
     }
 
     /**
@@ -147,14 +147,14 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         // backups don't needs if this is a 'new creation' command
         if ($resourceDO->isRecreate()) {
             $command = new BackupResourceCommand($resourceDO);
-            $backupResourceVerDO = $command->run();
+            $backupResourceVerDO = $command();
         }
         $this->writeFile($filePath, $content);
 
         if ($backupResourceVerDO instanceof ResourceDOInterface) {
             // If the newly created file is the same as the previous version, remove it immediately
             $command = new DestroyEqualResourceCommand($resourceDO, $backupResourceVerDO);
-            $command->run();
+            $command();
         }
 
         return $resourceDO;

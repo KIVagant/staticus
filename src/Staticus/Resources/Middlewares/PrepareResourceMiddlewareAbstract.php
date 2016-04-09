@@ -42,7 +42,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     }
 
     /**
-     * @throws \App\Dicatoros\Exceptions\WrongRequestException
+     * @throws WrongRequestException
      * @todo: Write separate cleanup rules for each parameter
      */
     protected function fillResource()

@@ -20,7 +20,7 @@ class BackupResourceCommand implements ResourceCommandInterface
      * @param null $lastVersion You can set the last existing version manually, if needed
      * @return ResourceDOInterface|int
      */
-    public function run($lastVersion = null)
+    public function __invoke($lastVersion = null)
     {
         if (null === $lastVersion) {
             $uuid = $this->resourceDO->getUuid();
@@ -42,6 +42,6 @@ class BackupResourceCommand implements ResourceCommandInterface
         $backupResourceDO->setVersion($newVersion);
         $command = new CopyResourceCommand($this->resourceDO, $backupResourceDO);
 
-        return $command->run();
+        return $command();
     }
 }
