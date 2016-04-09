@@ -10,7 +10,7 @@ $container = $builder->newInstance($builder::AUTO_RESOLVE);
 
 // Inject config
 $container->set('config', $config);
-$container->set(App\Config\Config::class, $container->lazyNew(App\Config\Config::class, [$config]));
+$container->set(Staticus\Config\Config::class, $container->lazyNew(Staticus\Config\Config::class, [$config]));
 
 // Inject factories
 foreach ($config['dependencies']['factories'] as $name => $object) {
