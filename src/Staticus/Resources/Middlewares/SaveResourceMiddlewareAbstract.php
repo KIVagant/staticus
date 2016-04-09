@@ -44,28 +44,30 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
-        if (!$response instanceof FileContentResponse) {
-            return $next($request, $response);
-        }
-        $resourceDO = $this->resourceDO;
-        $filePath = $resourceDO->getFilePath();
-        if (empty($filePath)) {
-            throw new WrongResponseException('Empty file path. File can\'t be saved.');
-        }
-        $this->setHeaders();
-        $resourceStream = $response->getResource();
-        if (is_resource($resourceStream)) {
-            $this->save($resourceDO, $resourceStream);
-        } else {
-            if (!$resourceStream instanceof StreamInterface) {
-                throw new WrongResponseException('Empty body for generated file. Request: ' . $resourceDO->getName());
+        if ($response instanceof FileContentResponse) {
+            $resourceDO = $this->resourceDO;
+            $filePath = $resourceDO->getFilePath();
+            if (empty($filePath)) {
+                throw new WrongResponseException('Empty file path. File can\'t be saved.');
             }
-            $body = $response->getContent();
-            $this->save($resourceDO, $body);
-        }
-        $this->copyFileToDefaults($resourceDO);
+            $resourceStream = $response->getResource();
+            if (is_resource($resourceStream)) {
+                $this->save($resourceDO, $resourceStream);
+            } else {
+                if (!$resourceStream instanceof StreamInterface) {
+                    throw new WrongResponseException('Empty body for generated file. Request: ' . $resourceDO->getName());
+                }
+                $body = $response->getContent();
+                $this->save($resourceDO, $body);
+            }
+            $this->copyFileToDefaults($resourceDO);
 
-        return new EmptyResponse($response->getStatusCode(), $response->getHeaders());
+            $this->response = new EmptyResponse($response->getStatusCode(), [
+                'Content-Type' => $this->resourceDO->getMimeType(),
+            ]);
+        }
+
+        return $this->next();
     }
 
     protected function writeFile($filePath, $content)
@@ -96,16 +98,6 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         }
 
         return true;
-    }
-
-    protected function setHeaders()
-    {
-        $fileHeaders = [
-            'Content-Type' => $this->resourceDO->getMimeType(),
-        ];
-        $headers = $this->response->getHeaders();
-        $headers = array_merge($headers, $fileHeaders);
-        $this->response->setHeaders($headers);
     }
 
     /**

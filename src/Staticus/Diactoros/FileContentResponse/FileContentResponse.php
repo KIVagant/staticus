@@ -82,16 +82,6 @@ class FileContentResponse extends Response
     }
 
     /**
-     * @param $headers
-     * @see \Zend\Diactoros\Response::__construct
-     */
-    public function setHeaders($headers)
-    {
-        list($this->headerNames, $headers) = $this->filterHeaders($headers);
-        $this->assertHeaders($headers);
-        $this->headers = $headers;
-    }
-    /**
      * Ensure header names and values are valid.
      *
      * @param array $headers

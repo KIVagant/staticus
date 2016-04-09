@@ -2,12 +2,14 @@
 namespace Staticus\Resources\Middlewares;
 
 use Staticus\Resources\File\ResourceDO;
+use Staticus\Resources\ResourceDOInterface;
 use Staticus\Resources\ResourceImageDO;
 
 abstract class SaveImageMiddlewareAbstract extends SaveResourceMiddlewareAbstract
 {
-    protected function copyFileToDefaults(ResourceImageDO $resourceDO)
+    protected function copyFileToDefaults(ResourceDOInterface $resourceDO)
     {
+        /** @var ResourceImageDO $resourceDO */
         if (ResourceDO::DEFAULT_VARIANT !== $resourceDO->getVariant()) {
             $defaultDO = clone $resourceDO;
             $defaultDO->setVariant();
