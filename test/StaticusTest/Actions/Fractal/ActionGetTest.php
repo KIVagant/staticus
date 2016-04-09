@@ -14,11 +14,15 @@ class ActionGetTest extends \PHPUnit_Framework_TestCase
     {
         $image = new ResourceDO();
         $action = new ActionGet($image);
-        $response = $action(new ServerRequest(['/fractal/welcome.jpg']), new Response(), function () {
+        $resultResponse = null;
+        $action(new ServerRequest(['/fractal/somethingrealnotfoundasfd2hwjq2u3jejr1h2.jpg']), new Response(), function (ServerRequest $request,
+            Response $response,
+            callable $next = null) use (&$resultResponse) {
+            $resultResponse = $response;
         });
-        $this->assertTrue($response instanceof Response);
-        $this->assertTrue($response instanceof EmptyResponse);
-        /** @var EmptyResponse $response */
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertTrue($resultResponse instanceof Response);
+        $this->assertTrue($resultResponse instanceof EmptyResponse);
+        /** @var EmptyResponse $resultResponse */
+        $this->assertEquals(404, $resultResponse->getStatusCode());
     }
 }
