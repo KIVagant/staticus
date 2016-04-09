@@ -71,7 +71,7 @@ abstract class ActionGetAbstract extends MiddlewareAbstract
         ];
         $filePath = realpath($this->resourceDO->getFilePath());
         $filename = $this->resourceDO->getName() . '.' . $this->resourceDO->getType();
-        if (file_exists($filePath)) {
+        if (is_file($filePath)) {
 
             return $this->XAccelRedirect($filePath, $filename, false);
         }

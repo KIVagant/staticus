@@ -47,7 +47,7 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
             'Content-Type' => $this->resourceDO->getMimeType(),
         ];
         $filePath = $this->resourceDO->getFilePath();
-        $fileExists = file_exists($filePath);
+        $fileExists = is_file($filePath);
         $recreate = PrepareResourceMiddlewareAbstract::getParamFromRequest('recreate', $this->request);
         $recreate = $fileExists && $recreate;
         if (!$fileExists || $recreate) {

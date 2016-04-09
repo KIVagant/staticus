@@ -27,7 +27,7 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
         if (!$uuid || !$type || !$baseDir) {
             throw new CommandErrorException('Invalid delete request');
         }
-        if (file_exists($filePath)) {
+        if (is_file($filePath)) {
             // Make backup of the default version
             if (ResourceDOInterface::DEFAULT_VERSION === $version) {
                 $lastVersion = $this->findLastExistsVersion($baseDir, $uuid, $type, $variant);
