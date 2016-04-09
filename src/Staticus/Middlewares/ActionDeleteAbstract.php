@@ -3,7 +3,7 @@ namespace Staticus\Middlewares;
 
 use Staticus\Resources\Commands\DeleteSafetyResourceCommand;
 use Staticus\Resources\Commands\DestroyResourceCommand;
-use Staticus\Resources\PrepareResourceMiddlewareAbstract;
+use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

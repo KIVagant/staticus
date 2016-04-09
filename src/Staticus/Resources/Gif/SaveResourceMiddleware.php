@@ -2,7 +2,7 @@
 namespace Staticus\Resources\Gif;
 
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
-use Staticus\Resources\SaveImageMiddlewareAbstract;
+use Staticus\Resources\Middlewares\SaveImageMiddlewareAbstract;
 
 class SaveResourceMiddleware extends SaveImageMiddlewareAbstract
 {

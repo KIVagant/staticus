@@ -1,7 +1,8 @@
 <?php
-namespace Staticus\Resources;
+namespace Staticus\Resources\Middlewares;
 
 use Staticus\Resources\File\ResourceDO;
+use Staticus\Resources\ResourceImageDO;
 
 abstract class SaveImageMiddlewareAbstract extends SaveResourceMiddlewareAbstract
 {

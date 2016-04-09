@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Middlewares;
 
-use Staticus\Resources\PrepareResourceMiddlewareAbstract;
+use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
 use Staticus\Resources\ResourceDOInterface;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
 use Zend\Diactoros\Response\EmptyResponse;

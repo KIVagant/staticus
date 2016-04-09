@@ -1,5 +1,5 @@
 <?php
-namespace Staticus\Resources;
+namespace Staticus\Resources\Middlewares;
 
 use Staticus\Resources\Commands\BackupResourceCommand;
 use Staticus\Resources\Commands\CopyResourceCommand;
@@ -10,6 +10,7 @@ use Staticus\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
 use Staticus\Diactoros\Exceptions\WrongResponseException;
 use Psr\Http\Message\StreamInterface;
+use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

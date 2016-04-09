@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\File;
 
-use Staticus\Resources\SaveResourceMiddlewareAbstract;
+use Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract;
 
 class SaveResourceMiddleware extends SaveResourceMiddlewareAbstract
 {
