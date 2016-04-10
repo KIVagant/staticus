@@ -25,7 +25,6 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_RESOURCE_NAME = 'somethingreallystrangeandrandomhere43jejlhkla';
     const ROUTE_PREFIX = '/fractal/';
     const FILE_PATH_V0 = 'jpg/def/0/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';
-
     const FILE_PATH_V1 = 'jpg/def/1/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';
     // Cleanup and first test
     public function testDestroyAction()

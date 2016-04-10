@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Middlewares;
 
+use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
 use Staticus\Resources\ResourceDOInterface;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
@@ -8,6 +9,7 @@ use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Resources\File\ResourceDO;
+use Zend\Diactoros\UploadedFile;
 
 abstract class ActionPostAbstract extends MiddlewareAbstract
 {
@@ -52,13 +54,36 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
         $recreate = $fileExists && $recreate;
         if (!$fileExists || $recreate) {
             $this->resourceDO->setRecreate($recreate);
-            $body = $this->generate($this->resourceDO, $filePath);
+            $body = $this->upload();
+            if ($body) {
 
-            /** @see \Zend\Diactoros\Response::$phrases */
-            return new FileContentResponse($body, 201, $headers);
+                /** @see \Zend\Diactoros\Response::$phrases */
+                return new FileUploadedResponse($body, 201, $headers);
+            } else {
+                $body = $this->generate($this->resourceDO, $filePath);
+
+                /** @see \Zend\Diactoros\Response::$phrases */
+                return new FileContentResponse($body, 201, $headers);
+            }
+
         }
 
         /** @see \Zend\Diactoros\Response::$phrases */
         return new EmptyResponse(304, $headers);
+    }
+
+    /**
+     * @return string|null
+     */
+    protected function upload()
+    {
+        $uploaded = $this->request->getUploadedFiles();
+        $uploaded = current($uploaded);
+        if ($uploaded instanceof UploadedFile) {
+
+            return $uploaded;
+        }
+
+        return null;
     }
 }

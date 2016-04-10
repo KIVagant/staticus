@@ -29,7 +29,6 @@ class BackupResourceCommand implements ResourceCommandInterface
             $baseDir = $this->resourceDO->getBaseDirectory();
             $lastVersion = $this->findLastExistsVersion($baseDir, $uuid, $type, $variant);
         }
-
         return $this->backupResource($lastVersion + 1);
     }
 

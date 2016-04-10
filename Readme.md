@@ -41,6 +41,7 @@ md-toc-filter ./Readme.md > Readme2.md
             - [Secondary creation](#secondary-creation)
             - [Regeneration 1: Re-created file is identical to the existing](#regeneration-1-re-created-file-is-identical-to-the-existing)
             - [Regeneration 2: The created file is a different](#regeneration-2-the-created-file-is-a-different)
+            - [Uploading file](#uploading-file)
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
@@ -325,6 +326,30 @@ X-Powered-By: PHP/5.6.15
 $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 /var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3 # automatically backuped version
+```
+
+#### File Uploading
+
+- You can use any parameter name for the uploaded file, but only first file from multiple files list will be uploaded.
+- Uploading will be ignored, if the version already exist. So, use 'recreate' param to force uploading.
+
+```
+$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 \
+  recreate=true var=test file@/Users/kivagant/vagrant/staticus/test.mp3
+HTTP/1.1 201 Created
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 0
+Content-Type: audio/mpeg
+Date: Sun, 10 Apr 2016 14:40:17 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+
+$ find /var/www/cache/mp3 -type f -name *.mp3
+/var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
+/var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3
+/var/www/cache/mp3/test/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 ```
 
 ### DELETE /*.mp3

@@ -1,14 +1,14 @@
 <?php
 namespace Staticus\Diactoros\FileContentResponse;
 
-use Zend\Diactoros\HeaderSecurity;
+use Psr\Http\Message\StreamInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Stream;
 
 /**
  * A class representing HTTP responses with body.
  */
-class FileContentResponse extends Response
+class FileContentResponse extends Response implements FileResponseInterface
 {
     use Response\InjectContentTypeTrait;
     /**
@@ -48,7 +48,7 @@ class FileContentResponse extends Response
     /**
      * Create an empty response with the given status code.
      *
-     * @param null $content
+     * @param string|resource|Stream $content
      * @param int $status Status code for the response, if any.
      * @param array $headers Headers for the response, if any.
      */
@@ -76,23 +76,7 @@ class FileContentResponse extends Response
         $stream = new Stream('php://temp', 'wb+');
         $stream->write((string)$content);
         $stream->rewind();
-        $this->resource = $stream;
 
         return $stream;
-    }
-
-    /**
-     * Ensure header names and values are valid.
-     *
-     * @param array $headers
-     * @throws InvalidArgumentException
-     * @see \Zend\Diactoros\Response::assertHeaders
-     */
-    private function assertHeaders(array $headers)
-    {
-        foreach ($headers as $name => $headerValues) {
-            HeaderSecurity::assertValidName($name);
-            array_walk($headerValues, '\Zend\Diactoros\HeaderSecurity::assertValid');
-        }
     }
 }

@@ -46,6 +46,7 @@ trait ShellFindCommandTrait
         $variantVersions = [];
         // Определяем последнюю версию
         foreach ($result as $path) {
+            $path = str_replace('//', '/', $path);
             // Проверяем, что из shell не прилетело чего-нибудь лишнего, не содержащего нужные нам маршруты
             if (0 === strpos($path, $prefixPath)) {
                 $suffix = substr($path, $prefixPathLenght);

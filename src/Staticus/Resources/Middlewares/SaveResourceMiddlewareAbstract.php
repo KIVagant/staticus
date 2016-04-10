@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Middlewares;
 
+use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Resources\Commands\BackupResourceCommand;
 use Staticus\Resources\Commands\CopyResourceCommand;
 use Staticus\Resources\Commands\DestroyEqualResourceCommand;
@@ -9,11 +10,12 @@ use Staticus\Middlewares\MiddlewareAbstract;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
 use Staticus\Diactoros\Exceptions\WrongResponseException;
-use Psr\Http\Message\StreamInterface;
 use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Stream;
+use Zend\Diactoros\UploadedFile;
 
 class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 {
@@ -44,7 +46,10 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
-        if ($response instanceof FileContentResponse) {
+        if (
+            $response instanceof FileContentResponse
+            || $response instanceof FileUploadedResponse
+        ) {
             $resourceDO = $this->resourceDO;
             $filePath = $resourceDO->getFilePath();
             if (empty($filePath)) {
@@ -54,10 +59,10 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             if (is_resource($resourceStream)) {
                 $this->save($resourceDO, $resourceStream);
             } else {
-                if (!$resourceStream instanceof StreamInterface) {
+                $body = $response->getContent();
+                if (!$body) {
                     throw new WrongResponseException('Empty body for generated file. Request: ' . $resourceDO->getName());
                 }
-                $body = $response->getContent();
                 $this->save($resourceDO, $body);
             }
             $this->copyFileToDefaults($resourceDO);
@@ -75,6 +80,19 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         if (!file_put_contents($filePath, $content)) {
             throw new SaveResourceErrorException('File cannot be written to the path ' . $filePath);
         }
+    }
+
+    protected function uploadFile($mime, $content, $filePath)
+    {
+        $uri = $content->getStream()->getMetadata('uri');
+        if (!$uri) {
+            throw new SaveResourceErrorException('Unknown error: can\'t get uploaded file uri');
+        }
+        $uploadedMime = mime_content_type($uri);
+        if ($mime !== $uploadedMime) {
+            throw new SaveResourceErrorException('Bad request: incorrect mime-type of the uploaded file');
+        }
+        $content->moveTo($filePath);
     }
 
     protected function copyResource(ResourceDOInterface $originResourceDO, ResourceDOInterface $newResourceDO)
@@ -128,8 +146,11 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 
     /**
      * @param ResourceDOInterface $resourceDO
-     * @param string|resource $content
+     * @param string|resource|Stream $content
      * @return ResourceDOInterface
+     * @throws \RuntimeException if the upload was not successful.
+     * @throws \InvalidArgumentException if the $path specified is invalid.
+     * @throws \RuntimeException on any error during the move operation, or on
      */
     protected function save(ResourceDOInterface $resourceDO, $content)
     {
@@ -141,9 +162,15 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             $command = new BackupResourceCommand($resourceDO);
             $backupResourceVerDO = $command();
         }
-        $this->writeFile($filePath, $content);
+        if ($content instanceof UploadedFile) {
+            $this->uploadFile($resourceDO->getMimeType(), $content, $filePath);
+        } else {
+            $this->writeFile($filePath, $content);
+        }
 
-        if ($backupResourceVerDO instanceof ResourceDOInterface) {
+        if ($backupResourceVerDO instanceof ResourceDOInterface
+            && $backupResourceVerDO->getVersion() !== ResourceDOInterface::DEFAULT_VERSION) {
+
             // If the newly created file is the same as the previous version, remove it immediately
             $command = new DestroyEqualResourceCommand($resourceDO, $backupResourceVerDO);
             $command();
