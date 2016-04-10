@@ -10,8 +10,10 @@ use FractalManager\Manager;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Resources\Jpg\ResourceDO;
+use Staticus\Resources\Jpg\ResourceResponseMiddleware;
 use Staticus\Resources\Jpg\SaveResourceMiddleware;
 use Zend\Diactoros\Response;
+use Zend\Diactoros\Response\JsonResponse;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\UploadedFile;
@@ -55,7 +57,8 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($responsePost instanceof FileContentResponse);
         /** @var EmptyResponse $responsePost */
         $this->assertEquals(201, $responsePost->getStatusCode());
-        $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V0);
+        $responseSave = $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V0);
+        $responseResource = $this->subtestResourceResponseMiddleware($responseSave, $image, 201);
     }
 
     protected function subtestSaveResourceMiddleware($responsePost, ResourceDO $image, $filePath)
@@ -74,6 +77,33 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($responseSave instanceof Response);
         $this->assertTrue($responseSave instanceof EmptyResponse);
         $this->assertFileExists($filePath);
+
+        return $responseSave;
+    }
+
+    protected function subtestResourceResponseMiddleware($responseSave, ResourceDO $image, $statusCode)
+    {
+        $action = new ResourceResponseMiddleware($image);
+        $responseResource = null;
+        $resourceRoute = $this->getResourceRoute($image);
+        $action(new ServerRequest([$resourceRoute]), $responseSave, function (
+            ServerRequest $request,
+            Response $response,
+            callable $next = null
+        ) use (&$responseResource) {
+            $responseResource = $response;
+        });
+        $this->assertTrue($responseResource instanceof Response);
+        $this->assertTrue($responseResource instanceof JsonResponse);
+        /** @var JsonResponse $responseResource */
+        $this->assertEquals($statusCode, $responseResource->getStatusCode());
+        $model = '{"resource":{"height":0,"name":"somethingreallystrangeandrandomhere43jejlhkla",'
+            . '"nameAlternative":"","recreate":false,"type":"jpg","uuid":"70c6bb24a7468ef0bdd98f0a773626a1",'
+            . '"variant":"def","version":0,"width":0},'
+            . '"uri":"somethingreallystrangeandrandomhere43jejlhkla.jpg"}';
+        $this->assertEquals($model, $responseResource->getBody()->getContents());
+
+        return $responseResource;
     }
 
     public function testGetFound()

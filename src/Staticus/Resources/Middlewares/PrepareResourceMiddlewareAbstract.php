@@ -11,11 +11,11 @@ use Zend\Diactoros\Response\EmptyResponse;
 
 abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
 {
-    private $resourceDO;
+    protected $resourceDO;
     /**
      * @var Config
      */
-    private $config;
+    protected $config;
 
     public function __construct(ResourceDOInterface $resourceDO, Config $config)
     {

@@ -266,10 +266,23 @@ Cache-Control: public
 Cache-Control: public
 Connection: keep-alive
 Content-Length: 0
-Content-Type: audio/mpeg
+Content-Type: application/json
 Date: Mon, 04 Apr 2016 20:30:37 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
+
+{
+    "resource": {
+        "name": "waxwing",
+        "nameAlternative": "",
+        "recreate": false,
+        "type": "mp3",
+        "uuid": "2d5080a8ea20ec175c318d65d1429e94",
+        "variant": "def",
+        "version": 0
+    },
+    "uri": "waxwing.mp3"
+}
 
 $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
@@ -318,10 +331,23 @@ Cache-Control: public
 Cache-Control: public
 Connection: keep-alive
 Content-Length: 0
-Content-Type: application/octet-stream
+Content-Type: application/json
 Date: Sat, 09 Apr 2016 10:41:39 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
+
+{
+    "resource": {
+        "name": "waxwing",
+        "nameAlternative": "",
+        "recreate": true,
+        "type": "mp3",
+        "uuid": "2d5080a8ea20ec175c318d65d1429e94",
+        "variant": "def",
+        "version": 0
+    },
+    "uri": "waxwing.mp3"
+}
 
 $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
@@ -341,10 +367,23 @@ Cache-Control: public
 Cache-Control: public
 Connection: keep-alive
 Content-Length: 0
-Content-Type: audio/mpeg
+Content-Type: application/json
 Date: Sun, 10 Apr 2016 14:40:17 GMT
 Server: nginx/1.9.7
 X-Powered-By: PHP/5.6.15
+
+{
+    "resource": {
+        "name": "waxwing",
+        "nameAlternative": "",
+        "recreate": true,
+        "type": "mp3",
+        "uuid": "2d5080a8ea20ec175c318d65d1429e94",
+        "variant": "test",
+        "version": 0
+    },
+    "uri": "waxwing.mp3?var=test"
+}
 
 $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3

@@ -19,7 +19,7 @@ use Zend\Diactoros\UploadedFile;
 
 class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 {
-    private $resourceDO;
+    protected $resourceDO;
 
     /**
      * Another type for nice IDE autocomplete in child classes

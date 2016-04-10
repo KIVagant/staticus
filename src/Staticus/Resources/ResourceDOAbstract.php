@@ -5,7 +5,7 @@ namespace Staticus\Resources;
  * Domain Object
  * @package Staticus\Resources\File
  */
-abstract class ResourceDOAbstract implements ResourceDOInterface
+abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 {
     protected $uuid;
     protected $name;
@@ -25,6 +25,21 @@ abstract class ResourceDOAbstract implements ResourceDOInterface
      */
     protected $baseDirectory;
     protected $filePath;
+
+    /**
+     * List of object properties that should not be iterable (denied for the usage in response)
+     * @var array
+     */
+    protected $notIterable = [
+        'itemPosition',
+        'notIterable',
+        'baseDirectory',
+        'filePath',
+        'author',
+    ];
+
+    protected $itemPosition = 0;
+
     public function reset()
     {
         $this->uuid = '';
@@ -253,5 +268,55 @@ abstract class ResourceDOAbstract implements ResourceDOInterface
         $this->recreate = (bool)$recreate;
 
         return $this;
+    }
+
+    public function rewind()
+    {
+        $this->itemPosition = 0;
+    }
+
+    public function current()
+    {
+        $props = get_object_vars($this);
+        $propsNames = array_keys($props);
+        sort($propsNames);
+        $propName = $propsNames[$this->itemPosition];
+
+        if (!in_array($propName, $this->notIterable)) {
+
+            return [$propName, $props[$propName]];
+        }
+
+        return [0, null];
+    }
+
+    public function key()
+    {
+        return $this->itemPosition;
+    }
+
+    public function next()
+    {
+        ++$this->itemPosition;
+    }
+
+    public function valid()
+    {
+        $props = get_object_vars($this);
+        $propsNames = array_keys($props);
+        sort($propsNames);
+
+        return isset($propsNames[$this->itemPosition]);
+    }
+    public function toArray()
+    {
+        $ar = [];
+        foreach ($this as $k => $p) {
+
+            $ar[$p[0]] = $p[1];
+        }
+        unset($ar[0]);
+
+        return $ar;
     }
 }
