@@ -45,6 +45,7 @@ md-toc-filter ./Readme.md > Readme2.md
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
+    - [Installation and tests](#installation-and-tests)
 
 ## Disclaimer
 
@@ -448,4 +449,22 @@ X-Powered-By: PHP/5.6.15
 
 $ find /var/www/cache/mp3 -type f -name *.mp3
 (nothing here)
+```
+
+## Installation and tests
+
+1. Copy **.env.develop** to **.env** and check the variables inside.
+2. Copy **phpunit.xml.dist** to **phpunit.xml**.
+
+```
+$ composer run-script serve
+$ composer run-script test
+> phpunit
+PHPUnit 4.8.24 by Sebastian Bergmann and contributors.
+
+.........
+
+Time: 180 ms, Memory: 6.75Mb
+
+OK (9 tests, 67 assertions)
 ```
