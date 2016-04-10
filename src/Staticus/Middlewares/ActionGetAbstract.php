@@ -48,7 +48,7 @@ abstract class ActionGetAbstract extends MiddlewareAbstract
     {
         $mime = mime_content_type($path);
         if (!$mime) {
-            throw new ErrorException('Mime content type can not be reached');
+            throw new ErrorException('Mime content type can not be reached', __LINE__);
         }
         $headers = [
             'X-Accel-Redirect' => $path,

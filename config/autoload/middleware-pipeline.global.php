@@ -9,6 +9,7 @@ return [
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
         ],
         'invokables' => [
+            Staticus\Middlewares\ErrorHandler::class => Staticus\Middlewares\ErrorHandler::class,
         ],
     ],
     // This can be used to seed pre- and/or post-routing middleware
@@ -61,7 +62,7 @@ return [
         ],
         'error' => [
             'middleware' => [
-                // Add error middleware here.
+                Staticus\Middlewares\ErrorHandler::class,
             ],
             'error'    => true,
             'priority' => -10000,

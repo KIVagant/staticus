@@ -16,7 +16,7 @@ class Config
         foreach ($routes as $item) {
             $endPath .= $item . '.';
             if (!isset($config[$item])) {
-                throw new \RuntimeException('Unknown config route: ' . $endPath);
+                throw new \RuntimeException('Unknown config route: ' . $endPath, __LINE__);
             }
             $config = $config[$item];
         }

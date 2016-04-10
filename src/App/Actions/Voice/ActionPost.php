@@ -31,8 +31,10 @@ class ActionPost extends ActionPostAbstract
         $headers = $this->generator->getHeaders();
         if (!isset($headers['http_code']) || $headers['http_code'] != 200) {
             throw new ErrorException(
-                'Wrong http response code from voice provider ' . get_class($this->generator->getAdapter())
-                . ': ' . $headers['http_code'] . '; Requested text: ' . $resourceDO->getName());
+                'Wrong http response code from voice provider '
+                . get_class($this->generator->getAdapter())
+                . ': ' . $headers['http_code'] . '; Requested text: '
+                . $resourceDO->getName(), __LINE__);
         }
 
         return $content;

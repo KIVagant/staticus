@@ -5,9 +5,8 @@ use Staticus\Config\Config;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Staticus\Diactoros\Exceptions\WrongRequestException;
+use Staticus\Exceptions\WrongRequestException;
 use Staticus\Resources\ResourceDOInterface;
-use Zend\Diactoros\Response\EmptyResponse;
 
 abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
 {
@@ -30,13 +29,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
-        try {
-            $this->fillResource();
-        } catch (WrongRequestException $e) {
-
-            /** @see \Zend\Diactoros\Response::$phrases */
-            return new EmptyResponse(400);
-        }
+        $this->fillResource();
 
         return $next($request, $response);
     }
@@ -50,7 +43,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         $name = static::getParamFromRequest('name', $this->request);
         $name = $this->cleanup($name);
         if (empty($name) || !preg_match('/\w+/u', $name)) {
-            throw new WrongRequestException('Wrong resource name ' . $name);
+            throw new WrongRequestException('Wrong resource name ' . $name, __LINE__);
         }
         $alt = static::getParamFromRequest('alt', $this->request);
         $alt = $this->cleanup($alt);
@@ -79,7 +72,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             $type = $this->request->getAttribute('type');
             $type = $this->cleanup($type);
             if (empty($type) || !preg_match('/\w+/u', $name)) {
-                throw new WrongRequestException('Unknown resource type for ' . $name);
+                throw new WrongRequestException('Unknown resource type for ' . $name, __LINE__);
             }
             $this->resourceDO->setType($type);
         }

@@ -1,5 +1,5 @@
 <?php
-namespace Staticus\Diactoros\Exceptions;
+namespace Staticus\Exceptions;
 
 class WrongRequestException extends \RuntimeException
 {

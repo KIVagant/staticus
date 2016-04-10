@@ -40,7 +40,7 @@ class FileUploadedResponse extends Response implements FileResponseInterface
     public function setContent($content)
     {
         if (!$content instanceof UploadedFile) {
-            throw new \RuntimeException('Content must be an instance of UploadedFile');
+            throw new \RuntimeException('Content must be an instance of UploadedFile', __LINE__);
         }
         $this->content = $content;
     }

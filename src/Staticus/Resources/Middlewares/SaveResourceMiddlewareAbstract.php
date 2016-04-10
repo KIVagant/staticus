@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Middlewares;
 
+use Staticus\Exceptions\WrongRequestException;
 use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Resources\Commands\BackupResourceCommand;
 use Staticus\Resources\Commands\CopyResourceCommand;
@@ -9,7 +10,7 @@ use Staticus\Resources\File\ResourceDO;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
-use Staticus\Diactoros\Exceptions\WrongResponseException;
+use Staticus\Exceptions\WrongResponseException;
 use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -53,7 +54,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             $resourceDO = $this->resourceDO;
             $filePath = $resourceDO->getFilePath();
             if (empty($filePath)) {
-                throw new WrongResponseException('Empty file path. File can\'t be saved.');
+                throw new WrongResponseException('Empty file path. File can\'t be saved.', __LINE__);
             }
             $resourceStream = $response->getResource();
             if (is_resource($resourceStream)) {
@@ -61,12 +62,11 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             } else {
                 $body = $response->getContent();
                 if (!$body) {
-                    throw new WrongResponseException('Empty body for generated file. Request: ' . $resourceDO->getName());
+                    throw new WrongResponseException('Empty body for generated file. Request: ' . $resourceDO->getName(), __LINE__);
                 }
                 $this->save($resourceDO, $body);
             }
             $this->copyFileToDefaults($resourceDO);
-
             $this->response = new EmptyResponse($response->getStatusCode(), [
                 'Content-Type' => $this->resourceDO->getMimeType(),
             ]);
@@ -78,7 +78,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     protected function writeFile($filePath, $content)
     {
         if (!file_put_contents($filePath, $content)) {
-            throw new SaveResourceErrorException('File cannot be written to the path ' . $filePath);
+            throw new SaveResourceErrorException('File cannot be written to the path ' . $filePath, __LINE__);
         }
     }
 
@@ -86,11 +86,11 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     {
         $uri = $content->getStream()->getMetadata('uri');
         if (!$uri) {
-            throw new SaveResourceErrorException('Unknown error: can\'t get uploaded file uri');
+            throw new SaveResourceErrorException('Unknown error: can\'t get uploaded file uri', __LINE__);
         }
         $uploadedMime = mime_content_type($uri);
         if ($mime !== $uploadedMime) {
-            throw new SaveResourceErrorException('Bad request: incorrect mime-type of the uploaded file');
+            throw new WrongRequestException('Bad request: incorrect mime-type of the uploaded file', __LINE__);
         }
         $content->moveTo($filePath);
     }
@@ -112,7 +112,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     {
         $this->createDirectory(dirname($toFullPath));
         if (!copy($fromFullPath, $toFullPath)) {
-            throw new SaveResourceErrorException('File cannot be copied to the default path ' . $toFullPath);
+            throw new SaveResourceErrorException('File cannot be copied to the default path ' . $toFullPath, __LINE__);
         }
 
         return true;
@@ -120,12 +120,12 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 
     /**
      * @param $directory
-     * @deprecated
+     * @throws SaveResourceErrorException
      */
     protected function createDirectory($directory)
     {
         if (@!mkdir($directory, 0777, true) && !is_dir($directory)) {
-            throw new SaveResourceErrorException('Can\'t create a directory: ' . $directory);
+            throw new SaveResourceErrorException('Can\'t create a directory: ' . $directory, __LINE__);
         }
     }
 

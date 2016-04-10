@@ -14,7 +14,7 @@ class SaveResourceMiddleware extends SaveImageMiddlewareAbstract
     {
         if (!imagegif($content, $filePath)) {
             imagedestroy($content);
-            throw new SaveResourceErrorException('File cannot be written to the path ' . $filePath);
+            throw new SaveResourceErrorException('File cannot be written to the path ' . $filePath, __LINE__);
         }
         imagedestroy($content);
     }

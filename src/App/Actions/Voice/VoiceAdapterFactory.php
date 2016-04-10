@@ -34,7 +34,7 @@ class VoiceAdapterFactory
                 $adapter->setOptions($options);
                 break;
             default:
-                throw new ErrorException('Not implemented functionality for voice provider: ' . $adapterName);
+                throw new ErrorException('Not implemented functionality for voice provider: ' . $adapterName, __LINE__);
         }
 
         return $adapter;
