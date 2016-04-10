@@ -8,11 +8,13 @@ use App\Actions\Fractal\ActionPost;
 use FractalManager\Adapter\Mandlebrot;
 use FractalManager\Manager;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
+use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Resources\Jpg\ResourceDO;
 use Staticus\Resources\Jpg\SaveResourceMiddleware;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Diactoros\ServerRequest;
+use Zend\Diactoros\UploadedFile;
 use Zend\Stratigility\MiddlewareInterface;
 
 class AcceptanceTest extends \PHPUnit_Framework_TestCase
@@ -26,6 +28,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     const ROUTE_PREFIX = '/fractal/';
     const FILE_PATH_V0 = 'jpg/def/0/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';
     const FILE_PATH_V1 = 'jpg/def/1/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';
+    const FILE_PATH_V2 = 'jpg/def/2/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';
     // Cleanup and first test
     public function testDestroyAction()
     {
@@ -104,20 +107,42 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(201, $responsePost->getStatusCode());
         $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V1);
     }
+    public function testPostUpload()
+    {
+        $uploadedFiles = [new UploadedFile(env('DATA_DIR') . static::FILE_PATH_V0, 123, UPLOAD_ERR_OK)];
+        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V2);
+        $image = $this->prepareResource();
+        $responsePost = $this->makePostRequest($image, ['recreate' => '1'], $uploadedFiles);
+        $this->assertTrue($responsePost instanceof Response);
+        $this->assertTrue($responsePost instanceof FileUploadedResponse);
+        /** @var EmptyResponse $responsePost */
+        $this->assertEquals(201, $responsePost->getStatusCode());
+        $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V2);
+    }
     public function testDeleteAction()
     {
         $image = $this->prepareResource();
-        $image->setVersion(1);
+
+        // First, delete the special version 2
+        $image->setVersion(2);
         $this->makeDeleteRequest($image);
         $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V1);
+        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V1);
+        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V2);
+
+        // Second, delete the basic version (backup version will created)
         $image->setVersion(0);
         $this->makeDeleteRequest($image);
         $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V0);
         $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V1);
+        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V2);
+
+        // And now destroy all created files (test cleanup)
         $this->makeDeleteRequest($image, ['destroy' => '1']);
         $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V0);
         $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V1);
+        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V2);
     }
 
     protected function prepareResource()
@@ -169,10 +194,10 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
         return $response;
     }
-    protected function makePostRequest(ResourceDO $image, $parsedBody = [])
+    protected function makePostRequest(ResourceDO $image, $parsedBody = [], $uploadedFiles = [])
     {
         $resourceRoute = $this->getResourceRoute($image);
-        $request = new ServerRequest([$resourceRoute], [], null, null, 'php://input', [], [], [], $parsedBody);
+        $request = new ServerRequest([$resourceRoute], $uploadedFiles, null, null, 'php://input', [], [], [], $parsedBody);
         $adapter = new Mandlebrot();
         $manager = new Manager($adapter);
         $action = new ActionPost($image, $manager);

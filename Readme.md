@@ -41,7 +41,7 @@ md-toc-filter ./Readme.md > Readme2.md
             - [Secondary creation](#secondary-creation)
             - [Regeneration 1: Re-created file is identical to the existing](#regeneration-1-re-created-file-is-identical-to-the-existing)
             - [Regeneration 2: The created file is a different](#regeneration-2-the-created-file-is-a-different)
-            - [Uploading file](#uploading-file)
+            - [File Uploading](#file-uploading)
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
