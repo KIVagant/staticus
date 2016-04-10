@@ -47,6 +47,7 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     public function setWidth($width = self::DEFAULT_WIDTH)
     {
         $this->width = (int)$width;
+        $this->setFilePath();
 
         return $this;
     }
@@ -66,6 +67,7 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     public function setHeight($height = self::DEFAULT_HEIGHT)
     {
         $this->height = (int)$height;
+        $this->setFilePath();
 
         return $this;
     }

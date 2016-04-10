@@ -47,7 +47,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
      */
     protected function fillResource()
     {
-        $name = $this->request->getAttribute('name');
+        $name = static::getParamFromRequest('name', $this->request);
         $name = $this->cleanup($name);
         if (empty($name) || !preg_match('/\w+/u', $name)) {
             throw new WrongRequestException('Wrong resource name ' . $name);
@@ -60,7 +60,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         $author = static::getParamFromRequest('author', $this->request);
         $author = $this->cleanup($author);
 
-        $cacheDir = $this->config->get('data_dir');
+        $dataDir = $this->config->get('data_dir');
         /**
          * You shouldn't check 'recreate' and 'destroy' params here.
          * @see \Staticus\Action\StaticMiddlewareAbstract::postAction
@@ -68,7 +68,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
          */
         $this->resourceDO
             ->reset()
-            ->setBaseDirectory($cacheDir)
+            ->setBaseDirectory($dataDir)
             ->setName($name)
             ->setNameAlternative($alt)
             ->setVariant($var)
@@ -83,7 +83,9 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             }
             $this->resourceDO->setType($type);
         }
+        $this->fillSpecificResourceSpecific();
     }
+    abstract protected function fillSpecificResourceSpecific();
 
     protected function cleanup($name)
     {
@@ -100,6 +102,11 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
      */
     public static function getParamFromRequest($name, ServerRequestInterface $request)
     {
+        $attribute = $request->getAttribute($name);
+        if ($attribute) {
+
+            return $attribute;
+        }
         $paramsGET = $request->getQueryParams();
         $paramsPOST = (array)$request->getParsedBody();
 

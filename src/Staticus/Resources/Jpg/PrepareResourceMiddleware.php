@@ -1,10 +1,10 @@
 <?php
 namespace Staticus\Resources\Jpg;
 
-use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
+use Staticus\Resources\Middlewares\PrepareImageMiddlewareAbstract;
 use Staticus\Config\Config;
 
-class PrepareResourceMiddleware extends PrepareResourceMiddlewareAbstract
+class PrepareResourceMiddleware extends PrepareImageMiddlewareAbstract
 {
     public function __construct(ResourceDO $resourceDO, Config $config)
     {

@@ -29,8 +29,8 @@ md-toc-filter ./Readme.md > Readme2.md
     - [JPG Type](#jpg-type)
         - [Special parameters](#special-parameters)
             - [size=WxH, string, image dimension](#sizewxh-string-image-dimension)
-            - [variant=fractal fractal variant of the image](#variantfractal-fractal-variant-of-the-image)
-            - [variant=auto[:id] automatically found variant](#variantautoid-automatically-found-variant)
+            - [var=fractal fractal variant of the image](#variantfractal-fractal-variant-of-the-image)
+            - [var=auto[:id] automatically found variant](#variantautoid-automatically-found-variant)
             - [filters[]=filtername, string, postprocessing filters](#filtersfiltername-string-postprocessing-filters)
     - [MP3 Type](#mp3-type)
         - [GET /*.mp3](#get-mp3)
@@ -185,12 +185,12 @@ PUT не поддерживается.
 Чтобы изображения обрезались, в конфигурационном файле должны быть зарегистрированы все разрешенные размеры.
 Изображение с неразрешенным размером будет обрезано к ближайшему найденному зарегистрированному *большему* размеру.
 
-#### variant=fractal fractal variant of the image
+#### var=fractal fractal variant of the image
 
 Если отправить POST-запрос на этот вариант, будет генерирована картинка с фракталом. Удобно использовать в качестве
 заглушек по-умолчанию.
 
-#### variant=auto[:id] automatically found variant
+#### var=auto[:id] automatically found variant
 
 Варианты будут искаться через зарегистрированного провайдера изображений (поддерживается один провайдер).
 Если не указан идентификатор, вернётся нулевой вариант (первый из найденных).

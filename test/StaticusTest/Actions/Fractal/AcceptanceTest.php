@@ -2,9 +2,9 @@
 
 namespace StaticusTest\Actions\Fractal;
 
-use App\Actions\Fractal\ActionDelete;
-use App\Actions\Fractal\ActionGet;
-use App\Actions\Fractal\ActionPost;
+use App\Actions\Image\ActionDelete;
+use App\Actions\Image\ActionGet;
+use App\Actions\Image\ActionPost;
 use FractalManager\Adapter\Mandlebrot;
 use FractalManager\Manager;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
@@ -27,7 +27,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
      * All tests must be run one-by-one! Do not change their position in this file!
      */
     const DEFAULT_RESOURCE_NAME = 'somethingreallystrangeandrandomhere43jejlhkla';
-    const ROUTE_PREFIX = '/fractal/';
+    const ROUTE_PREFIX = '/';
     const FILE_PATH_V0 = 'jpg/def/0/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';
     const FILE_PATH_V1 = 'jpg/def/1/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';
     const FILE_PATH_V2 = 'jpg/def/2/0/70c6bb24a7468ef0bdd98f0a773626a1.jpg';

@@ -2,7 +2,7 @@
 
 namespace StaticusTest\Actions\Fractal;
 
-use App\Actions\Fractal\ActionGet;
+use App\Actions\Image\ActionGet;
 use Staticus\Resources\Jpg\ResourceDO;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Response\EmptyResponse;

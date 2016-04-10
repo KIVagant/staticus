@@ -1,5 +1,5 @@
 <?php
-namespace App\Actions\Fractal;
+namespace App\Actions\Image;
 
 use Staticus\Middlewares\ActionDeleteAbstract;
 use Staticus\Resources\ResourceImageDOInterface;
