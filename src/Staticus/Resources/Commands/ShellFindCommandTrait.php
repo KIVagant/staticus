@@ -38,6 +38,14 @@ trait ShellFindCommandTrait
      */
     protected function findLastExistsVersion($baseDir, $uuid, $type, $variant)
     {
+        $variantVersions = $this->findAllVersions($baseDir, $uuid, $type, $variant);
+        $lastVersion = (int)current($variantVersions);
+
+        return $lastVersion;
+    }
+
+    protected function findAllVersions($baseDir, $uuid, $type, $variant)
+    {
         $command = $this->getShellFindCommand($baseDir, $uuid, $type, $variant);
         $result = shell_exec($command);
         $result = array_filter(explode(PHP_EOL, $result));
@@ -58,9 +66,7 @@ trait ShellFindCommandTrait
         }
         $variantVersions = array_unique($variantVersions);
         rsort($variantVersions, SORT_NUMERIC);
-        $lastVersion = (int)current($variantVersions);
 
-        return $lastVersion;
+        return $variantVersions;
     }
-
 }

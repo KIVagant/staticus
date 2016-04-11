@@ -32,4 +32,32 @@ abstract class SaveImageMiddlewareAbstract extends SaveResourceMiddlewareAbstrac
             $this->copyResource($resourceDO, $defaultDO);
         }
     }
+    protected function afterSave(ResourceDOInterface $resourceDO)
+    {
+        // If the basic version replaced
+        if (ResourceImageDO::DEFAULT_SIZE === $resourceDO->getSize()) {
+            $command = 'find '
+                . $resourceDO->getBaseDirectory() . $resourceDO->getType()
+                . DIRECTORY_SEPARATOR . $resourceDO->getVariant() . DIRECTORY_SEPARATOR
+                . $resourceDO->getVersion() . DIRECTORY_SEPARATOR
+                . '*x*' . DIRECTORY_SEPARATOR // only non-zero versions
+                . ' -type f -name ' . $resourceDO->getUuid() . '.' . $resourceDO->getType();
+            $command .= ' -delete';
+
+            shell_exec($command);
+        }
+    }
+    protected function backup(ResourceDOInterface $resourceDO)
+    {
+
+        return ResourceImageDO::DEFAULT_SIZE === $resourceDO->getSize()
+            ? parent::backup($resourceDO)
+            : $resourceDO;
+    }
+    protected function destroyEqual(ResourceDOInterface $resourceDO, ResourceDOInterface $backupResourceVerDO)
+    {
+        return ResourceImageDO::DEFAULT_SIZE === $resourceDO->getSize()
+            ? parent::destroyEqual($resourceDO, $backupResourceVerDO)
+            : $resourceDO;
+    }
 }

@@ -2,6 +2,7 @@
 namespace Staticus\Resources\File;
 
 use Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract;
+use Staticus\Resources\ResourceDOInterface;
 
 class SaveResourceMiddleware extends SaveResourceMiddlewareAbstract
 {
@@ -9,4 +10,5 @@ class SaveResourceMiddleware extends SaveResourceMiddlewareAbstract
     {
         parent::__construct($resourceDO);
     }
+    protected function afterSave(ResourceDOInterface $resourceDO) {}
 }
