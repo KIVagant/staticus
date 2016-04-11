@@ -44,7 +44,7 @@ abstract class SaveImageMiddlewareAbstract extends SaveResourceMiddlewareAbstrac
                 . ' -type f -name ' . $resourceDO->getUuid() . '.' . $resourceDO->getType();
             $command .= ' -delete';
 
-            shell_exec($command);
+            shell_exec($command . '> /dev/null 2>&1');
         }
     }
     protected function backup(ResourceDOInterface $resourceDO)
