@@ -1,5 +1,7 @@
 <?php
 
+use Staticus\Resources\ResourceDOInterface;
+
 return [
     'dependencies' => [
         'invokables' => [
@@ -69,7 +71,7 @@ return [
     'routes' => [
         [
             'name' => 'get-voice',
-            'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
+            'path' => '/{name:' . ResourceDOInterface::PARAM_NAME_REGEXP . '}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
                 App\Actions\Voice\ActionGet::class,
@@ -78,7 +80,7 @@ return [
         ],
         [
             'name' => 'post-voice',
-            'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}', // ?recreate=1 is allowed here
+            'path' => '/{name:' . ResourceDOInterface::PARAM_NAME_REGEXP . '}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}', // ?recreate=1 is allowed here
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
@@ -90,7 +92,7 @@ return [
         ],
         [
             'name' => 'delete-voice',
-            'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
+            'path' => '/{name:' . ResourceDOInterface::PARAM_NAME_REGEXP . '}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
@@ -102,7 +104,7 @@ return [
         /* JPG */
         [
             'name' => 'get-jpg',
-            'path' => '/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
+            'path' => '/{name:' . ResourceDOInterface::PARAM_NAME_REGEXP . '}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
                 Staticus\Resources\Jpg\ImagePostProcessingMiddleware::class,
@@ -112,7 +114,7 @@ return [
         ],
         [
             'name' => 'post-jpg',
-            'path' => '/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
+            'path' => '/{name:' . ResourceDOInterface::PARAM_NAME_REGEXP . '}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'allowed_methods' => ['POST'],
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
@@ -124,7 +126,7 @@ return [
         ],
         [
             'name' => 'delete-jpg',
-            'path' => '/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
+            'path' => '/{name:' . ResourceDOInterface::PARAM_NAME_REGEXP . '}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,

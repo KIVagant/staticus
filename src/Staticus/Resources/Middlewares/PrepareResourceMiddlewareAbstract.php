@@ -42,14 +42,13 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     {
         $name = static::getParamFromRequest('name', $this->request);
         $name = $this->cleanup($name);
-        if (empty($name) || !preg_match('/\w+/u', $name)) {
-            throw new WrongRequestException('Wrong resource name ' . $name, __LINE__);
-        }
+        $this->defaultValidator('name', $name, false, '/^' . ResourceDOInterface::PARAM_NAME_REGEXP . '$/ui');
         $alt = static::getParamFromRequest('alt', $this->request);
         $alt = $this->cleanup($alt);
         $var = static::getParamFromRequest('var', $this->request);
         $var = $this->cleanup($var);
-        $v = static::getParamFromRequest('v', $this->request);
+        $this->defaultValidator('var', $var, true);
+        $v = (int)static::getParamFromRequest('v', $this->request);
         $author = static::getParamFromRequest('author', $this->request);
         $author = $this->cleanup($author);
 
@@ -69,11 +68,9 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             ->setAuthor($author);
 
         if (!$this->resourceDO->getType()) {
-            $type = $this->request->getAttribute('type');
+            $type = static::getParamFromRequest('type');
             $type = $this->cleanup($type);
-            if (empty($type) || !preg_match('/\w+/u', $name)) {
-                throw new WrongRequestException('Unknown resource type for ' . $name, __LINE__);
-            }
+            $this->defaultValidator('type', $type);
             $this->resourceDO->setType($type);
         }
         $this->fillSpecificResourceSpecific();
@@ -83,6 +80,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     protected function cleanup($name)
     {
         $name = preg_replace('/\s+/u', ' ', trim(mb_strtolower(rawurldecode((string)$name), 'UTF-8')));
+        $name = str_replace(['\\', '/'], '', $name);
 
         return $name;
     }
@@ -112,5 +110,12 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             );
 
         return $str;
+    }
+
+    protected function defaultValidator($name, $value, $canBeEmpty = false, $regexp = '/^[\w\d\-]+$/ui')
+    {
+        if ((empty($value) && !$canBeEmpty) || (!empty($value) && !preg_match($regexp, $value))) {
+            throw new WrongRequestException('Wrong request param "' . $name . '": ' . $value, __LINE__);
+        }
     }
 }

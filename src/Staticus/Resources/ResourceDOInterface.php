@@ -9,6 +9,7 @@ interface ResourceDOInterface
 {
     const DEFAULT_VARIANT = 'def';
     const DEFAULT_VERSION = 0;
+    const PARAM_NAME_REGEXP = '[\w\d \-\,\.]+';
 
     /**
      * @return string

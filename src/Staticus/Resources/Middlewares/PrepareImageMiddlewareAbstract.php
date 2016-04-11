@@ -15,11 +15,14 @@ abstract class PrepareImageMiddlewareAbstract extends PrepareResourceMiddlewareA
         if ($size) {
             $size = explode('x', $size);
             if (!empty($size[0]) && !empty($size[1])) {
-                $width = $size[0];
-                $height = $size[1];
-                $allowedSizes = $this->config->get('images.sizes');
-                if (!in_array([$width, $height], $allowedSizes)) {
-                    throw new WrongRequestException('Resource size is not allowed: ' . $width . 'x' . $height, __LINE__);
+                $width = (int)$size[0];
+                $height = (int)$size[1];
+                if ($width && $height) {
+                    $allowedSizes = $this->config->get('images.sizes');
+                    if (!in_array([$width, $height], $allowedSizes)) {
+                        throw new WrongRequestException('Resource size is not allowed: ' . $width . 'x' . $height,
+                            __LINE__);
+                    }
                 }
             }
         }
