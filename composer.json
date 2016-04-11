@@ -39,12 +39,23 @@
       "App\\": "src/App/",
       "Common\\": "src/Common/",
       "Staticus\\": "src/Staticus/",
-      "FractalManager\\": "src/FractalManager/"
+      "FractalManager\\": "src/FractalManager/",
+      "SearchManager\\": "src/SearchManager/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "AppTest\\": "test/AppTest/"
+      "StaticusTest\\": "test/StaticusTest/"
     }
+  },
+  "scripts": {
+    "check": [
+      "@cs",
+      "@test"
+    ],
+    "cs": "phpcs",
+    "cs-fix": "phpcbf",
+    "serve": "php -S 0.0.0.0:8080 -t public/ public/index.php",
+    "test": "phpunit"
   }
 }

@@ -1,12 +1,14 @@
 <?php
 
 return [
-    'voice' => [
-        'cache_dir' => DATA_DIR . 'voice/',
-        'file_extension' => VOICE_FILE_EXTENSION,
-    ],
-    'fractal' => [
-        'cache_dir' => DATA_DIR . 'fractal/',
-        'file_extension' => FRACTAL_FILE_EXTENSION,
+    'data_dir' => DATA_DIR,
+    'images' => [
+        // Allowed sizes: [[w, h], [w, h]]
+        'sizes' => [
+            [100, 100],
+            [500, 300],
+            [400, 700],
+            [2000, 3000],
+        ],
     ],
 ];

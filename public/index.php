@@ -1,5 +1,4 @@
 <?php
-use Zend\Expressive\AppFactory;
 define('REQUEST_MICROTIME', microtime(true));
 chdir(dirname(__DIR__));
 
@@ -10,13 +9,7 @@ if (php_sapi_name() === 'cli-server'
     return false;
 }
 require 'vendor/autoload.php';
-
-$dotenv = new Dotenv\Dotenv('./');
-$dotenv->load();
-
-define('DATA_DIR', 'data/');
-define('VOICE_FILE_EXTENSION', 'mp3');
-define('FRACTAL_FILE_EXTENSION', 'png');
+require 'config/bootstrap.php';
 
 /** @var \Interop\Container\ContainerInterface $container */
 $container = require 'config/container.php';

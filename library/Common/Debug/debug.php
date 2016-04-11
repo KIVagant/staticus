@@ -10,7 +10,21 @@ if ( ! function_exists('dd'))
      */
     function dd($value)
     {
-        array_map(function($x) { var_dump($x); }, func_get_args());
+        if (php_sapi_name() === 'cli-server' || php_sapi_name() === "cli") {
+            array_map(function($x) { var_export($x); echo PHP_EOL; }, func_get_args());
+        } else {
+            array_map(function($x) { var_dump($x); }, func_get_args());
+        }
+        die;
+    }
+
+    /**
+     * Dump and die with var_export instead of var_dump
+     * @param $value
+     */
+    function ddc($value)
+    {
+        array_map(function($x) { var_export($x); echo PHP_EOL; }, func_get_args());
         die;
     }
 }
