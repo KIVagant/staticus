@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Middlewares;
 
+use Psr\Http\Message\UploadedFileInterface;
 use Staticus\Exceptions\WrongRequestException;
 use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Resources\Commands\BackupResourceCommand;
@@ -82,7 +83,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         }
     }
 
-    protected function uploadFile($mime, $content, $filePath)
+    protected function uploadFile(UploadedFileInterface $content, $mime, $filePath)
     {
         $uri = $content->getStream()->getMetadata('uri');
         if (!$uri) {
@@ -90,6 +91,11 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         }
         $uploadedMime = mime_content_type($uri);
         if ($mime !== $uploadedMime) {
+            /**
+             * Try to remove unnecessary file because UploadFile object can be emulated
+             * @see \Staticus\Middlewares\ActionPostAbstract::download
+             */
+            @unlink($uri);
             throw new WrongRequestException('Bad request: incorrect mime-type of the uploaded file', __LINE__);
         }
         $content->moveTo($filePath);
@@ -162,8 +168,8 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             $command = new BackupResourceCommand($resourceDO);
             $backupResourceVerDO = $command();
         }
-        if ($content instanceof UploadedFile) {
-            $this->uploadFile($resourceDO->getMimeType(), $content, $filePath);
+        if ($content instanceof UploadedFileInterface) {
+            $this->uploadFile($content, $resourceDO->getMimeType(), $filePath);
         } else {
             $this->writeFile($filePath, $content);
         }

@@ -18,7 +18,11 @@ return [
             App\Actions\Image\ActionDelete::class => App\Actions\Image\ActionDelete::class,
             AudioManager\Manager::class => AudioManager\Manager::class,
             FractalManager\Manager::class => FractalManager\Manager::class,
-            FractalManager\Adapter\AdapterInterface::class => FractalManager\Adapter\Mandlebrot::class,
+            FractalManager\Adapter\AdapterInterface::class => FractalManager\Adapter\MandlebrotAdapter::class,
+            SearchManager\Manager::class => SearchManager\Manager::class,
+            SearchManager\Adapter\AdapterInterface::class => SearchManager\Adapter\GoogleAdapter::class,
+            SearchManager\ImageProviders\ImageSearchInterface::class => SearchManager\ImageProviders\SearchImageProviderProxy::class, // search adapter proxy
+            SearchManager\ImageProviders\GoogleCustomSearchImage::class => SearchManager\ImageProviders\GoogleCustomSearchImage::class, // search adapter
 //            Staticus\Resources\File\PrepareResourceMiddleware::class => Staticus\Resources\File\PrepareResourceMiddleware::class,
 //            Staticus\Resources\File\SaveResourceMiddleware::class => Staticus\Resources\File\SaveResourceMiddleware::class,
 //            Staticus\Resources\File\ResourceResponseMiddleware::class => Staticus\Resources\File\ResourceResponseMiddleware::class,
@@ -53,6 +57,10 @@ return [
             AudioManager\Manager::class => AudioManager\Manager::class,
             FractalManager\Adapter\AdapterInterface::class => FractalManager\Adapter\AdapterInterface::class,
             FractalManager\Manager::class => FractalManager\Manager::class,
+            SearchManager\Adapter\AdapterInterface::class => SearchManager\Adapter\AdapterInterface::class,
+            SearchManager\Manager::class => SearchManager\Manager::class,
+            SearchManager\ImageProviders\ImageSearchInterface::class => SearchManager\ImageProviders\ImageSearchInterface::class,
+            SearchManager\ImageProviders\GoogleCustomSearchImage::class => SearchManager\ImageProviders\GoogleCustomSearchImage::class,
         ],
     ],
     'routes' => [

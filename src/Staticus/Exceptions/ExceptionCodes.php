@@ -25,6 +25,9 @@ class ExceptionCodes
         \Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract::class,
         \Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract::class,
         \Staticus\Resources\Png\SaveResourceMiddleware::class,
+        \Staticus\Middlewares\ActionPostAbstract::class,
+        \Staticus\Diactoros\DownloadedFile::class,
+        \SearchManager\ImageProviders\SearchImageProviderProxy::class,
     ];
 
     public static function code($className)

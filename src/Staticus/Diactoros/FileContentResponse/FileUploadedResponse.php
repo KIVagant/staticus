@@ -1,9 +1,9 @@
 <?php
 namespace Staticus\Diactoros\FileContentResponse;
 
+use Psr\Http\Message\UploadedFileInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Stream;
-use Zend\Diactoros\UploadedFile;
 
 class FileUploadedResponse extends Response implements FileResponseInterface
 {
@@ -14,7 +14,7 @@ class FileUploadedResponse extends Response implements FileResponseInterface
     protected $resource;
 
     /**
-     * @var UploadedFile
+     * @var UploadedFileInterface
      */
     protected $content;
 
@@ -27,7 +27,7 @@ class FileUploadedResponse extends Response implements FileResponseInterface
     }
 
     /**
-     * @return UploadedFile
+     * @return UploadedFileInterface
      */
     public function getContent()
     {
@@ -35,12 +35,12 @@ class FileUploadedResponse extends Response implements FileResponseInterface
     }
 
     /**
-     * @param UploadedFile $content
+     * @param UploadedFileInterface $content
      */
     public function setContent($content)
     {
-        if (!$content instanceof UploadedFile) {
-            throw new \RuntimeException('Content must be an instance of UploadedFile', __LINE__);
+        if (!$content instanceof UploadedFileInterface) {
+            throw new \RuntimeException('Content must be an instance of UploadedFileInterface', __LINE__);
         }
         $this->content = $content;
     }
@@ -48,11 +48,11 @@ class FileUploadedResponse extends Response implements FileResponseInterface
     /**
      * Create an empty response with the given status code and attached uploaded file information.
      *
-     * @param UploadedFile $uploadedFile
+     * @param UploadedFileInterface $uploadedFile
      * @param int $status Status code for the response, if any.
      * @param array $headers Headers for the response, if any.
      */
-    public function __construct(UploadedFile $uploadedFile, $status = 204, array $headers = [])
+    public function __construct(UploadedFileInterface $uploadedFile, $status = 204, array $headers = [])
     {
         $this->setContent($uploadedFile);
         $body = $this->createBody();

@@ -23,14 +23,14 @@ md-toc-filter ./Readme.md > Readme2.md
             - [var: string, resource variant name](#var-string-resource-variant-name)
             - [alt: string, alternative resource name](#alt-string-alternative-resource-name)
             - [v: integer, version id](#v-integer-version-id)
-            - [destroy: bool, remove without backup](#destroy-bool-remove-without-backup)
-            - [author: string, author](#author-string-author)
+            - [DELETE destroy: bool, remove without backup](#delete-destroy-bool-remove-without-backup)
+            - [POST author: string, author](#post-author-string-author)
+            - [POST uri=http Upload image by remote URI](#post-urihttp-upload-image-by-remote-uri)
+            - [POST search=1 Find images with search adapter](#post-search1-find-images-with-search-adapter)
     - [Path structure](#path-structure)
     - [JPG Type](#jpg-type)
         - [Special parameters](#special-parameters)
             - [size=WxH, string, image dimension](#sizewxh-string-image-dimension)
-            - [var=fractal fractal variant of the image](#variantfractal-fractal-variant-of-the-image)
-            - [var=auto[:id] automatically found variant](#variantautoid-automatically-found-variant)
             - [filters[]=filtername, string, postprocessing filters](#filtersfiltername-string-postprocessing-filters)
     - [MP3 Type](#mp3-type)
         - [GET /*.mp3](#get-mp3)
@@ -42,6 +42,8 @@ md-toc-filter ./Readme.md > Readme2.md
             - [Regeneration 1: Re-created file is identical to the existing](#regeneration-1-re-created-file-is-identical-to-the-existing)
             - [Regeneration 2: The created file is a different](#regeneration-2-the-created-file-is-a-different)
             - [File Uploading](#file-uploading)
+            - [File Remote Downloading](#file-remote-downloading)
+            - [File Search](#file-search)
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
@@ -153,7 +155,7 @@ PUT не поддерживается.
 
 Чтобы удалить ресурс полностью, нужно добавить параметр **destroy**.
 
-#### destroy: bool, remove without backup
+#### DELETE destroy: bool, remove without backup
 
 - Если при удалении ресурса *версии по-умолчанию* в *варианте по-умолчанию* передать параметр destroy — ресурс будет
 удалён во всех вариантах и версиях.
@@ -162,9 +164,18 @@ PUT не поддерживается.
 - Если при удалении ресурса указана определенная версия (для любого варианта) и передан параметр destroy,
   будет удалена только указанная версия этого варианта, т.е. параметр destroy не окажет никакого влияния на поведение.
 
-#### author: string, author
+#### POST author: string, author
 
 Строка с информацией об авторе изменения в произвольном строковом формате. Требуется только для журналирования.
+
+#### POST uri=http Upload image by remote URI
+
+Указанное в параметре uri изображение будет загружено на сервер.
+
+#### POST search=1 Find images with search adapter
+
+Будет выдан список файлов, найденных с помощью поискового адаптера.
+Выберете URI из этого списка и отправьте его с параметром uri=*ссылка*.
 
 ## Path structure
 
@@ -185,17 +196,8 @@ PUT не поддерживается.
 Чтобы изображения обрезались, в конфигурационном файле должны быть зарегистрированы все разрешенные размеры.
 Изображение с неразрешенным размером будет обрезано к ближайшему найденному зарегистрированному *большему* размеру.
 
-#### var=fractal fractal variant of the image
-
-Если отправить POST-запрос на этот вариант, будет генерирована картинка с фракталом. Удобно использовать в качестве
+Если отправить POST-запрос на изображение без загружаемого файла, будет генерирована картинка с фракталом. Удобно использовать в качестве
 заглушек по-умолчанию.
-
-#### var=auto[:id] automatically found variant
-
-Варианты будут искаться через зарегистрированного провайдера изображений (поддерживается один провайдер).
-Если не указан идентификатор, вернётся нулевой вариант (первый из найденных).
-Если не существует варианта изображения по-умолчанию, нулевой вариант из автоматически генерированных будет скопирован
-как вариант по-умолчанию.
 
 #### filters[]=filtername, string, postprocessing filters
 
@@ -362,7 +364,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 
 ```
 $ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 \
-  recreate=true var=test file@/Users/kivagant/vagrant/staticus/test.mp3
+  recreate=true var=uploaded file@/Users/kivagant/vagrant/staticus/test.mp3
 HTTP/1.1 201 Created
 Cache-Control: public
 Cache-Control: public
@@ -390,6 +392,72 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 /var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3
 /var/www/cache/mp3/test/0/2d5080a8ea20ec175c318d65d1429e94.mp3
+```
+
+#### File Remote Downloading
+
+```
+$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 var=remote uri='http://some.domain/new.mp3'
+HTTP/1.1 201 Created
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Length: 186
+Content-Type: application/json
+Date: Mon, 11 Apr 2016 01:22:01 GMT
+Server: nginx/1.9.7
+X-Powered-By: PHP/5.6.15
+
+{
+    "resource": {
+        "name": "waxwing",
+        "nameAlternative": "",
+        "recreate": false,
+        "type": "mp3",
+        "uuid": "2d5080a8ea20ec175c318d65d1429e94",
+        "variant": "remote",
+        "version": 0
+    },
+    "uri": "waxwing.mp3?var=remote"
+}
+```
+
+#### File Search
+
+```
+$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/welcome.jpg alt='school' search=1 recreate=1
+HTTP/1.1 200 OK
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Type: application/json
+Date: Mon, 11 Apr 2016 01:25:52 GMT
+Server: nginx/1.9.7
+Transfer-Encoding: chunked
+Vary: Accept-Encoding
+X-Powered-By: PHP/5.6.15
+
+{
+    "found": {
+        "count": 10,
+        "items": [
+            {
+                "height": 675,
+                "size": 453573,
+                "thumbnailheight": 112,
+                "thumbnailurl": "https://somehots.somedomain/someurl",
+                "thumbnailwidth": 146,
+                "title": "FREE Back to School Party",
+                "url": "http://somehots.somedomain/wp-content/uploads/2013/02/welcome-back-to-school.jpg",
+                "width": 880
+            },
+            {...},
+        ],
+        "start": 0,
+        "total": "449000000"
+    }
+}
 ```
 
 ### DELETE /*.mp3

@@ -5,8 +5,13 @@ namespace StaticusTest\Actions\Fractal;
 use App\Actions\Image\ActionDelete;
 use App\Actions\Image\ActionGet;
 use App\Actions\Image\ActionPost;
-use FractalManager\Adapter\Mandlebrot;
-use FractalManager\Manager;
+use FractalManager\Adapter\MandlebrotAdapter;
+use FractalManager\Manager as FractalManager;
+use SearchManager\Adapter\GoogleAdapter;
+use SearchManager\ImageProviders\GoogleCustomSearchImage;
+use SearchManager\ImageProviders\SearchImageProviderProxy;
+use SearchManager\Manager;
+use Staticus\Config\Config;
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Resources\Jpg\ResourceDO;
@@ -21,7 +26,6 @@ use Zend\Stratigility\MiddlewareInterface;
 
 class AcceptanceTest extends \PHPUnit_Framework_TestCase
 {
-    // TODO: test for variants
     /*
      * WARNING! This test will modify files on disk!
      * All tests must be run one-by-one! Do not change their position in this file!
@@ -228,9 +232,9 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     {
         $resourceRoute = $this->getResourceRoute($image);
         $request = new ServerRequest([$resourceRoute], $uploadedFiles, null, null, 'php://input', [], [], [], $parsedBody);
-        $adapter = new Mandlebrot();
-        $manager = new Manager($adapter);
-        $action = new ActionPost($image, $manager);
+        $fractalManager = $this->fractalManagerFactory();
+        $searchManager = $this->searchManagerFactory();
+        $action = new ActionPost($image, $fractalManager, $searchManager);
         $response = $this->invokeAction($request, $action, $image);
 
         return $response;
@@ -246,5 +250,38 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($response instanceof EmptyResponse);
         /** @var EmptyResponse $response */
         $this->assertEquals(204, $response->getStatusCode());
+    }
+
+    /**
+     * @return Manager
+     */
+    protected function searchManagerFactory()
+    {
+        $config = [
+            'api' => [
+                'google' => [
+                    'key' => env('GOOGLE_SEARCH_API_KEY'),
+                    'cx' => env('GOOGLE_SEARCH_API_CX'),
+                ]
+            ]
+        ];
+        $config = new Config($config);
+        $searchAdapter = new GoogleCustomSearchImage($config);
+        $searchProvider = new SearchImageProviderProxy($searchAdapter);
+        $searchProvider = new GoogleAdapter($searchProvider);
+        $searchManager = new Manager($searchProvider);
+
+        return $searchManager;
+    }
+
+    /**
+     * @return FractalManager
+     */
+    protected function fractalManagerFactory()
+    {
+        $fractalAdapter = new MandlebrotAdapter();
+        $fractalManager = new FractalManager($fractalAdapter);
+
+        return $fractalManager;
     }
 }

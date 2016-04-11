@@ -39,7 +39,8 @@
       "App\\": "src/App/",
       "Common\\": "src/Common/",
       "Staticus\\": "src/Staticus/",
-      "FractalManager\\": "src/FractalManager/"
+      "FractalManager\\": "src/FractalManager/",
+      "SearchManager\\": "src/SearchManager/"
     }
   },
   "autoload-dev": {
