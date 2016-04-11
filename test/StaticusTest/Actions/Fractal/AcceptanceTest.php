@@ -30,9 +30,12 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
      * WARNING! This test will modify files on disk!
      * All tests must be run one-by-one! Do not change their position in this file!
      */
-    const DEFAULT_RESOURCE_UUID = 'db4c5305bc8365f99453e567780cf8ba';
-    const DEFAULT_RESOURCE_NAME = 'Something! Really strange, and random - here. We\'re happy 43 times';
-    const DEFAULT_RESOURCE_ENCODED = 'Something! Really strange, and random - here. We\u0027re happy 43 times';
+    const DEFAULT_RESOURCE_UUID = 'a20439c55d292a4a765b7f4a417a8061';
+    /**
+     * @todo add test for \Jpg\PrepareResourceMiddleware
+     */
+    const DEFAULT_RESOURCE_NAME = 'Something! Really strange, and random: - here. We\'re happy 43_times';
+    const DEFAULT_RESOURCE_ENCODED = 'Something! Really strange, and random: - here. We\u0027re happy 43_times';
     const ROUTE_PREFIX = '/';
     const FILE_PATH_V0 = 'jpg/def/0/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
     const FILE_PATH_V1 = 'jpg/def/1/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
