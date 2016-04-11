@@ -17,9 +17,8 @@ use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Stream;
-use Zend\Diactoros\UploadedFile;
 
-class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
+abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 {
     protected $resourceDO;
 
@@ -76,6 +75,11 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         return $this->next();
     }
 
+    /**
+     * @param $filePath
+     * @param $content
+     * @todo move file operations somethere
+     */
     protected function writeFile($filePath, $content)
     {
         if (!file_put_contents($filePath, $content)) {
@@ -106,22 +110,6 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         $command = new CopyResourceCommand($originResourceDO, $newResourceDO);
 
         return $command();
-    }
-
-    /**
-     * @param $fromFullPath
-     * @param $toFullPath
-     * @return bool
-     * @throws SaveResourceErrorException
-     */
-    protected function copyFile($fromFullPath, $toFullPath)
-    {
-        $this->createDirectory(dirname($toFullPath));
-        if (!copy($fromFullPath, $toFullPath)) {
-            throw new SaveResourceErrorException('File cannot be copied to the default path ' . $toFullPath, __LINE__);
-        }
-
-        return true;
     }
 
     /**
@@ -168,8 +156,7 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         $this->createDirectory(dirname($filePath));
         // backups don't needs if this is a 'new creation' command
         if ($resourceDO->isRecreate()) {
-            $command = new BackupResourceCommand($resourceDO);
-            $backupResourceVerDO = $command();
+            $backupResourceVerDO = $this->backup($resourceDO);
         }
         if ($content instanceof UploadedFileInterface) {
             $this->uploadFile($content, $resourceDO->getMimeType(), $filePath);
@@ -177,14 +164,42 @@ class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
             $this->writeFile($filePath, $content);
         }
 
+        $responseDO = $resourceDO;
         if ($backupResourceVerDO instanceof ResourceDOInterface
             && $backupResourceVerDO->getVersion() !== ResourceDOInterface::DEFAULT_VERSION) {
+            // If the newly created file is the same as the previous version, remove backup immediately
+            $responseDO = $this->destroyEqual($resourceDO, $backupResourceVerDO);
+        }
+        if ($responseDO === $resourceDO) {
 
-            // If the newly created file is the same as the previous version, remove it immediately
-            $command = new DestroyEqualResourceCommand($resourceDO, $backupResourceVerDO);
-            $command();
+            // cleanup postprocessing cache folders
+            // - if it is a new file creation (remove possible garbage after other operations)
+            // - or if the basic file is replaced and not equal to the previous version
+            $this->afterSave($resourceDO);
         }
 
         return $resourceDO;
+    }
+    abstract protected function afterSave(ResourceDOInterface $resourceDO);
+
+    protected function backup(ResourceDOInterface $resourceDO)
+    {
+        $command = new BackupResourceCommand($resourceDO);
+        $backupResourceVerDO = $command();
+
+        return $backupResourceVerDO;
+    }
+
+    /**
+     * @param ResourceDOInterface $resourceDO
+     * @param ResourceDOInterface $backupResourceVerDO
+     * @return mixed
+     */
+    protected function destroyEqual(ResourceDOInterface $resourceDO, ResourceDOInterface $backupResourceVerDO)
+    {
+        $command = new DestroyEqualResourceCommand($resourceDO, $backupResourceVerDO);
+        $responseDO = $command();
+
+        return $responseDO;
     }
 }

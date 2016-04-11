@@ -38,7 +38,7 @@ class DestroyResourceCommand implements ResourceCommandInterface
         } else {
             $command = $this->getShellFindCommand($baseDir, $uuid, $type, $variant, $version);
             $command .= ' -delete';
-            shell_exec($command);
+            shell_exec($command . '> /dev/null 2>&1');
         }
 
         return $this->resourceDO;
