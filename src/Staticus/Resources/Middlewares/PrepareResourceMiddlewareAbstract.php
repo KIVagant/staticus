@@ -66,9 +66,8 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             ->setVariant($var)
             ->setVersion($v)
             ->setAuthor($author);
-
         if (!$this->resourceDO->getType()) {
-            $type = static::getParamFromRequest('type');
+            $type = static::getParamFromRequest('type', $this->request);
             $type = $this->cleanup($type);
             $this->defaultValidator('type', $type);
             $this->resourceDO->setType($type);

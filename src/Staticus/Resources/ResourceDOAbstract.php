@@ -7,10 +7,11 @@ namespace Staticus\Resources;
  */
 abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 {
+    const TYPE = '';
     protected $uuid;
     protected $name;
     protected $nameAlternative;
-    protected $type;
+    protected $type = self::TYPE;
     protected $variant;
     protected $version;
     protected $author;
@@ -45,7 +46,8 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
         $this->uuid = '';
         $this->name = '';
         $this->nameAlternative = '';
-        $this->type = '';
+        $c = get_called_class();
+        $this->type = $c::TYPE;
         $this->variant = self::DEFAULT_VARIANT;
         $this->version = self::DEFAULT_VERSION;
         $this->author = '';
