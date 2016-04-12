@@ -7,7 +7,6 @@ namespace Staticus\Resources;
  */
 abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceImageDOInterface
 {
-    const TYPE = '';
     const DEFAULT_WIDTH = 0;
     const DEFAULT_HEIGHT = 0;
     const DEFAULT_SIZE = '0';
