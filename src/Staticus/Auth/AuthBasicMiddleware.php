@@ -36,7 +36,15 @@ class AuthBasicMiddleware implements MiddlewareInterface
     {
         $authToken = str_replace('Basic ', '', $request->getHeaderLine('authorization'));
         foreach ($this->config['users'] as $user) {
-            if (base64_encode($user) == $authToken) {
+            if (isset($user['name']) && isset($user['pass'])
+                && (
+                (
+                    isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])
+                    && $_SERVER['PHP_AUTH_USER'] == $user['name']
+                    && $_SERVER['PHP_AUTH_PW'] == $user['pass']
+                )
+                || base64_encode($user['name'] . ':' . $user['pass']) == $authToken
+                )) {
 
                 return $next($request, $response);
             }

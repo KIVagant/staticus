@@ -4,7 +4,10 @@ return [
     'auth' => [
         'basic' => [
             'users' => [
-                env('AUTH_DEFAULT_USER', 'Moderator:hasld1845aKAf29pp3nnzAAqkgHFjA1fEFWF3'),
+                [
+                    'name' => env('AUTH_DEFAULT_USER', 'Moderator'),
+                    'pass' => env('AUTH_DEFAULT_USER_PASS', 'hasld1845aKAf29pp3nnzAAqkgHFjA1fEFWF3'),
+                ],
             ],
         ],
     ],
