@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Gif;
 
-use Staticus\Resources\ImagePostProcessingMiddlewareAbstract;
+use Staticus\Resources\Middlewares\ImagePostProcessingMiddlewareAbstract;
 
 class PostProcessingMiddleware extends ImagePostProcessingMiddlewareAbstract
 {

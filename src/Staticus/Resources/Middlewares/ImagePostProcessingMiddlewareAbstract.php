@@ -1,10 +1,11 @@
 <?php
-namespace Staticus\Resources;
+namespace Staticus\Resources\Middlewares;
 
 use Staticus\Middlewares\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
+use Staticus\Resources\ResourceDOInterface;
 
 abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
 {
