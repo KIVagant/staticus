@@ -27,7 +27,7 @@ class ExceptionCodes
         \Staticus\Resources\Png\SaveResourceMiddleware::class,
         \Staticus\Middlewares\ActionPostAbstract::class,
         \Staticus\Diactoros\DownloadedFile::class,
-        \SearchManager\ImageProviders\SearchImageProviderProxy::class,
+        \SearchManager\Image\SearchImageProviderProxy::class,
         \Staticus\Resources\Middlewares\ImagePostProcessingMiddlewareAbstract::class
     ];
 
