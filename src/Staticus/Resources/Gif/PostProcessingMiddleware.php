@@ -3,7 +3,7 @@ namespace Staticus\Resources\Gif;
 
 use Staticus\Resources\ImagePostProcessingMiddlewareAbstract;
 
-class ImagePostProcessingMiddleware extends ImagePostProcessingMiddlewareAbstract
+class PostProcessingMiddleware extends ImagePostProcessingMiddlewareAbstract
 {
     public function __construct(ResourceDO $resourceDO)
     {
