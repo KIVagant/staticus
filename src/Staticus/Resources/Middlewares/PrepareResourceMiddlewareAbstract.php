@@ -48,7 +48,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         $alt = $this->cleanup($alt);
         $var = static::getParamFromRequest('var', $this->request);
         $var = $this->cleanup($var);
-        $var = $this->defaultValidator('var', $var, true);
+        $var = $this->defaultValidator('var', $var, true, '\w\d\-\._');
         $v = (int)static::getParamFromRequest('v', $this->request);
         $author = static::getParamFromRequest('author', $this->request);
         $author = $this->cleanup($author);
@@ -112,7 +112,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         return $str;
     }
 
-    protected function defaultValidator($name, $value, $canBeEmpty = false, $allowedRegexpSymbols = '\w\d\-', $replaceDeniedSymbols = false)
+    protected function defaultValidator($name, $value, $canBeEmpty = false, $allowedRegexpSymbols = '\w\d\-_', $replaceDeniedSymbols = false)
     {
         if (empty($value) && !$canBeEmpty) {
             throw new WrongRequestException('Empty request param "' . $name . '"', __LINE__);
