@@ -9,7 +9,7 @@ interface ResourceDOInterface
 {
     const DEFAULT_VARIANT = 'def';
     const DEFAULT_VERSION = 0;
-    const PARAM_NAME_REGEXP = '[\w\d %!\-,\.\'_:]+';
+    const NAME_REG_SYMBOLS = '\w\d \-\.\'_';
 
     /**
      * @return string
