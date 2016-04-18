@@ -74,7 +74,6 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             $this->resourceDO->setType($type);
         }
         $this->fillSpecificResourceSpecific();
-        ddc($this->resourceDO);
     }
     abstract protected function fillSpecificResourceSpecific();
 
