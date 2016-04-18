@@ -46,8 +46,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
         $this->uuid = '';
         $this->name = '';
         $this->nameAlternative = '';
-        $c = get_called_class();
-        $this->type = $c::TYPE;
+        $this->type = static::TYPE;
         $this->variant = self::DEFAULT_VARIANT;
         $this->version = self::DEFAULT_VERSION;
         $this->author = '';
@@ -146,7 +145,6 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
     {
         return $this->type;
     }
-
     /**
      * @param string $type
      * @return ResourceFileDO
