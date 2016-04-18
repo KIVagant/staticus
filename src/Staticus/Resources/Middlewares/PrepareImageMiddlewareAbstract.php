@@ -18,7 +18,7 @@ abstract class PrepareImageMiddlewareAbstract extends PrepareResourceMiddlewareA
                 $width = (int)$size[0];
                 $height = (int)$size[1];
                 if ($width && $height) {
-                    $allowedSizes = $this->config->get('images.sizes');
+                    $allowedSizes = $this->config->get('staticus.images.sizes');
                     if (!in_array([$width, $height], $allowedSizes)) {
                         throw new WrongRequestException('Resource size is not allowed: ' . $width . 'x' . $height,
                             __LINE__);

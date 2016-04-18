@@ -42,17 +42,18 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     {
         $name = static::getParamFromRequest('name', $this->request);
         $name = $this->cleanup($name);
-        $this->defaultValidator('name', $name, false, '/^' . ResourceDOInterface::PARAM_NAME_REGEXP . '$/ui');
+        $name = $this->defaultValidator('name', $name, false
+            , ResourceDOInterface::NAME_REG_SYMBOLS, $this->config->get('staticus.clean_resource_name'));
         $alt = static::getParamFromRequest('alt', $this->request);
         $alt = $this->cleanup($alt);
         $var = static::getParamFromRequest('var', $this->request);
         $var = $this->cleanup($var);
-        $this->defaultValidator('var', $var, true);
+        $var = $this->defaultValidator('var', $var, true);
         $v = (int)static::getParamFromRequest('v', $this->request);
         $author = static::getParamFromRequest('author', $this->request);
         $author = $this->cleanup($author);
 
-        $dataDir = $this->config->get('data_dir');
+        $dataDir = $this->config->get('staticus.data_dir');
         /**
          * You shouldn't check 'recreate' and 'destroy' params here.
          * @see \Staticus\Action\StaticMiddlewareAbstract::postAction
@@ -69,10 +70,11 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         if (!$this->resourceDO->getType()) {
             $type = static::getParamFromRequest('type', $this->request);
             $type = $this->cleanup($type);
-            $this->defaultValidator('type', $type);
+            $type = $this->defaultValidator('type', $type);
             $this->resourceDO->setType($type);
         }
         $this->fillSpecificResourceSpecific();
+        ddc($this->resourceDO);
     }
     abstract protected function fillSpecificResourceSpecific();
 
@@ -111,10 +113,20 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         return $str;
     }
 
-    protected function defaultValidator($name, $value, $canBeEmpty = false, $regexp = '/^[\w\d\-]+$/ui')
+    protected function defaultValidator($name, $value, $canBeEmpty = false, $allowedRegexpSymbols = '\w\d\-', $replaceDeniedSymbols = false)
     {
-        if ((empty($value) && !$canBeEmpty) || (!empty($value) && !preg_match($regexp, $value))) {
-            throw new WrongRequestException('Wrong request param "' . $name . '": ' . $value, __LINE__);
+        if (empty($value) && !$canBeEmpty) {
+            throw new WrongRequestException('Empty request param "' . $name . '"', __LINE__);
+        } else if (!empty($value)) {
+            if ($replaceDeniedSymbols) {
+                $value = trim(preg_replace('/\s+/u', ' ', preg_replace('~[^' . $allowedRegexpSymbols . ']+~', '_', $value)));
+            } else {
+                if (!preg_match('/^[' . $allowedRegexpSymbols . ']+$/ui', $value)) {
+                    throw new WrongRequestException('Wrong request param "' . $name . '": ' . $value, __LINE__);
+                }
+            }
         }
+
+        return $value;
     }
 }
