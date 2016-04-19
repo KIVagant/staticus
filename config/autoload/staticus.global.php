@@ -12,9 +12,8 @@ return [
             // Allowed sizes: [[w, h], [w, h]]
             'sizes' => [
                 [100, 100],
-                [500, 300],
-                [400, 700],
-                [2000, 3000],
+                [940, 532], // Courses-int, exercises, group B
+                [600, 432], // Courses-int, exercises, group C
             ],
         ],
     ],
