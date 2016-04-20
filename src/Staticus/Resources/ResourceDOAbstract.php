@@ -15,11 +15,19 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
     protected $variant;
     protected $version;
     protected $author;
+
     /**
-     * Set to true if resource needs to be recreated
+     * true if resource file is just created (or should be)
+     * @var bool
+     */
+    protected $new = false;
+
+    /**
+     * true if exists resource needs to be recreated
      * @var bool
      */
     protected $recreate = false;
+
     /**
      * Path to base directory (without dynamic path part)
      * @var string
@@ -247,6 +255,25 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
     {
         $this->baseDirectory = (string)$dir;
         $this->setFilePath();
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isNew()
+    {
+        return $this->new;
+    }
+
+    /**
+     * @param boolean $new
+     * @return ResourceDOAbstract
+     */
+    public function setNew($new = false)
+    {
+        $this->new = $new;
 
         return $this;
     }

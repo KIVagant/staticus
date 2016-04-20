@@ -25,7 +25,10 @@ abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
 
         $resourceDO = $this->resourceDO;
         if ($resourceDO->getSize()) {
-            if (!is_file($resourceDO->getFilePath())) {
+            if ($resourceDO->isNew() // For POST method
+                || $resourceDO->isRecreate() // For POST method
+                || !is_file($resourceDO->getFilePath()) // For GET method
+            ) {
                 $defaultSizeResourceDO = clone $resourceDO;
                 $defaultSizeResourceDO->setWidth();
                 $defaultSizeResourceDO->setHeight();

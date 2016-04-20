@@ -121,6 +121,7 @@ return [
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
                 App\Actions\Image\ActionPost::class,
                 Staticus\Resources\Jpg\SaveResourceMiddleware::class,
+                Staticus\Resources\Jpg\PostProcessingMiddleware::class,
                 Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
             ],
         ],
