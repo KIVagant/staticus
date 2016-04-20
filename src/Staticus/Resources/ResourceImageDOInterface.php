@@ -24,4 +24,9 @@ interface ResourceImageDOInterface extends ResourceDOInterface
      * @return int|string
      */
     public function getSize();
+
+    /**
+     * @return CropDO|null
+     */
+    public function getCrop();
 }

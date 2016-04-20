@@ -335,11 +335,12 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
         return isset($propsNames[$this->itemPosition]);
     }
+    
     public function toArray()
     {
         $ar = [];
         foreach ($this as $k => $p) {
-
+            
             $ar[$p[0]] = $p[1];
         }
         unset($ar[0]);

@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
 use Staticus\Resources\ResourceDOInterface;
 
-abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
+abstract class ImageResizeMiddlewareAbstract extends MiddlewareAbstract
 {
     protected $resourceDO;
     public function __construct(ResourceDOInterface $resourceDO)
@@ -29,17 +29,25 @@ abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
                 || $resourceDO->isRecreate() // For POST method
                 || !is_file($resourceDO->getFilePath()) // For GET method
             ) {
-                $defaultSizeResourceDO = clone $resourceDO;
-                $defaultSizeResourceDO->setWidth();
-                $defaultSizeResourceDO->setHeight();
-                if (is_file($defaultSizeResourceDO->getFilePath())) {
-                    $this->resizeImage($defaultSizeResourceDO->getFilePath(), $resourceDO->getFilePath(), $resourceDO->getWidth(), $resourceDO->getHeight());
+                $defaultImagePath = $request->getAttribute('defaultImagePath', $this->getDefaultImagePath());
+                if (is_file($defaultImagePath)) {
+                    $this->resizeImage($defaultImagePath, $resourceDO->getFilePath(), $resourceDO->getWidth(), $resourceDO->getHeight());
                 }
             }
         }
 
         return $next($request, $response);
     }
+
+    protected function getDefaultImagePath()
+    {
+        $defaultSizeResourceDO = clone $this->resourceDO;
+        $defaultSizeResourceDO->setWidth();
+        $defaultSizeResourceDO->setHeight();
+
+        return $defaultSizeResourceDO->getFilePath();
+    }
+
     public function resizeImage($sourcePath, $destinationPath, $width, $height)
     {
         $this->createDirectory(dirname($destinationPath));

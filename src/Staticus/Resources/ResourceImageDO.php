@@ -12,6 +12,12 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     const DEFAULT_SIZE = '0';
     protected $width = 0;
     protected $height = 0;
+
+    /**
+     * @var CropDO
+     */
+    protected $crop = null;
+
     public function reset()
     {
         parent::reset();
@@ -105,4 +111,33 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
 
         return $size;
     }
+
+    /**
+     * @return CropDO|null
+     */
+    public function getCrop()
+    {
+        return $this->crop;
+    }
+
+    /**
+     * @param CropDO $crop
+     * @return ResourceImageDO
+     */
+    public function setCrop(CropDO $crop = null)
+    {
+        $this->crop = $crop;
+        return $this;
+    }
+
+    public function toArray()
+    {
+        $data = parent::toArray();
+        if ($this->crop) {
+            $data['crop'] = $this->crop->toArray();
+        }
+
+        return $data;
+    }
+
 }
