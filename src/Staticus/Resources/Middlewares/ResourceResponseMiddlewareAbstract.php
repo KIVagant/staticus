@@ -31,13 +31,17 @@ abstract class ResourceResponseMiddlewareAbstract extends MiddlewareAbstract
     {
         parent::__invoke($request, $response, $next);
         if ($this->isSupportedResponse($response)) {
+            $uri = $this->getUri($this->resourceDO);
             $data = [
                 'resource' => $this->resourceDO->toArray(),
-                'uri' => $this->getUri($this->resourceDO),
+                'uri' => $uri,
             ];
             if (!empty($data)) {
                 $headers = $response->getHeaders();
                 $headers['Content-Type'] = 'application/json';
+
+                // here is relative link without host url
+                $headers['Link'] = '<' . rawurlencode($uri) . '>; rel="canonical"';
                 $response = $this->getResponseObject($data, $response->getStatusCode(), $headers);
             }
         }
