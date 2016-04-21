@@ -30,7 +30,7 @@ abstract class ResourceResponseMiddlewareAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
-        if ($this->isAllowedResponse($response)) {
+        if ($this->isSupportedResponse($response)) {
             $data = [
                 'resource' => $this->resourceDO->toArray(),
                 'uri' => $this->getUri($this->resourceDO),
@@ -77,7 +77,7 @@ abstract class ResourceResponseMiddlewareAbstract extends MiddlewareAbstract
      * @param ResponseInterface $response
      * @return bool
      */
-    protected function isAllowedResponse(ResponseInterface $response)
+    protected function isSupportedResponse(ResponseInterface $response)
     {
         return $response instanceof EmptyResponse
         || $response instanceof FileContentResponse
