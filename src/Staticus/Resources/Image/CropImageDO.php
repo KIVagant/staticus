@@ -1,10 +1,8 @@
 <?php
 
+namespace Staticus\Resources\Image;
 
-namespace Staticus\Resources;
-
-
-class CropDO
+class CropImageDO implements CropImageDOInterface
 {
     /**
      * Position of cropped area X coordinate of image left top corner
@@ -40,7 +38,7 @@ class CropDO
 
     /**
      * @param int $x
-     * @return CropDO
+     * @return CropImageDO
      */
     public function setX($x)
     {
@@ -58,7 +56,7 @@ class CropDO
 
     /**
      * @param int $y
-     * @return CropDO
+     * @return CropImageDO
      */
     public function setY($y)
     {
@@ -76,7 +74,7 @@ class CropDO
 
     /**
      * @param int $width
-     * @return CropDO
+     * @return CropImageDO
      */
     public function setWidth($width)
     {
@@ -94,7 +92,7 @@ class CropDO
 
     /**
      * @param int $height
-     * @return CropDO
+     * @return CropImageDO
      */
     public function setHeight($height)
     {
@@ -113,7 +111,7 @@ class CropDO
         foreach ($this as $k => $p) {
             $ar[$k] = $p;
         }
-        
+
         return $ar;
     }
 }

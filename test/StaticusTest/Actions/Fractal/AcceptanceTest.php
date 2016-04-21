@@ -106,8 +106,8 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($responseResource instanceof JsonResponse);
         /** @var JsonResponse $responseResource */
         $this->assertEquals($statusCode, $responseResource->getStatusCode());
-        $model = '{"resource":{"height":0,"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
-            . '"nameAlternative":"","recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'
+        $model = '{"resource":{"crop":null,"height":0,"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
+            . '"nameAlternative":"","new":true,"recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'
             . '"variant":"def","version":0,"width":0},'
             . '"uri":"' . self::DEFAULT_RESOURCE_ENCODED . '.jpg"}';
         $this->assertEquals($model, $responseResource->getBody()->getContents());

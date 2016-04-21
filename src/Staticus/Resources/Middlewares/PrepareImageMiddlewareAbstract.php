@@ -2,8 +2,9 @@
 namespace Staticus\Resources\Middlewares;
 
 use Staticus\Exceptions\WrongRequestException;
-use Staticus\Resources\CropDO;
-use Staticus\Resources\ResourceImageDO;
+use Staticus\Resources\Image\CropImageDO;
+use Staticus\Resources\Image\ResourceImageDO;
+use Staticus\Resources\Image\ResourceImageDOInterface;
 
 abstract class PrepareImageMiddlewareAbstract extends PrepareResourceMiddlewareAbstract
 {
@@ -18,14 +19,14 @@ abstract class PrepareImageMiddlewareAbstract extends PrepareResourceMiddlewareA
     protected function parseCropParameter($crop)
     {
         if ($crop) {
-            /* @var ResourceImageDO $resource */
+            /* @var ResourceImageDOInterface $resource */
             $resource = $this->resourceDO;
             $crop = explode('x', $crop);
             if (count($crop) != 4) {
                 throw new WrongRequestException('Crop parameter has to consist of four parts, concatenated by "x" char.',
                     __LINE__);
             }
-            $cropObject = new CropDO();
+            $cropObject = new CropImageDO();
             $cropObject->setX((int) $crop[0]);
             $cropObject->setY((int) $crop[1]);
             $cropObject->setWidth((int) $crop[2]);
@@ -69,7 +70,7 @@ abstract class PrepareImageMiddlewareAbstract extends PrepareResourceMiddlewareA
                 }
             }
         }
-        /** @var ResourceImageDO $resource */
+        /** @var ResourceImageDOInterface $resource */
         $resource->setWidth($width);
         $resource->setHeight($height);
     }

@@ -54,7 +54,7 @@ return [
         'types' => [
             Staticus\Config\Config::class => Staticus\Config\Config::class,
 //            Staticus\Resources\File\ResourceDO::class => Staticus\Resources\File\ResourceDO::class,
-            Staticus\Resources\ResourceImageDOInterface::class => Staticus\Resources\Jpg\ResourceDO::class, // For Fractal\Action* injects
+            \Staticus\Resources\Image\ResourceImageDOInterface::class => Staticus\Resources\Jpg\ResourceDO::class, // For Fractal\Action* injects
             Staticus\Resources\Mpeg\ResourceDO::class => Staticus\Resources\Mpeg\ResourceDO::class,
 //            Staticus\Resources\Gif\ResourceDO::class => Staticus\Resources\Gif\ResourceDO::class,
             Staticus\Resources\Jpg\ResourceDO::class => Staticus\Resources\Jpg\ResourceDO::class,

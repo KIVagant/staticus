@@ -1,5 +1,7 @@
 <?php
-namespace Staticus\Resources;
+namespace Staticus\Resources\Image;
+use Staticus\Resources\ResourceDOAbstract;
+use Staticus\Resources\Image\ResourceImageDOInterface;
 
 /**
  * Domain Object
@@ -14,7 +16,7 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     protected $height = 0;
 
     /**
-     * @var CropDO
+     * @var CropImageDOInterface
      */
     protected $crop = null;
 
@@ -113,7 +115,7 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     }
 
     /**
-     * @return CropDO|null
+     * @return CropImageDOInterface|null
      */
     public function getCrop()
     {
@@ -121,10 +123,10 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     }
 
     /**
-     * @param CropDO $crop
+     * @param CropImageDOInterface $crop
      * @return ResourceImageDO
      */
-    public function setCrop(CropDO $crop = null)
+    public function setCrop(CropImageDOInterface $crop = null)
     {
         $this->crop = $crop;
         return $this;

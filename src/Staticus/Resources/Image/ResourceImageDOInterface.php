@@ -1,5 +1,7 @@
 <?php
-namespace Staticus\Resources;
+namespace Staticus\Resources\Image;
+
+use Staticus\Resources\ResourceDOInterface;
 
 interface ResourceImageDOInterface extends ResourceDOInterface
 {
@@ -10,7 +12,7 @@ interface ResourceImageDOInterface extends ResourceDOInterface
 
     /**
      * @param mixed $width
-     * @return ResourceImageDO
+     * @return ResourceImageDOInterface
      */
     public function setWidth($width = 0);
 
@@ -26,7 +28,7 @@ interface ResourceImageDOInterface extends ResourceDOInterface
     public function getSize();
 
     /**
-     * @return CropDO|null
+     * @return CropImageDOInterface|null
      */
     public function getCrop();
 }

@@ -4,8 +4,7 @@ namespace Staticus\Resources\Middlewares;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Staticus\Resources\CropDO;
-use Staticus\Resources\Exceptions\SaveResourceErrorException;
+use Staticus\Resources\Image\CropImageDOInterface;
 use Staticus\Resources\Image\ImagePostProcessingAbstract;
 
 abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingAbstract
@@ -38,7 +37,7 @@ abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingAbstract
         return $next($request, $response);
     }
 
-    public function cropImage($sourcePath, $destinationPath, CropDO $crop)
+    public function cropImage($sourcePath, $destinationPath, CropImageDOInterface $crop)
     {
         $this->createDirectory(dirname($destinationPath));
         $imagick = new \Imagick(realpath($sourcePath));

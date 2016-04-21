@@ -2,7 +2,7 @@
 namespace App\Actions\Image;
 
 use Staticus\Middlewares\ActionDeleteAbstract;
-use Staticus\Resources\ResourceImageDOInterface;
+use Staticus\Resources\Image\ResourceImageDOInterface;
 
 class ActionDelete extends ActionDeleteAbstract
 {
