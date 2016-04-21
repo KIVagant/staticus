@@ -16,7 +16,10 @@ abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewa
     )
     {
         parent::__invoke($request, $response, $next);
+        if (!$this->isSupportedResponse($response)) {
 
+            return $next($request, $response);
+        }
         $resourceDO = $this->resourceDO;
         if ($resourceDO->getSize()) {
             if ($resourceDO->isNew() // For POST method

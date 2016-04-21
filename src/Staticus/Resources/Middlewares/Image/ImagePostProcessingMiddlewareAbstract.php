@@ -6,6 +6,7 @@ use Staticus\Middlewares\MiddlewareAbstract;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
 use Staticus\Resources\ResourceDOInterface;
 use Psr\Http\Message\ResponseInterface;
+use Zend\Diactoros\Response\EmptyResponse;
 
 abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
 {
@@ -17,6 +18,16 @@ abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
     public function __construct(ResourceDOInterface $resourceDO)
     {
         $this->resourceDO = $resourceDO;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return bool
+     */
+    protected function isSupportedResponse(ResponseInterface $response)
+    {
+        return $response instanceof EmptyResponse
+        || $response instanceof ResourceDoResponse;
     }
 
     protected function getTargetResourceDO()

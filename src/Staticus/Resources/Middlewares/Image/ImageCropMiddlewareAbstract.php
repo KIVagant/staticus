@@ -16,7 +16,10 @@ abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingMiddleware
     )
     {
         parent::__invoke($request, $response, $next);
+        if (!$this->isSupportedResponse($response)) {
 
+            return $next($request, $response);
+        }
         $resourceDO = $this->resourceDO;
         $crop = $resourceDO->getCrop();
         if ($resourceDO->getSize() && $crop) {
