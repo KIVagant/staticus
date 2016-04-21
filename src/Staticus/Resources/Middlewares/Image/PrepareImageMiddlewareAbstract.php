@@ -1,10 +1,11 @@
 <?php
-namespace Staticus\Resources\Middlewares;
+namespace Staticus\Resources\Middlewares\Image;
 
 use Staticus\Exceptions\WrongRequestException;
 use Staticus\Resources\Image\CropImageDO;
 use Staticus\Resources\Image\ResourceImageDO;
 use Staticus\Resources\Image\ResourceImageDOInterface;
+use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
 
 abstract class PrepareImageMiddlewareAbstract extends PrepareResourceMiddlewareAbstract
 {

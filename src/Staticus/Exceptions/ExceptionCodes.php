@@ -21,15 +21,15 @@ class ExceptionCodes
         \Staticus\Resources\Commands\DestroyResourceCommand::class,
         \Staticus\Resources\Gif\SaveResourceMiddleware::class,
         \Staticus\Resources\Jpg\SaveResourceMiddleware::class,
-        \Staticus\Resources\Middlewares\PrepareImageMiddlewareAbstract::class,
+        \Staticus\Resources\Middlewares\Image\PrepareImageMiddlewareAbstract::class,
         \Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract::class,
         \Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract::class,
         \Staticus\Resources\Png\SaveResourceMiddleware::class,
         \Staticus\Middlewares\ActionPostAbstract::class,
         \Staticus\Diactoros\DownloadedFile::class,
         \SearchManager\Image\SearchImageProviderProxy::class,
-        \Staticus\Resources\Middlewares\ImageResizeMiddlewareAbstract::class,
-        \Staticus\Resources\Middlewares\ImageCropMiddlewareAbstract::class,
+        \Staticus\Resources\Middlewares\Image\ImageResizeMiddlewareAbstract::class,
+        \Staticus\Resources\Middlewares\Image\ImageCropMiddlewareAbstract::class,
     ];
 
     public static function code($className)

@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Gif;
 
-use Staticus\Resources\Middlewares\ImageResizeMiddlewareAbstract;
+use Staticus\Resources\Middlewares\Image\ImageResizeMiddlewareAbstract;
 
 class ResizeMiddleware extends ImageResizeMiddlewareAbstract
 {

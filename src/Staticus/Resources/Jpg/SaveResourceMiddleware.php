@@ -2,7 +2,7 @@
 namespace Staticus\Resources\Jpg;
 
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
-use Staticus\Resources\Middlewares\SaveImageMiddlewareAbstract;
+use Staticus\Resources\Middlewares\Image\SaveImageMiddlewareAbstract;
 
 class SaveResourceMiddleware extends SaveImageMiddlewareAbstract
 {

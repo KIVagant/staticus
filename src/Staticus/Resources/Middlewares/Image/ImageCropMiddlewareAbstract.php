@@ -1,14 +1,14 @@
 <?php
-namespace Staticus\Resources\Middlewares;
+namespace Staticus\Resources\Middlewares\Image;
 
+use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
+use Staticus\Resources\Image\CropImageDOInterface;
 use Staticus\Resources\Image\ImagePostProcessingMiddlewareAbstract;
 
-abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewareAbstract
+abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingMiddlewareAbstract
 {
-
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
@@ -18,7 +18,8 @@ abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewa
         parent::__invoke($request, $response, $next);
 
         $resourceDO = $this->resourceDO;
-        if ($resourceDO->getSize()) {
+        $crop = $resourceDO->getCrop();
+        if ($resourceDO->getSize() && $crop) {
             if ($resourceDO->isNew() // For POST method
                 || $resourceDO->isRecreate() // For POST method
                 || !is_file($resourceDO->getFilePath()) // For GET method
@@ -27,21 +28,25 @@ abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewa
 
                 $defaultImagePath = $targetResourceDO->getFilePath();
                 if (is_file($defaultImagePath)) {
-                    $this->resizeImage($defaultImagePath, $resourceDO->getFilePath(), $resourceDO->getWidth(), $resourceDO->getHeight());
+                    $this->cropImage($defaultImagePath, $resourceDO->getFilePath(), $crop);
                 }
             }
         }
-
         $response = new ResourceDoResponse($resourceDO, $response->getStatusCode(), $response->getHeaders());
 
         return $next($request, $response);
     }
 
-    public function resizeImage($sourcePath, $destinationPath, $width, $height)
+    public function cropImage($sourcePath, $destinationPath, CropImageDOInterface $crop)
     {
         $this->createDirectory(dirname($destinationPath));
-        $imagick = $this->getImagick($sourcePath);
-        $imagick->adaptiveResizeImage($width, $height, true);
+        $imagick = new \Imagick(realpath($sourcePath));
+        $imagick->cropImage(
+            $crop->getWidth(),
+            $crop->getHeight(),
+            $crop->getX(),
+            $crop->getY()
+        );
         $imagick->writeImage($destinationPath);
     }
 }
