@@ -69,6 +69,9 @@ abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
 
     protected function getImagick($sourcePath)
     {
+        if (!class_exists(\Imagick::class)) {
+            throw new SaveResourceErrorException('Imagick is not installed', __LINE__);
+        }
         $imagick = new \Imagick(realpath($sourcePath));
 
         return $imagick;

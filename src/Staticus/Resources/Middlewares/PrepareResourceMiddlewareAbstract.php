@@ -118,7 +118,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             throw new WrongRequestException('Empty request param "' . $name . '"', __LINE__);
         } else if (!empty($value)) {
             if ($replaceDeniedSymbols) {
-                $value = trim(preg_replace('/\s+/u', ' ', preg_replace('~[^' . $allowedRegexpSymbols . ']+~', '_', $value)));
+                $value = trim(preg_replace('/\s+/u', ' ', preg_replace('~[^' . $allowedRegexpSymbols . ']+~', '', $value)));
             } else {
                 if (!preg_match('/^[' . $allowedRegexpSymbols . ']+$/ui', $value)) {
                     throw new WrongRequestException('Wrong request param "' . $name . '": ' . $value, __LINE__);
