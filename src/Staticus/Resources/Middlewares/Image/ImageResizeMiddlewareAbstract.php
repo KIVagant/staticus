@@ -4,7 +4,6 @@ namespace Staticus\Resources\Middlewares\Image;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
-use Staticus\Resources\Image\ImagePostProcessingMiddlewareAbstract;
 
 abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewareAbstract
 {
