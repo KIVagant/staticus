@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Gif;
 
-use Staticus\Resources\Middlewares\PrepareImageMiddlewareAbstract;
+use Staticus\Resources\Middlewares\Image\PrepareImageMiddlewareAbstract;
 use Staticus\Config\Config;
 
 class PrepareResourceMiddleware extends PrepareImageMiddlewareAbstract

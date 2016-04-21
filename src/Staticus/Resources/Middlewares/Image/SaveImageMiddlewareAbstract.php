@@ -1,7 +1,8 @@
 <?php
-namespace Staticus\Resources\Middlewares;
+namespace Staticus\Resources\Middlewares\Image;
 
 use Staticus\Resources\File\ResourceDO;
+use Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract;
 use Staticus\Resources\ResourceDOInterface;
 use Staticus\Resources\Image\ResourceImageDO;
 

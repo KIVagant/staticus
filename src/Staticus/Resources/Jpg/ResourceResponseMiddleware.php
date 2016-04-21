@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Jpg;
 
-use Staticus\Resources\Middlewares\ImageResponseMiddlewareAbstract;
+use Staticus\Resources\Middlewares\Image\ImageResponseMiddlewareAbstract;
 
 class ResourceResponseMiddleware extends ImageResponseMiddlewareAbstract
 {

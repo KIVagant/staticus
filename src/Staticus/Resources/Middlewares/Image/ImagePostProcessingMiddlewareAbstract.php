@@ -5,10 +5,10 @@ use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
 use Staticus\Resources\ResourceDOInterface;
-use Staticus\Resources\Image\ResourceImageDOInterface;
 use Psr\Http\Message\ResponseInterface;
+use Zend\Diactoros\Response\EmptyResponse;
 
-abstract class ImagePostProcessingAbstract extends MiddlewareAbstract
+abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
 {
     /**
      * @var ResourceImageDOInterface
@@ -18,6 +18,16 @@ abstract class ImagePostProcessingAbstract extends MiddlewareAbstract
     public function __construct(ResourceDOInterface $resourceDO)
     {
         $this->resourceDO = $resourceDO;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return bool
+     */
+    protected function isSupportedResponse(ResponseInterface $response)
+    {
+        return $response instanceof EmptyResponse
+        || $response instanceof ResourceDoResponse;
     }
 
     protected function getTargetResourceDO()
@@ -32,7 +42,7 @@ abstract class ImagePostProcessingAbstract extends MiddlewareAbstract
 
     /**
      * @param ResponseInterface $response
-     * @return ResourceDOInterface|\Staticus\Resources\Image\ResourceImageDOInterface
+     * @return ResourceDOInterface|ResourceImageDOInterface
      */
     protected function chooseTargetResource(ResponseInterface $response)
     {

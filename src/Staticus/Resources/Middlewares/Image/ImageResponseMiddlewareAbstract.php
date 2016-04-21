@@ -1,6 +1,7 @@
 <?php
-namespace Staticus\Resources\Middlewares;
+namespace Staticus\Resources\Middlewares\Image;
 
+use Staticus\Resources\Middlewares\ResourceResponseMiddlewareAbstract;
 use Staticus\Resources\ResourceDOInterface;
 use Staticus\Resources\Image\ResourceImageDO;
 

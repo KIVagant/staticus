@@ -1,13 +1,13 @@
 <?php
-namespace Staticus\Resources\Middlewares;
+namespace Staticus\Resources\Middlewares\Image;
 
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Resources\Image\CropImageDOInterface;
-use Staticus\Resources\Image\ImagePostProcessingAbstract;
+use Staticus\Resources\Image\ImagePostProcessingMiddlewareAbstract;
 
-abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingAbstract
+abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingMiddlewareAbstract
 {
     public function __invoke(
         ServerRequestInterface $request,
@@ -16,7 +16,10 @@ abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingAbstract
     )
     {
         parent::__invoke($request, $response, $next);
+        if (!$this->isSupportedResponse($response)) {
 
+            return $next($request, $response);
+        }
         $resourceDO = $this->resourceDO;
         $crop = $resourceDO->getCrop();
         if ($resourceDO->getSize() && $crop) {

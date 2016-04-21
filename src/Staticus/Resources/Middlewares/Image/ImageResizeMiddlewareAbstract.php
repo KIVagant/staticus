@@ -1,13 +1,12 @@
 <?php
-namespace Staticus\Resources\Middlewares;
+namespace Staticus\Resources\Middlewares\Image;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
-use Staticus\Resources\Exceptions\SaveResourceErrorException;
-use Staticus\Resources\Image\ImagePostProcessingAbstract;
+use Staticus\Resources\Image\ImagePostProcessingMiddlewareAbstract;
 
-abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingAbstract
+abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewareAbstract
 {
 
     public function __invoke(
@@ -17,7 +16,10 @@ abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingAbstract
     )
     {
         parent::__invoke($request, $response, $next);
+        if (!$this->isSupportedResponse($response)) {
 
+            return $next($request, $response);
+        }
         $resourceDO = $this->resourceDO;
         if ($resourceDO->getSize()) {
             if ($resourceDO->isNew() // For POST method

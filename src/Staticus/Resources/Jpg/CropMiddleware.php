@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Jpg;
 
-use Staticus\Resources\Middlewares\ImageCropMiddlewareAbstract;
+use Staticus\Resources\Middlewares\Image\ImageCropMiddlewareAbstract;
 
 class CropMiddleware extends ImageCropMiddlewareAbstract
 {
