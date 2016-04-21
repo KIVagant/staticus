@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Png;
 
-use Staticus\Resources\Middlewares\ImageResizeMiddlewareAbstract;
+use Staticus\Resources\Middlewares\Image\ImageResizeMiddlewareAbstract;
 
 class ResizeMiddleware extends ImageResizeMiddlewareAbstract
 {
