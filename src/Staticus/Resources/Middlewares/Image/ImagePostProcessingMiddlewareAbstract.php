@@ -8,6 +8,7 @@ use Staticus\Resources\Image\ResourceImageDOInterface;
 use Staticus\Resources\ResourceDOInterface;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\EmptyResponse;
+use Zend\Stratigility\Http\Response;
 
 abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
 {
@@ -28,7 +29,8 @@ abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
     protected function isSupportedResponse(ResponseInterface $response)
     {
         return $response instanceof EmptyResponse
-        || $response instanceof ResourceDoResponse;
+        || $response instanceof ResourceDoResponse
+        || $response instanceof Response;
     }
 
     protected function getTargetResourceDO()
