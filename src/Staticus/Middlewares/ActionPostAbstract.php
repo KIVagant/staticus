@@ -70,6 +70,7 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
         $search = PrepareResourceMiddlewareAbstract::getParamFromRequest(static::SEARCH_COMMAND, $this->request);
         $uri = PrepareResourceMiddlewareAbstract::getParamFromRequest(static::URI_COMMAND, $this->request);
         $recreate = $fileExists && $recreate;
+        $this->resourceDO->setNew(!$fileExists);
         if (!$fileExists || $recreate) {
             $this->resourceDO->setRecreate($recreate);
             $upload = $this->upload();

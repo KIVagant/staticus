@@ -1,9 +1,9 @@
 <?php
 namespace Staticus\Resources\Gif;
 
-use Staticus\Resources\Middlewares\ImagePostProcessingMiddlewareAbstract;
+use Staticus\Resources\Middlewares\ImageResizeMiddlewareAbstract;
 
-class PostProcessingMiddleware extends ImagePostProcessingMiddlewareAbstract
+class ResizeMiddleware extends ImageResizeMiddlewareAbstract
 {
     public function __construct(ResourceDO $resourceDO)
     {

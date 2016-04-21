@@ -36,7 +36,8 @@ return [
 //            Staticus\Resources\Gif\SaveResourceMiddleware::class => Staticus\Resources\Gif\SaveResourceMiddleware::class,
 //            Staticus\Resources\Gif\ResourceResponseMiddleware::class => Staticus\Resources\Gif\ResourceResponseMiddleware::class,
             Staticus\Resources\Jpg\PrepareResourceMiddleware::class => Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
-            Staticus\Resources\Jpg\PostProcessingMiddleware::class => Staticus\Resources\Jpg\PostProcessingMiddleware::class,
+            Staticus\Resources\Jpg\ResizeMiddleware::class => Staticus\Resources\Jpg\ResizeMiddleware::class,
+            Staticus\Resources\Jpg\CropMiddleware::class => Staticus\Resources\Jpg\CropMiddleware::class,
             Staticus\Resources\Jpg\SaveResourceMiddleware::class => Staticus\Resources\Jpg\SaveResourceMiddleware::class,
             Staticus\Resources\Jpg\ResourceResponseMiddleware::class => Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
 //            Staticus\Resources\Png\SaveResourceMiddleware::class => Staticus\Resources\Png\SaveResourceMiddleware::class,
@@ -53,7 +54,7 @@ return [
         'types' => [
             Staticus\Config\Config::class => Staticus\Config\Config::class,
 //            Staticus\Resources\File\ResourceDO::class => Staticus\Resources\File\ResourceDO::class,
-            Staticus\Resources\ResourceImageDOInterface::class => Staticus\Resources\Jpg\ResourceDO::class, // For Fractal\Action* injects
+            \Staticus\Resources\Image\ResourceImageDOInterface::class => Staticus\Resources\Jpg\ResourceDO::class, // For Fractal\Action* injects
             Staticus\Resources\Mpeg\ResourceDO::class => Staticus\Resources\Mpeg\ResourceDO::class,
 //            Staticus\Resources\Gif\ResourceDO::class => Staticus\Resources\Gif\ResourceDO::class,
             Staticus\Resources\Jpg\ResourceDO::class => Staticus\Resources\Jpg\ResourceDO::class,
@@ -107,7 +108,7 @@ return [
             'path' => '/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
-                Staticus\Resources\Jpg\PostProcessingMiddleware::class,
+                Staticus\Resources\Jpg\ResizeMiddleware::class,
                 App\Actions\Image\ActionGet::class,
             ],
             'allowed_methods' => ['GET'],
@@ -121,6 +122,8 @@ return [
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
                 App\Actions\Image\ActionPost::class,
                 Staticus\Resources\Jpg\SaveResourceMiddleware::class,
+                Staticus\Resources\Jpg\CropMiddleware::class,
+                Staticus\Resources\Jpg\ResizeMiddleware::class,
                 Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
             ],
         ],

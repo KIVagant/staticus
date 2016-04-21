@@ -3,7 +3,7 @@ namespace Staticus\Resources\Middlewares;
 
 use Staticus\Resources\File\ResourceDO;
 use Staticus\Resources\ResourceDOInterface;
-use Staticus\Resources\ResourceImageDO;
+use Staticus\Resources\Image\ResourceImageDO;
 
 abstract class SaveImageMiddlewareAbstract extends SaveResourceMiddlewareAbstract
 {

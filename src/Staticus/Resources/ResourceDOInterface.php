@@ -114,6 +114,17 @@ interface ResourceDOInterface
     /**
      * @return boolean
      */
+    public function isNew();
+
+    /**
+     * @param boolean $new
+     * @return ResourceDOAbstract
+     */
+    public function setNew($new = false);
+
+    /**
+     * @return boolean
+     */
     public function isRecreate();
 
     /**

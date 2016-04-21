@@ -3,6 +3,7 @@ namespace Staticus\Resources\Middlewares;
 
 use Staticus\Diactoros\FileContentResponse\FileContentResponse;
 use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
+use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,6 +17,7 @@ abstract class ResourceResponseMiddlewareAbstract extends MiddlewareAbstract
      * @var ResourceDOInterface
      */
     protected $resourceDO;
+    
     public function __construct(ResourceDOInterface $resourceDO)
     {
         $this->resourceDO = $resourceDO;
@@ -28,11 +30,7 @@ abstract class ResourceResponseMiddlewareAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
-        if (
-            $response instanceof EmptyResponse
-            || $response instanceof FileContentResponse
-            || $response instanceof FileUploadedResponse
-        ) {
+        if ($this->isAllowedResponse($response)) {
             $data = [
                 'resource' => $this->resourceDO->toArray(),
                 'uri' => $this->getUri($this->resourceDO),
@@ -73,5 +71,17 @@ abstract class ResourceResponseMiddlewareAbstract extends MiddlewareAbstract
         }
 
         return $uri;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return bool
+     */
+    protected function isAllowedResponse(ResponseInterface $response)
+    {
+        return $response instanceof EmptyResponse
+        || $response instanceof FileContentResponse
+        || $response instanceof FileUploadedResponse
+        || $response instanceof ResourceDoResponse;
     }
 }

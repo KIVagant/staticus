@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Png;
 
-use Staticus\Resources\ResourceImageDO;
+use Staticus\Resources\Image\ResourceImageDO;
 
 /**
  * Domain Object

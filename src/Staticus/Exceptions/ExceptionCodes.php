@@ -28,7 +28,8 @@ class ExceptionCodes
         \Staticus\Middlewares\ActionPostAbstract::class,
         \Staticus\Diactoros\DownloadedFile::class,
         \SearchManager\Image\SearchImageProviderProxy::class,
-        \Staticus\Resources\Middlewares\ImagePostProcessingMiddlewareAbstract::class
+        \Staticus\Resources\Middlewares\ImageResizeMiddlewareAbstract::class,
+        \Staticus\Resources\Middlewares\ImageCropMiddlewareAbstract::class,
     ];
 
     public static function code($className)

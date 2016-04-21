@@ -2,13 +2,13 @@
 namespace Staticus\Resources\Middlewares;
 
 use Staticus\Resources\ResourceDOInterface;
-use Staticus\Resources\ResourceImageDO;
+use Staticus\Resources\Image\ResourceImageDO;
 
 abstract class ImageResponseMiddlewareAbstract extends ResourceResponseMiddlewareAbstract
 {
     protected function getUri(ResourceDOInterface $resourceDO)
     {
-        /** @var ResourceImageDO $resourceDO */
+        /** @var \Staticus\Resources\Image\ResourceImageDO $resourceDO */
         $uri = $resourceDO->getName() . '.' . $resourceDO->getType();
         $query = [];
         if (ResourceDOInterface::DEFAULT_VARIANT !== $resourceDO->getVariant()) {

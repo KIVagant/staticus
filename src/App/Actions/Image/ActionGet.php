@@ -2,7 +2,7 @@
 namespace App\Actions\Image;
 
 use Staticus\Middlewares\ActionGetAbstract;
-use Staticus\Resources\ResourceImageDOInterface;
+use Staticus\Resources\Image\ResourceImageDOInterface;
 
 class ActionGet extends ActionGetAbstract
 {
