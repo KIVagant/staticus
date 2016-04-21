@@ -12,13 +12,13 @@ interface ResourceImageDOInterface extends ResourceDOInterface
      * @param mixed $width
      * @return ResourceImageDO
      */
-    public function setWidth($width);
+    public function setWidth($width = 0);
 
     /**
      * @return int
      */
     public function getHeight();
-    public function setHeight($height);
+    public function setHeight($height = 0);
     public function generateFilePath();
     /**
      * @return int|string

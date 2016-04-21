@@ -1,21 +1,15 @@
 <?php
 namespace Staticus\Resources\Middlewares;
 
-use Staticus\Middlewares\MiddlewareAbstract;
+use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Resources\CropDO;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
-use Staticus\Resources\ResourceDOInterface;
+use Staticus\Resources\Image\ImagePostProcessingAbstract;
 
-abstract class ImageCropMiddlewareAbstract extends MiddlewareAbstract
+abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingAbstract
 {
-    protected $resourceDO;
-    public function __construct(ResourceDOInterface $resourceDO)
-    {
-        $this->resourceDO = $resourceDO;
-    }
-
     public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
@@ -31,24 +25,17 @@ abstract class ImageCropMiddlewareAbstract extends MiddlewareAbstract
                 || $resourceDO->isRecreate() // For POST method
                 || !is_file($resourceDO->getFilePath()) // For GET method
             ) {
-                $defaultImagePath = $request->getAttribute('defaultImagePath', $this->getDefaultImagePath());
+                $targetResourceDO = $this->chooseTargetResource($response);
+
+                $defaultImagePath = $targetResourceDO->getFilePath();
                 if (is_file($defaultImagePath)) {
                     $this->cropImage($defaultImagePath, $resourceDO->getFilePath(), $crop);
-                    $request = $request->withAttribute('defaultImagePath', $resourceDO->getFilePath());
                 }
             }
         }
+        $response = new ResourceDoResponse($resourceDO, $response->getStatusCode(), $response->getHeaders());
 
         return $next($request, $response);
-    }
-
-    protected function getDefaultImagePath()
-    {
-        $defaultSizeResourceDO = clone $this->resourceDO;
-        $defaultSizeResourceDO->setWidth();
-        $defaultSizeResourceDO->setHeight();
-
-        return $defaultSizeResourceDO->getFilePath();
     }
 
     public function cropImage($sourcePath, $destinationPath, CropDO $crop)
@@ -61,24 +48,6 @@ abstract class ImageCropMiddlewareAbstract extends MiddlewareAbstract
             $crop->getX(),
             $crop->getY()
         );
-        $resource = fopen($destinationPath, "w");
-        if (!$resource) {
-            throw new SaveResourceErrorException('Can\'t open file for write: ' . $destinationPath, __LINE__);
-        }
-        $imagick->writeImageFile($resource);
-        fclose($resource);
-    }
-    /**
-     * @param $directory
-     * @throws SaveResourceErrorException
-     * @deprecated
-     * @todo move file operations somewhere
-     * @see \Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract::createDirectory
-     */
-    protected function createDirectory($directory)
-    {
-        if (@!mkdir($directory, 0777, true) && !is_dir($directory)) {
-            throw new SaveResourceErrorException('Can\'t create a directory: ' . $directory, __LINE__);
-        }
+        $imagick->writeImage($destinationPath);
     }
 }
