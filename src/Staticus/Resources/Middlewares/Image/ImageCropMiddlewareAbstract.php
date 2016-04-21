@@ -42,7 +42,7 @@ abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingMiddleware
     public function cropImage($sourcePath, $destinationPath, CropImageDOInterface $crop)
     {
         $this->createDirectory(dirname($destinationPath));
-        $imagick = new \Imagick(realpath($sourcePath));
+        $imagick = $this->getImagick($sourcePath);
         $imagick->cropImage(
             $crop->getWidth(),
             $crop->getHeight(),
