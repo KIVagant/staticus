@@ -5,10 +5,9 @@ use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
 use Staticus\Resources\ResourceDOInterface;
-use Staticus\Resources\Image\ResourceImageDOInterface;
 use Psr\Http\Message\ResponseInterface;
 
-abstract class ImagePostProcessingAbstract extends MiddlewareAbstract
+abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
 {
     /**
      * @var ResourceImageDOInterface
@@ -32,7 +31,7 @@ abstract class ImagePostProcessingAbstract extends MiddlewareAbstract
 
     /**
      * @param ResponseInterface $response
-     * @return ResourceDOInterface|\Staticus\Resources\Image\ResourceImageDOInterface
+     * @return ResourceDOInterface|ResourceImageDOInterface
      */
     protected function chooseTargetResource(ResponseInterface $response)
     {
