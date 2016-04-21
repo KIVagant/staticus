@@ -117,7 +117,7 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
      * @throws SaveResourceErrorException
      * @deprecated
      * @todo move file operations somethere
-     * @see \Staticus\Resources\ImagePostProcessingMiddlewareAbstract::createDirectory
+     * @see \Staticus\Resources\Middlewares\Image\ImagePostProcessingMiddlewareAbstract::createDirectory
      */
     protected function createDirectory($directory)
     {

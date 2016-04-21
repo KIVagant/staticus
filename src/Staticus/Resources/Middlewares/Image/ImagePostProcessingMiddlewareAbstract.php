@@ -4,6 +4,7 @@ namespace Staticus\Resources\Middlewares\Image;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
+use Staticus\Resources\Image\ResourceImageDOInterface;
 use Staticus\Resources\ResourceDOInterface;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\EmptyResponse;

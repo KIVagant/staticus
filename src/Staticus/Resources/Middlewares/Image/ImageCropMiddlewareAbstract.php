@@ -5,7 +5,6 @@ use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Resources\Image\CropImageDOInterface;
-use Staticus\Resources\Image\ImagePostProcessingMiddlewareAbstract;
 
 abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingMiddlewareAbstract
 {
