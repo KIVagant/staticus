@@ -4,10 +4,9 @@ namespace Staticus\Resources\Middlewares;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
-use Staticus\Resources\Exceptions\SaveResourceErrorException;
-use Staticus\Resources\Image\ImagePostProcessingAbstract;
+use Staticus\Resources\Image\ImagePostProcessingMiddlewareAbstract;
 
-abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingAbstract
+abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewareAbstract
 {
 
     public function __invoke(
