@@ -1,5 +1,5 @@
 <?php
-namespace Staticus\Resources\Image;
+namespace Staticus\Resources\Middlewares\Image;
 
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
