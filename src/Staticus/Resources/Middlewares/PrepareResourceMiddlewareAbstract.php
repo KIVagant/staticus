@@ -114,16 +114,17 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
 
     protected function defaultValidator($name, $value, $canBeEmpty = false, $allowedRegexpSymbols = '\w\d\-_', $replaceDeniedSymbols = false)
     {
-        if (empty($value) && !$canBeEmpty) {
-            throw new WrongRequestException('Empty request param "' . $name . '"', __LINE__);
-        } else if (!empty($value)) {
+        if (!empty($value)) {
             if ($replaceDeniedSymbols) {
-                $value = trim(preg_replace('/\s+/u', ' ', preg_replace('~[^' . $allowedRegexpSymbols . ']+~', '', $value)));
+                $value = trim(preg_replace('/\s+/u', ' ', preg_replace('/[^' . $allowedRegexpSymbols . ']+/ui', '', $value)));
             } else {
                 if (!preg_match('/^[' . $allowedRegexpSymbols . ']+$/ui', $value)) {
                     throw new WrongRequestException('Wrong request param "' . $name . '": ' . $value, __LINE__);
                 }
             }
+        }
+        if (empty($value) && !$canBeEmpty) {
+            throw new WrongRequestException('Empty request param "' . $name . '"', __LINE__);
         }
 
         return $value;
