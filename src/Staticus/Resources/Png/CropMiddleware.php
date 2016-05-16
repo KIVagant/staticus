@@ -1,5 +1,5 @@
 <?php
-namespace Staticus\Resources\Jpg;
+namespace Staticus\Resources\Png;
 
 use Staticus\Resources\Middlewares\Image\ImageCropMiddlewareAbstract;
 
