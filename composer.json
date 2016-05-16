@@ -25,7 +25,6 @@
     "zendframework/zend-expressive-fastroute": "^1.0",
     "aura/di": "^3.1",
     "league/flysystem": "^1.0",
-    "bushbaby/flysystem": "^1.0",
     "mtymek/expressive-config-manager": "^0.4.0"
   },
   "require-dev": {
