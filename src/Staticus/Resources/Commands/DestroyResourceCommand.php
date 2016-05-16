@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Commands;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Resources\Exceptions\CommandErrorException;
 use Staticus\Resources\ResourceDOInterface;
 
@@ -11,9 +12,15 @@ class DestroyResourceCommand implements ResourceCommandInterface
      * @var ResourceDOInterface
      */
     protected $resourceDO;
-    public function __construct(ResourceDOInterface $resourceDO)
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
+
+    public function __construct(ResourceDOInterface $resourceDO, FilesystemInterface $filesystem)
     {
         $this->resourceDO = $resourceDO;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -32,7 +39,7 @@ class DestroyResourceCommand implements ResourceCommandInterface
             throw new CommandErrorException('Invalid destroy request', __LINE__);
         }
         if ($byPathOnly) {
-            if (!unlink($filePath)) {
+            if (!$this->filesystem->delete($filePath)) {
                 throw new CommandErrorException('The file cannot be removed: ' . $filePath, __LINE__);
             }
         } else {

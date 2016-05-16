@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Middlewares;
 
+use League\Flysystem\FilesystemInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Staticus\Exceptions\WrongRequestException;
 use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
@@ -27,10 +28,15 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
      * @var FileContentResponse
      */
     protected $response;
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
 
-    public function __construct(ResourceDOInterface $resourceDO)
+    public function __construct(ResourceDOInterface $resourceDO, FilesystemInterface $filesystem)
     {
         $this->resourceDO = $resourceDO;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -78,11 +84,15 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     /**
      * @param $filePath
      * @param $content
-     * @todo move file operations somethere
      */
     protected function writeFile($filePath, $content)
     {
-        if (!file_put_contents($filePath, $content)) {
+        if (is_resource($content)) {
+            $result = $this->filesystem->putStream($filePath, $content);
+        } else {
+            $result = $this->filesystem->put($filePath, $content);
+        }
+        if (!$result) {
             throw new SaveResourceErrorException('File cannot be written to the path ' . $filePath, __LINE__);
         }
     }
@@ -99,7 +109,7 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
              * Try to remove unnecessary file because UploadFile object can be emulated
              * @see \Staticus\Middlewares\ActionPostAbstract::download
              */
-            @unlink($uri);
+            $this->filesystem->delete($uri);
             throw new WrongRequestException('Bad request: incorrect mime-type of the uploaded file', __LINE__);
         }
         $content->moveTo($filePath);
@@ -107,7 +117,7 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 
     protected function copyResource(ResourceDOInterface $originResourceDO, ResourceDOInterface $newResourceDO)
     {
-        $command = new CopyResourceCommand($originResourceDO, $newResourceDO);
+        $command = new CopyResourceCommand($originResourceDO, $newResourceDO, $this->filesystem);
 
         return $command();
     }
@@ -115,13 +125,11 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
     /**
      * @param $directory
      * @throws SaveResourceErrorException
-     * @deprecated
-     * @todo move file operations somethere
      * @see \Staticus\Resources\Middlewares\Image\ImagePostProcessingMiddlewareAbstract::createDirectory
      */
     protected function createDirectory($directory)
     {
-        if (@!mkdir($directory, 0777, true) && !is_dir($directory)) {
+        if (!$this->filesystem->createDir($directory)) {
             throw new SaveResourceErrorException('Can\'t create a directory: ' . $directory, __LINE__);
         }
     }
@@ -184,7 +192,7 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
 
     protected function backup(ResourceDOInterface $resourceDO)
     {
-        $command = new BackupResourceCommand($resourceDO);
+        $command = new BackupResourceCommand($resourceDO, $this->filesystem);
         $backupResourceVerDO = $command();
 
         return $backupResourceVerDO;
@@ -197,7 +205,7 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
      */
     protected function destroyEqual(ResourceDOInterface $resourceDO, ResourceDOInterface $backupResourceVerDO)
     {
-        $command = new DestroyEqualResourceCommand($resourceDO, $backupResourceVerDO);
+        $command = new DestroyEqualResourceCommand($resourceDO, $backupResourceVerDO, $this->filesystem);
         $responseDO = $command();
 
         return $responseDO;

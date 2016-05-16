@@ -1,6 +1,7 @@
 <?php
 namespace App\Actions\Image;
 
+use League\Flysystem\FilesystemInterface;
 use SearchManager\Manager as SearchManager;
 use Staticus\Middlewares\ActionPostAbstract;
 use Staticus\Resources\ResourceDOInterface;
@@ -9,11 +10,14 @@ use FractalManager\Manager as FractalManager;
 
 class ActionPost extends ActionPostAbstract
 {
-    public function __construct(ResourceImageDOInterface $resourceDO, FractalManager $fractal, SearchManager $generatorSearch)
+    public function __construct(
+        ResourceImageDOInterface $resourceDO
+        , FilesystemInterface $filesystem
+        , FractalManager $fractal
+        , SearchManager $generatorSearch
+    )
     {
-        $this->resourceDO = $resourceDO;
-        $this->generator = $fractal;
-        $this->searcher = $generatorSearch;
+        parent::__construct($resourceDO, $filesystem, $fractal, $generatorSearch);
     }
 
     /**

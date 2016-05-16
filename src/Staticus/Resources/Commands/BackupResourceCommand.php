@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Commands;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Resources\ResourceDOInterface;
 
 class BackupResourceCommand implements ResourceCommandInterface
@@ -10,10 +11,15 @@ class BackupResourceCommand implements ResourceCommandInterface
      * @var ResourceDOInterface
      */
     protected $resourceDO;
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
 
-    public function __construct(ResourceDOInterface $resourceDO)
+    public function __construct(ResourceDOInterface $resourceDO, FilesystemInterface $filesystem)
     {
         $this->resourceDO = $resourceDO;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -39,7 +45,7 @@ class BackupResourceCommand implements ResourceCommandInterface
     {
         $backupResourceDO = clone $this->resourceDO;
         $backupResourceDO->setVersion($newVersion);
-        $command = new CopyResourceCommand($this->resourceDO, $backupResourceDO);
+        $command = new CopyResourceCommand($this->resourceDO, $backupResourceDO, $this->filesystem);
 
         return $command();
     }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Actions\Voice;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Exceptions\ErrorException;
 use Staticus\Exceptions\WrongRequestException;
 use Staticus\Middlewares\ActionPostAbstract;
@@ -10,10 +11,9 @@ use AudioManager\Manager;
 
 class ActionPost extends ActionPostAbstract
 {
-    public function __construct(ResourceDO $resourceDO, Manager $manager)
+    public function __construct(ResourceDO $resourceDO, FilesystemInterface $filesystem, Manager $manager)
     {
-        $this->resourceDO = $resourceDO;
-        $this->generator = $manager;
+        parent::__construct($resourceDO, $filesystem, $manager, null);
     }
     /**
      * @param ResourceDOInterface $resourceDO

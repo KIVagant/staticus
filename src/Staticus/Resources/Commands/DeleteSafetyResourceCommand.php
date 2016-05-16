@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Commands;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Resources\Exceptions\CommandErrorException;
 use Staticus\Resources\ResourceDOInterface;
 
@@ -11,9 +12,15 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
      * @var ResourceDOInterface
      */
     protected $resourceDO;
-    public function __construct(ResourceDOInterface $resourceDO)
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
+
+    public function __construct(ResourceDOInterface $resourceDO, FilesystemInterface $filesystem)
     {
         $this->resourceDO = $resourceDO;
+        $this->filesystem = $filesystem;
     }
 
     public function __invoke()
@@ -36,7 +43,7 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
                 if (ResourceDOInterface::DEFAULT_VERSION !== $lastVersion) {
                     $lastVersionResourceDO = clone $this->resourceDO;
                     $lastVersionResourceDO->setVersion($lastVersion);
-                    $command = new DestroyEqualResourceCommand($lastVersionResourceDO, $this->resourceDO);
+                    $command = new DestroyEqualResourceCommand($lastVersionResourceDO, $this->resourceDO, $this->filesystem);
                     $result = $command();
                     if ($result === $this->resourceDO) {
 
@@ -46,7 +53,7 @@ class DeleteSafetyResourceCommand implements ResourceCommandInterface
                     }
                 }
 
-                $command = new BackupResourceCommand($this->resourceDO);
+                $command = new BackupResourceCommand($this->resourceDO, $this->filesystem);
                 $command($lastVersion);
             }
 
