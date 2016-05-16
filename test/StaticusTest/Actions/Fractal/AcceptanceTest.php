@@ -7,6 +7,8 @@ use App\Actions\Image\ActionGet;
 use App\Actions\Image\ActionPost;
 use FractalManager\Adapter\MandlebrotAdapter;
 use FractalManager\Manager as FractalManager;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use SearchManager\Adapter\GoogleAdapter;
 use SearchManager\Image\GoogleCustomSearchImage;
 use SearchManager\Image\SearchImageProviderProxy;
@@ -79,7 +81,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     protected function subtestSaveResourceMiddleware($responsePost, ResourceDO $image, $filePath)
     {
         $this->assertFileNotExists($filePath);
-        $action = new SaveResourceMiddleware($image);
+        $action = new SaveResourceMiddleware($image, $this->getFileSystem());
         $responseSave = null;
         $resourceRoute = $this->getResourceRoute($image);
         $action(new ServerRequest([$resourceRoute]), $responsePost, function (
@@ -288,8 +290,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     {
         $resourceRoute = $this->getResourceRoute($image);
         $request = new ServerRequest([$resourceRoute]);
-
-        $action = new ActionGet($image);
+        $action = new ActionGet($image, $this->getFileSystem());
         $response = $this->invokeAction($request, $action, $image);
         $this->assertTrue($response instanceof Response);
         $this->assertTrue($response instanceof EmptyResponse);
@@ -302,7 +303,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $request = new ServerRequest([$resourceRoute], $uploadedFiles, null, null, 'php://input', [], [], [], $parsedBody);
         $fractalManager = $this->fractalManagerFactory();
         $searchManager = $this->searchManagerFactory();
-        $action = new ActionPost($image, $fractalManager, $searchManager);
+        $action = new ActionPost($image, $this->getFileSystem(), $fractalManager, $searchManager);
         $response = $this->invokeAction($request, $action, $image);
 
         return $response;
@@ -312,7 +313,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     {
         $resourceRoute = $this->getResourceRoute($image);
         $request = new ServerRequest([$resourceRoute], $uploadedFiles, null, null, 'php://input', [], [], [], $parsedBody);
-        $action = new CropMiddleware($image);
+        $action = new CropMiddleware($image, $this->getFileSystem());
 
         $response = new EmptyResponse(200, [
             'Content-Type' => 'image/jpg',
@@ -327,7 +328,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     {
         $resourceRoute = $this->getResourceRoute($image);
         $request = new ServerRequest([$resourceRoute], [], null, null, 'php://input', [], [], $queryParams);
-        $action = new ActionDelete($image);
+        $action = new ActionDelete($image, $this->getFileSystem());
         $response = $this->invokeAction($request, $action, $image);
         $this->assertTrue($response instanceof Response);
         $this->assertTrue($response instanceof EmptyResponse);
@@ -366,5 +367,16 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $fractalManager = new FractalManager($fractalAdapter);
 
         return $fractalManager;
+    }
+
+    /**
+     * @return Filesystem
+     */
+    protected function getFileSystem()
+    {
+        $adapter = new Local('/'); // can't be replaced to env('DATA_DIR') until all file operations will be refactored
+        $filesystem = new Filesystem($adapter);
+
+        return $filesystem;
     }
 }
