@@ -4,6 +4,8 @@ namespace Staticus\Auth;
 use Staticus\Config\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
+use Staticus\Exceptions\WrongRequestException;
 use Zend\Stratigility\MiddlewareInterface;
 
 /**
@@ -25,6 +27,30 @@ class ACLMiddleware implements MiddlewareInterface
         callable $next = null
     )
     {
+        $this->checkResponseOrDie($response);
+
         return $next($request, $response);
     }
+
+
+    /**
+     * @param ResponseInterface $response
+     */
+    protected function checkResponseOrDie(ResponseInterface $response)
+    {
+        if (!$this->isSupportedResponse($response)) {
+
+            // something like PrepareResourceMiddleware should be called before this
+            throw new WrongRequestException('Unsupported type of the response for ACL. Resource preparing layer must be called before this.');
+        }
+    }
+    /**
+     * @param ResponseInterface $response
+     * @return bool
+     */
+    protected function isSupportedResponse(ResponseInterface $response)
+    {
+        return $response instanceof ResourceDoResponse;
+    }
+
 }

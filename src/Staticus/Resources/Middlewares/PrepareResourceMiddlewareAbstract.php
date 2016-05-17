@@ -2,6 +2,7 @@
 namespace Staticus\Resources\Middlewares;
 
 use Staticus\Config\Config;
+use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,6 +31,9 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     {
         parent::__invoke($request, $response, $next);
         $this->fillResource();
+
+        // Pass the resource to the next middleware
+        $response = new ResourceDoResponse($this->resourceDO, $response->getStatusCode(), $response->getHeaders());
 
         return $next($request, $response);
     }
