@@ -1,9 +1,11 @@
 <?php
 namespace Staticus\Middlewares;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Resources\Commands\DeleteSafetyResourceCommand;
 use Staticus\Resources\Commands\DestroyResourceCommand;
 use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
+use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,7 +17,16 @@ abstract class ActionDeleteAbstract extends MiddlewareAbstract
      * @var ResourceDO
      */
     protected $resourceDO;
+    /**
+     * @var
+     */
+    protected $filesystem;
 
+    public function __construct(ResourceDOInterface $resourceDO, FilesystemInterface $filesystem)
+    {
+        $this->resourceDO = $resourceDO;
+        $this->filesystem = $filesystem;
+    }
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -42,10 +53,10 @@ abstract class ActionDeleteAbstract extends MiddlewareAbstract
         ];
         $destroy = PrepareResourceMiddlewareAbstract::getParamFromRequest('destroy', $this->request);
         if ($destroy) {
-            $command = new DestroyResourceCommand($this->resourceDO);
+            $command = new DestroyResourceCommand($this->resourceDO, $this->filesystem);
             $command();
         } else {
-            $command = new DeleteSafetyResourceCommand($this->resourceDO);
+            $command = new DeleteSafetyResourceCommand($this->resourceDO, $this->filesystem);
             $command();
         }
 

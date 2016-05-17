@@ -1,11 +1,8 @@
 <?php
 
-use Staticus\Resources\ResourceDOInterface;
-
 return [
     'dependencies' => [
         'invokables' => [
-            Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
             Staticus\Auth\AuthBasicMiddleware::class => Staticus\Auth\AuthBasicMiddleware::class,
 //            Staticus\Resources\File\ResourceDO::class => Staticus\Resources\File\ResourceDO::class,
             Staticus\Resources\Mpeg\ResourceDO::class => Staticus\Resources\Mpeg\ResourceDO::class,
@@ -23,7 +20,7 @@ return [
             FractalManager\Adapter\AdapterInterface::class => FractalManager\Adapter\MandlebrotAdapter::class,
             SearchManager\Manager::class => SearchManager\Manager::class,
             SearchManager\Adapter\AdapterInterface::class => SearchManager\Adapter\GoogleAdapter::class,
-            \SearchManager\Image\ImageSearchInterface::class => SearchManager\Image\SearchImageProviderProxy::class, // search adapter proxy
+            SearchManager\Image\ImageSearchInterface::class => SearchManager\Image\SearchImageProviderProxy::class, // search adapter proxy
             SearchManager\Image\GoogleCustomSearchImage::class => SearchManager\Image\GoogleCustomSearchImage::class, // search adapter
 //            Staticus\Resources\File\PrepareResourceMiddleware::class => Staticus\Resources\File\PrepareResourceMiddleware::class,
 //            Staticus\Resources\File\SaveResourceMiddleware::class => Staticus\Resources\File\SaveResourceMiddleware::class,
@@ -52,9 +49,8 @@ return [
         // необходимо перечислить их типы (в нашем случае они совпадают с ключами в invokables и factories)
         // После этого эти типы можно использовать в type hinting.
         'types' => [
-            Staticus\Config\Config::class => Staticus\Config\Config::class,
 //            Staticus\Resources\File\ResourceDO::class => Staticus\Resources\File\ResourceDO::class,
-            \Staticus\Resources\Image\ResourceImageDOInterface::class => Staticus\Resources\Jpg\ResourceDO::class, // For Fractal\Action* injects
+            Staticus\Resources\Image\ResourceImageDOInterface::class => Staticus\Resources\Jpg\ResourceDO::class, // For Fractal\Action* injects
             Staticus\Resources\Mpeg\ResourceDO::class => Staticus\Resources\Mpeg\ResourceDO::class,
 //            Staticus\Resources\Gif\ResourceDO::class => Staticus\Resources\Gif\ResourceDO::class,
             Staticus\Resources\Jpg\ResourceDO::class => Staticus\Resources\Jpg\ResourceDO::class,
@@ -65,7 +61,7 @@ return [
             FractalManager\Manager::class => FractalManager\Manager::class,
             SearchManager\Adapter\AdapterInterface::class => SearchManager\Adapter\AdapterInterface::class,
             SearchManager\Manager::class => SearchManager\Manager::class,
-            \SearchManager\Image\ImageSearchInterface::class => \SearchManager\Image\ImageSearchInterface::class,
+            SearchManager\Image\ImageSearchInterface::class => SearchManager\Image\ImageSearchInterface::class,
             SearchManager\Image\GoogleCustomSearchImage::class => SearchManager\Image\GoogleCustomSearchImage::class,
         ],
     ],

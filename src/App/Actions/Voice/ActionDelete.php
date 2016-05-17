@@ -1,13 +1,14 @@
 <?php
 namespace App\Actions\Voice;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Middlewares\ActionDeleteAbstract;
 use Staticus\Resources\Mpeg\ResourceDO;
 
 class ActionDelete extends ActionDeleteAbstract
 {
-    public function __construct(ResourceDO $resourceDO)
+    public function __construct(ResourceDO $resourceDO, FilesystemInterface $filesystem)
     {
-        $this->resourceDO = $resourceDO;
+        parent::__construct($resourceDO, $filesystem);
     }
 }

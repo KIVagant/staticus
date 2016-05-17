@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Commands;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Resources\ResourceDOInterface;
 
 class DestroyEqualResourceCommand implements ResourceCommandInterface
@@ -12,16 +13,22 @@ class DestroyEqualResourceCommand implements ResourceCommandInterface
     /**
      * @var ResourceDOInterface
      */
-    private $suspectResourceDO;
+    protected $suspectResourceDO;
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
 
     /**
      * @param ResourceDOInterface $originResourceDO
      * @param ResourceDOInterface $suspectResourceDO This resource will be deleted, if equal to $originResourceDO
+     * @param FilesystemInterface $filesystem
      */
-    public function __construct(ResourceDOInterface $originResourceDO, ResourceDOInterface $suspectResourceDO)
+    public function __construct(ResourceDOInterface $originResourceDO, ResourceDOInterface $suspectResourceDO, FilesystemInterface $filesystem)
     {
         $this->originResourceDO = $originResourceDO;
         $this->suspectResourceDO = $suspectResourceDO;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -34,10 +41,10 @@ class DestroyEqualResourceCommand implements ResourceCommandInterface
         $originFilePath = $this->originResourceDO->getFilePath();
         $suspectFilePath = $this->suspectResourceDO->getFilePath();
         if ($originType === $suspectType
-            && filesize($originFilePath) === filesize($suspectFilePath)
+            && $this->filesystem->getSize($originFilePath) === $this->filesystem->getSize($suspectFilePath)
             && md5_file($originFilePath) === md5_file($suspectFilePath)
         ) {
-            $command = new DestroyResourceCommand($this->suspectResourceDO);
+            $command = new DestroyResourceCommand($this->suspectResourceDO, $this->filesystem);
 
             return $command(true);
         }

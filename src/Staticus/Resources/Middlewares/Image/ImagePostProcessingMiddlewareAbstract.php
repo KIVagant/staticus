@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Resources\Middlewares\Image;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Staticus\Resources\Exceptions\SaveResourceErrorException;
@@ -16,10 +17,15 @@ abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
      * @var ResourceImageDOInterface
      */
     protected $resourceDO;
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
 
-    public function __construct(ResourceDOInterface $resourceDO)
+    public function __construct(ResourceDOInterface $resourceDO, FilesystemInterface $filesystem)
     {
         $this->resourceDO = $resourceDO;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -58,13 +64,11 @@ abstract class ImagePostProcessingMiddlewareAbstract extends MiddlewareAbstract
     /**
      * @param $directory
      * @throws SaveResourceErrorException
-     * @deprecated
-     * @todo move file operations somewhere
      * @see \Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract::createDirectory
      */
     protected function createDirectory($directory)
     {
-        if (@!mkdir($directory, 0777, true) && !is_dir($directory)) {
+        if (!$this->filesystem->createDir($directory)) {
             throw new SaveResourceErrorException('Can\'t create a directory: ' . $directory, __LINE__);
         }
     }

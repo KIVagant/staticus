@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Middlewares;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Diactoros\DownloadedFile;
 use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
 use Staticus\Exceptions\ErrorException;
@@ -36,6 +37,19 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
      * @var ResourceDO
      */
     protected $resourceDO;
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
+
+    public function __construct(
+        ResourceDOInterface $resourceDO, FilesystemInterface $filesystem, $fractal, $generatorSearch)
+    {
+        $this->resourceDO = $resourceDO;
+        $this->generator = $fractal;
+        $this->searcher = $generatorSearch;
+        $this->filesystem = $filesystem;
+    }
 
     /**
      * @param ServerRequestInterface $request
@@ -124,7 +138,7 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
      * @throws ErrorException
      * @throws \Exception
      */
-    private function download(ResourceDOInterface $resourceDO, $uri)
+    protected function download(ResourceDOInterface $resourceDO, $uri)
     {
         // ------------
         // @todo refactoring: move downloading code from here to separate service!

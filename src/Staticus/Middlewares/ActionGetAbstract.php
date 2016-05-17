@@ -1,7 +1,9 @@
 <?php
 namespace Staticus\Middlewares;
 
+use League\Flysystem\FilesystemInterface;
 use Staticus\Exceptions\ErrorException;
+use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,7 +19,16 @@ abstract class ActionGetAbstract extends MiddlewareAbstract
      * @var ResourceDO
      */
     protected $resourceDO;
+    /**
+     * @var
+     */
+    protected $filesystem;
 
+    public function __construct(ResourceDOInterface $resourceDO, FilesystemInterface $filesystem)
+    {
+        $this->resourceDO = $resourceDO;
+        $this->filesystem = $filesystem;
+    }
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
