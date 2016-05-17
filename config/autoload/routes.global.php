@@ -4,6 +4,8 @@ return [
     'dependencies' => [
         'invokables' => [
             Staticus\Auth\AuthBasicMiddleware::class => Staticus\Auth\AuthBasicMiddleware::class,
+            Staticus\Auth\ACLMiddleware::class => Staticus\Auth\ACLMiddleware::class,
+            Staticus\Auth\AuthSessionMiddleware::class => Staticus\Auth\AuthSessionMiddleware::class,
 //            Staticus\Resources\File\ResourceDO::class => Staticus\Resources\File\ResourceDO::class,
             Staticus\Resources\Mpeg\ResourceDO::class => Staticus\Resources\Mpeg\ResourceDO::class,
 //            Staticus\Resources\Gif\ResourceDO::class => Staticus\Resources\Gif\ResourceDO::class,
@@ -114,8 +116,10 @@ return [
             'path' => '/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'allowed_methods' => ['POST'],
             'middleware' => [
-                Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
+                Staticus\Auth\AuthSessionMiddleware::class,
+                Staticus\Auth\AuthBasicMiddleware::class,
+                Staticus\Auth\ACLMiddleware::class,
                 App\Actions\Image\ActionPost::class,
                 Staticus\Resources\Jpg\SaveResourceMiddleware::class,
                 Staticus\Resources\Jpg\CropMiddleware::class,

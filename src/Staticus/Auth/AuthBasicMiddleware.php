@@ -8,9 +8,7 @@ use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Stratigility\MiddlewareInterface;
 
 /**
- * Слой авторизации, см. конфиг auth.global.php
- * Class AuthBasicMiddleware
- * @package Staticus\Auth
+ * http-auth layer, look into auth.global.php
  */
 class AuthBasicMiddleware implements MiddlewareInterface
 {
