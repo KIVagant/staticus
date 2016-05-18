@@ -14,6 +14,10 @@ use Zend\Stratigility\MiddlewareInterface;
 class AuthBasicMiddleware implements MiddlewareInterface
 {
     protected $config;
+
+    /**
+     * @var User|UserInterface
+     */
     protected $user;
 
     public function __construct(ConfigInterface $config, UserInterface $user)

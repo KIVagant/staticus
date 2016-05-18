@@ -1,6 +1,8 @@
 <?php
 namespace Staticus\Acl;
 
+use Staticus\Auth\User;
+use Staticus\Auth\UserInterface;
 use Staticus\Config\ConfigInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,12 +15,22 @@ use Zend\Stratigility\MiddlewareInterface;
 class AclMiddleware implements MiddlewareInterface
 {
     protected $config;
+
+    /**
+     * @var AclServiceInterface|AclService
+     */
     protected $service;
 
-    public function __construct(ConfigInterface $config, AclService $service)
+    /**
+     * @var UserInterface|User
+     */
+    protected $user;
+
+    public function __construct(ConfigInterface $config, AclServiceInterface $service, UserInterface $user)
     {
         $this->config = $config->get('acl');
         $this->service = $service;
+        $this->user = $user;
     }
 
     public function __invoke(
@@ -37,12 +49,8 @@ class AclMiddleware implements MiddlewareInterface
         $AclResourceUnique = $resourceDO instanceof ResourceInterface
             ? $resourceDO->getResourceId()
             : null;
-        $role = Roles::GUEST;// @todo get roles from authenticated user
-        if (!$this->isAllowed($role, $AclResourceCommon, $action)) {
-
-            return new EmptyResponse(403);
-        }
-        if (!$this->isAllowed($role, $AclResourceUnique, $action)) {
+        if (!$this->isAllowed($AclResourceCommon, $action)
+            || !$this->isAllowed($AclResourceUnique, $action)) {
 
             return new EmptyResponse(403);
         }
@@ -98,15 +106,15 @@ class AclMiddleware implements MiddlewareInterface
         return $action;
     }
 
-    protected function isAllowed($role, $AclResourceName, $action)
+    protected function isAllowed($aclResource, $action)
     {
-        return (
-            !$this->service->acl()->hasRole($role)
-            || !$this->service->acl()->hasResource($AclResourceName)
-            || $this->service->acl()->isAllowed(
-                $role,
-                $AclResourceName,
-                $action)
-        );
+        if (!$this->service->acl()->hasResource($aclResource)) {
+
+            // By default all users allowed to any resource actions
+            // if it is not yet registered in Acl
+            return true;
+        }
+
+        return $this->user->can($aclResource, $action);
     }
 }

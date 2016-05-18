@@ -17,7 +17,7 @@ class AclService implements AclServiceInterface
     protected $config;
 
     /**
-     * @var Acl
+     * @var AclInterface|Acl
      */
     protected $acl;
 

@@ -1,19 +1,25 @@
 <?php
 namespace Staticus\Auth;
 
+use Staticus\Acl\AclServiceInterface;
 use Staticus\Acl\Roles;
-use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\AclAclInterface;
+use Zend\Permissions\Acl;
 
 class User implements UserInterface
 {
     protected $id;
     protected $roles = [];
+
+    /**
+     * @var Acl|AclInterface
+     */
     protected $acl;
 
-    public function __construct(Acl $acl, array $roles = [])
+    public function __construct(AclServiceInterface $acl, array $roles = [])
     {
         $this->addRoles($roles);
-        $this->acl = $acl;
+        $this->acl = $acl->acl();
     }
 
     /**
@@ -108,6 +114,6 @@ class User implements UserInterface
     public function hasRole($role)
     {
 
-        return false !== array_search($role, $this->roles, null);
+        return in_array($role, $this->roles);
     }
 }
