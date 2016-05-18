@@ -2,8 +2,6 @@
 
 return [
     'auth' => [
-        'acl' => [
-        ],
         'session' => [
             ],
         'basic' => [

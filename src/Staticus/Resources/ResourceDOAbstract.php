@@ -1,11 +1,13 @@
 <?php
 namespace Staticus\Resources;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Domain Object
  * @package Staticus\Resources\File
  */
-abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
+abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, ResourceInterface
 {
     const TYPE = '';
     protected $uuid;
@@ -95,6 +97,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
     }
 
     /**
+     * Note: Uuid is not really unique, if you want full unique identifier, use hash sum from the full path, for example
      * @return mixed
      */
     public function getUuid()
@@ -104,6 +107,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
         }
         return $this->uuid;
     }
+
     /**
      * @return string
      */
@@ -335,7 +339,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
         return isset($propsNames[$this->itemPosition]);
     }
-    
+
     public function toArray()
     {
         $ar = [];
@@ -346,5 +350,16 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
         unset($ar[0]);
 
         return $ar;
+    }
+
+    /**
+     * Unique resource identifier for ACL
+     * @return mixed
+     * @see \Zend\Permissions\Acl\Resource\ResourceInterface::getResourceId
+     * @see getFilePath
+     */
+    public function getResourceId()
+    {
+        return $this->getFilePath();
     }
 }
