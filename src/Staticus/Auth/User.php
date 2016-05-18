@@ -100,4 +100,14 @@ class User implements UserInterface
             Roles::GUEST,
         ];
     }
+
+    /**
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+
+        return false !== array_search($role, $this->roles, null);
+    }
 }

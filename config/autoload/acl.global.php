@@ -8,10 +8,12 @@ return [
         'invokables' => [
             Zend\Permissions\Acl\AclInterface::class => Zend\Permissions\Acl\Acl::class,
             Staticus\Acl\AclServiceInterface::class => Staticus\Acl\AclService::class,
+            Staticus\Auth\UserInterface::class => Staticus\Auth\User::class,
         ],
         'types' => [
             Zend\Permissions\Acl\AclInterface::class => Zend\Permissions\Acl\AclInterface::class,
             Staticus\Acl\AclServiceInterface::class => Staticus\Acl\AclServiceInterface::class,
+            Staticus\Auth\UserInterface::class => Staticus\Auth\UserInterface::class,
         ],
     ],
     'acl' => [

@@ -27,6 +27,7 @@ interface UserInterface
      */
     public function can($resource, $action);
     public function addRoles(array $roles);
+    public function hasRole($role);
 
     /**
      * @param $role
