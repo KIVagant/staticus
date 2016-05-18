@@ -11,6 +11,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
 {
     const TYPE = '';
     protected $uuid;
+    protected $namespace;
     protected $name;
     protected $nameAlternative;
     protected $type = self::TYPE;
@@ -90,6 +91,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
     public function generateFilePath()
     {
         return $this->getBaseDirectory()
+        . ($this->getNamespace() ? $this->getNamespace() . DIRECTORY_SEPARATOR : '')
         . $this->getType() . DIRECTORY_SEPARATOR
         . $this->getVariant() . DIRECTORY_SEPARATOR
         . $this->getVersion() . DIRECTORY_SEPARATOR
@@ -118,11 +120,32 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
 
     /**
      * @param string $name
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setName($name)
     {
         $this->name = (string)$name;
+        $this->setUuid();
+        $this->setFilePath();
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param string $namespace
+     * @return ResourceDOInterface
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = (string)$namespace;
         $this->setUuid();
         $this->setFilePath();
 
@@ -139,7 +162,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
 
     /**
      * @param string $nameAlternative
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setNameAlternative($nameAlternative)
     {
@@ -159,7 +182,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
     }
     /**
      * @param string $type
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setType($type)
     {
@@ -183,7 +206,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
 
     /**
      * @param string $variant
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setVariant($variant = self::DEFAULT_VARIANT)
     {
@@ -206,7 +229,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
 
     /**
      * @param int $version
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setVersion($version = self::DEFAULT_VERSION)
     {
@@ -226,7 +249,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
 
     /**
      * @param string $author
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setAuthor($author)
     {
@@ -253,7 +276,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, Res
 
     /**
      * @param string $dir
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setBaseDirectory($dir)
     {

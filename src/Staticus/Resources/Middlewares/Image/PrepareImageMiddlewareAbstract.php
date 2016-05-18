@@ -9,7 +9,7 @@ use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
 
 abstract class PrepareImageMiddlewareAbstract extends PrepareResourceMiddlewareAbstract
 {
-    protected function fillSpecificResourceSpecific()
+    protected function fillResourceSpecialFields()
     {
         $size = static::getParamFromRequest('size', $this->request);
         $this->parseSizeParameter($size);

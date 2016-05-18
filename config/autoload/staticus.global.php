@@ -13,6 +13,12 @@ return [
         // Directory for cached files
         'data_dir' => DATA_DIR,
 
+        // List of allowed namespaces
+        'namespaces' => [
+            'fractal',
+            'user/*', // @todo wildcards support
+        ],
+
         // If true and resource name is not valid and contains bad symbols, their will be converted to '-' for the end-point url.
         // If false – Bad request response will return.
         'clean_resource_name' => true,

@@ -10,5 +10,5 @@ class PrepareResourceMiddleware extends PrepareResourceMiddlewareAbstract
     {
         parent::__construct($resourceDO, $config);
     }
-    protected function fillSpecificResourceSpecific() {}
+    protected function fillResourceSpecialFields() {}
 }

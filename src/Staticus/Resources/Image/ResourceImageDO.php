@@ -92,6 +92,7 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     public function generateFilePath()
     {
         return $this->getBaseDirectory()
+            . ($this->getNamespace() ? $this->getNamespace() . DIRECTORY_SEPARATOR : '')
             . $this->getType() . DIRECTORY_SEPARATOR
             . $this->getVariant() . DIRECTORY_SEPARATOR
             . $this->getVersion() . DIRECTORY_SEPARATOR

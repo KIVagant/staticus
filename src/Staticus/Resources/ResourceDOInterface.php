@@ -9,6 +9,7 @@ interface ResourceDOInterface
 {
     const DEFAULT_VARIANT = 'def';
     const DEFAULT_VERSION = 0;
+    const NAMESPACE_REG_SYMBOLS = '\w\d\-\'_\/';
     const NAME_REG_SYMBOLS = '\w\d\p{L} \-\.\'_';
 
     /**
@@ -24,6 +25,18 @@ interface ResourceDOInterface
      * @return mixed
      */
     public function getUuid();
+
+    /**
+     * @return string
+     */
+    public function getNamespace();
+
+    /**
+     * @param string $namespace
+     * @return ResourceDOInterface
+     */
+    public function setNamespace($namespace);
+
     /**
      * @return string
      */
