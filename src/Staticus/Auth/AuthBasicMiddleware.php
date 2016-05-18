@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Auth;
 
-use Staticus\Config\Config;
+use Staticus\Config\ConfigInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\EmptyResponse;
@@ -14,7 +14,7 @@ class AuthBasicMiddleware implements MiddlewareInterface
 {
     protected $config;
 
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config->get('auth.basic');
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Resources\Middlewares;
 
-use Staticus\Config\Config;
+ use Staticus\Config\ConfigInterface;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Middlewares\MiddlewareAbstract;
 use Psr\Http\Message\ResponseInterface;
@@ -17,7 +17,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
      */
     protected $config;
 
-    public function __construct(ResourceDOInterface $resourceDO, Config $config)
+    public function __construct(ResourceDOInterface $resourceDO, ConfigInterface $config)
     {
         $this->resourceDO = $resourceDO;
         $this->config = $config;

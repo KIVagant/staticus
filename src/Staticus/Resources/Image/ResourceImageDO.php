@@ -1,7 +1,6 @@
 <?php
 namespace Staticus\Resources\Image;
 use Staticus\Resources\ResourceDOAbstract;
-use Staticus\Resources\Image\ResourceImageDOInterface;
 
 /**
  * Domain Object

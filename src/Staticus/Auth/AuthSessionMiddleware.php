@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\Auth;
 
-use Staticus\Config\Config;
+use Staticus\Config\ConfigInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Stratigility\MiddlewareInterface;
@@ -9,7 +9,7 @@ use Zend\Stratigility\MiddlewareInterface;
 class AuthSessionMiddleware implements MiddlewareInterface
 {
     protected $config;
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config->get('auth.session');
     }

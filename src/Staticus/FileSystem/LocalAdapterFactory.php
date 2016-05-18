@@ -1,7 +1,7 @@
 <?php
 namespace Staticus\FileSystem;
 use League\Flysystem\Adapter\Local;
-use Staticus\Config\Config;
+use Staticus\Config\ConfigInterface;
 
 
 class LocalAdapterFactory
@@ -11,7 +11,7 @@ class LocalAdapterFactory
      */
     protected $config;
 
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
     }
