@@ -36,8 +36,7 @@ return [
                         \Staticus\Acl\Actions::ACTION_READ,
                     ],
                     Roles::ADMIN => [
-                        \Staticus\Acl\Actions::ACTION_CREATE,
-                        \Staticus\Acl\Actions::ACTION_UPDATE,
+                        \Staticus\Acl\Actions::ACTION_WRITE,
                         \Staticus\Acl\Actions::ACTION_SEARCH,
                         \Staticus\Acl\Actions::ACTION_DELETE,
                     ]
