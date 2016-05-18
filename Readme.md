@@ -7,6 +7,10 @@
 Nginx должен быть настроен таким образом, чтобы в свою очередь управлять внутренним кешированием,
 обеспечивая максимальную скорость повторной отдачи.
 
+## Dependencies
+
+- (zendframework/zend-permissions-acl)[https://github.com/zendframework/zend-permissions-acl]
+
 ## Contents
 
 <!---
