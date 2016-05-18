@@ -106,6 +106,8 @@ return [
             'path' => '/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
+                Staticus\Auth\AuthSessionMiddleware::class,
+                \Staticus\Acl\AclMiddleware::class,
                 Staticus\Resources\Jpg\ResizeMiddleware::class,
                 App\Actions\Image\ActionGet::class,
             ],
@@ -131,8 +133,10 @@ return [
             'name' => 'delete-jpg',
             'path' => '/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
-                Staticus\Auth\AuthBasicMiddleware::class,
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
+                Staticus\Auth\AuthSessionMiddleware::class,
+                Staticus\Auth\AuthBasicMiddleware::class,
+                \Staticus\Acl\AclMiddleware::class,
                 App\Actions\Image\ActionDelete::class,
             ],
             'allowed_methods' => ['DELETE'],
