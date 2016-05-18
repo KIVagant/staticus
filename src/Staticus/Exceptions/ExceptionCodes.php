@@ -38,6 +38,7 @@ class ExceptionCodes
 
         \Staticus\Acl\AclService::class,
         \Staticus\Acl\AclMiddleware::class,
+        \Staticus\Auth\User::class,
     ];
 
     public static function code($className)
