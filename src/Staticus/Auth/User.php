@@ -3,13 +3,14 @@ namespace Staticus\Auth;
 
 use Staticus\Acl\AclServiceInterface;
 use Staticus\Acl\Roles;
-use Zend\Permissions\AclAclInterface;
-use Zend\Permissions\Acl;
+use Zend\Permissions\Acl\AclInterface;
+use Zend\Permissions\Acl\Acl;
 
 class User implements UserInterface
 {
     protected $id;
     protected $roles = [];
+    protected $namespace = '';
 
     /**
      * @var Acl|AclInterface
@@ -85,7 +86,7 @@ class User implements UserInterface
      */
     public function removeRole($role)
     {
-        if(($key = array_search($role, $this->roles)) !== false) {
+        if(($key = array_search($role, $this->roles, true)) !== false) {
             unset($this->roles[$key]);
 
             return true;
@@ -114,6 +115,24 @@ class User implements UserInterface
     public function hasRole($role)
     {
 
-        return in_array($role, $this->roles);
+        return in_array($role, $this->roles, true);
+    }
+
+    /**
+     * Get the home namespace for this user
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * Set the home namespace for this user
+     * @param string $namespace
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
     }
 }

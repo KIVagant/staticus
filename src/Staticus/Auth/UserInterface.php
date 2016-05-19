@@ -3,6 +3,9 @@ namespace Staticus\Auth;
 
 interface UserInterface
 {
+    const NAMESPACES = 'user';
+    const NAMESPACES_WILDCARD = self::NAMESPACES . '/*';
+
     /**
      * @return bool
      */
@@ -34,4 +37,16 @@ interface UserInterface
      * @return bool
      */
     public function removeRole($role);
+
+    /**
+     * Get the home namespace where user has full access to any resources
+     * @return string
+     */
+    public function getNamespace();
+
+    /**
+     * Set the home namespace where user has full access to any resources
+     * @param string $namespace
+     */
+    public function setNamespace($namespace);
 }

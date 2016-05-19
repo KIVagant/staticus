@@ -45,6 +45,7 @@ class AuthSessionMiddleware implements MiddlewareInterface
                 $storage = $auth->storage;
                 if (property_exists($storage, 'user_id')) {
                     $this->user->login($storage->user_id, [Roles::USER]);
+                    $this->user->setNamespace(UserInterface::NAMESPACES . DIRECTORY_SEPARATOR . $storage->user_id);
                 }
             }
         }
