@@ -13,7 +13,7 @@ return [
         // List of allowed namespaces
         // See the ACL config for each of them
         'namespaces' => [
-            'fractal', // example static namespace
+            'fractal', // custom namespace
             \Staticus\Auth\UserInterface::NAMESPACES_WILDCARD,
         ],
 

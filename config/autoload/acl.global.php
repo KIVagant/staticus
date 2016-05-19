@@ -130,6 +130,39 @@ return [
                 AclService::INHERIT => UserInterface::NAMESPACES_WILDCARD
                     . Staticus\Resources\Image\ResourceImageDO::class,
             ],
+
+            // ---------------------------------------------------------------------------------------------------------
+            // CUSTOM NAMESPACES below
+
+            // ---------------------------------------------------------------------------------------------------------
+            // FRACTAL namespace
+            'fractal' . Staticus\Resources\File\ResourceDO::class => [
+                AclService::PRIVILEGES => [
+                    Roles::GUEST => [
+                        Staticus\Acl\Actions::ACTION_READ,
+                    ],
+                ],
+            ],
+            'fractal' . Staticus\Resources\Mpeg\ResourceDO::class => [
+                AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
+                    . Staticus\Resources\File\ResourceDO::class,
+            ],
+            'fractal' . Staticus\Resources\Image\ResourceImageDO::class => [
+                AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
+                    . Staticus\Resources\File\ResourceDO::class,
+            ],
+            'fractal' . Staticus\Resources\Jpg\ResourceDO::class => [
+                AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
+                    . Staticus\Resources\Image\ResourceImageDO::class,
+            ],
+            'fractal' . Staticus\Resources\Png\ResourceDO::class => [
+                AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
+                    . Staticus\Resources\Image\ResourceImageDO::class,
+            ],
+            'fractal' . Staticus\Resources\Gif\ResourceDO::class => [
+                AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
+                    . Staticus\Resources\Image\ResourceImageDO::class,
+            ],
         ],
     ],
 ];
