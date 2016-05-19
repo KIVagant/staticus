@@ -1,6 +1,7 @@
 <?php
 namespace Staticus\Auth;
 
+use Staticus\Acl\Roles;
 use Staticus\Config\ConfigInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,10 +18,16 @@ class AuthSessionMiddleware implements MiddlewareInterface
      */
     protected $manager;
 
-    public function __construct(ConfigInterface $config, ManagerInterface $manager)
+    /**
+     * @var UserInterface|User
+     */
+    protected $user;
+
+    public function __construct(ConfigInterface $config, ManagerInterface $manager, UserInterface $user)
     {
         $this->config = $config->get('auth.session');
         $this->manager = $manager;
+        $this->user = $user;
     }
     public function __invoke(
         ServerRequestInterface $request,
@@ -28,6 +35,19 @@ class AuthSessionMiddleware implements MiddlewareInterface
         callable $next = null
     )
     {
+        if (array_key_exists('Zend_Auth', $_SESSION)) {
+
+            /** @var \Zend\Stdlib\ArrayObject $auth */
+            $auth = $_SESSION['Zend_Auth'];
+            if ($auth->offsetExists('storage')) {
+
+                /** @var StdClass $storage */
+                $storage = $auth->storage;
+                if (property_exists($storage, 'user_id')) {
+                    $this->user->login($storage->user_id, [Roles::USER]);
+                }
+            }
+        }
 
         return $next($request, $response);
     }
