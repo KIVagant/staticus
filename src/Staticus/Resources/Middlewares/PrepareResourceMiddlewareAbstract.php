@@ -52,7 +52,7 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             , ResourceDOInterface::NAME_REG_SYMBOLS, $this->config->get('staticus.clean_resource_name'));
         $namespace = $this->defaultValidator('namespace', $namespace, true
             , ResourceDOInterface::NAMESPACE_REG_SYMBOLS, $this->config->get('staticus.clean_resource_name'));
-        $this->isNamespaceAllowed($namespace);
+        $this->namespaceValidator($namespace);
         $alt = static::getParamFromRequest('alt', $this->request);
         $alt = $this->cleanup($alt);
         $var = static::getParamFromRequest('var', $this->request);
@@ -141,14 +141,20 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
         return $value;
     }
 
-    /**
-     * @param $namespace
-     */
-    protected function isNamespaceAllowed($namespace)
+    protected function namespaceValidator($namespace)
     {
-        // @todo wildcard namespaces support in config: 'user/*'
-        if ($namespace && !in_array($namespace, $this->config->get('staticus.namespaces'))) {
+        $allowed = $this->config->get('staticus.namespaces');
+        if ($namespace && !in_array($namespace, $allowed, true)) {
+            foreach ($allowed as $item) {
+                if (false !== strpos($item, '*') && fnmatch($item, $namespace)) {
+                    // TODO: limitations for nested namespaces
+
+                    return true;
+                }
+            }
             throw new WrongRequestException('Unknown namespace "' . $namespace . '"', __LINE__);
         }
+
+        return true;
     }
 }
