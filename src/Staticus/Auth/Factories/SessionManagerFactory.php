@@ -2,7 +2,7 @@
 namespace Staticus\Auth\Factories;
 
 use Staticus\Auth\SaveHandlers\Redis;
-use Zend\Session\Config\ConfigInterface;
+use Staticus\Config\ConfigInterface;
 use Zend\Session\Config\SessionConfig;
 use Zend\Session\SessionManager;
 
@@ -14,6 +14,7 @@ class SessionManagerFactory
     {
         $this->config = $config->get('auth.session');
     }
+
     public function __invoke()
     {
         $sessionConfig = new SessionConfig();

@@ -3,7 +3,10 @@
 return [
     'dependencies' => [
         'factories' => [
-            Zend\Session\SessionManager::class => Staticus\Auth\Factories\SessionManagerFactory::class,
+            Zend\Session\ManagerInterface::class => Staticus\Auth\Factories\SessionManagerFactory::class,
+        ],
+        'types' => [
+            Zend\Session\ManagerInterface::class => Zend\Session\ManagerInterface::class,
         ],
     ],
     'auth' => [
