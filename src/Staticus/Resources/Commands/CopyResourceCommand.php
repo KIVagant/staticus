@@ -34,7 +34,7 @@ class CopyResourceCommand implements ResourceCommandInterface
         if (!$this->filesystem->has($originPath)) {
             throw new CommandErrorException('Origin file is not exists: ' . $originPath, __LINE__);
         }
-        if (!$this->filesystem->copy($originPath, $newPath)) {
+        if (!$this->filesystem->has($newPath)) {
             $this->copyFile($originPath, $newPath);
 
             return $this->newResourceDO;
