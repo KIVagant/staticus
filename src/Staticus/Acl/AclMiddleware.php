@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Exceptions\WrongRequestException;
+use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Stratigility\MiddlewareInterface;
@@ -45,17 +46,52 @@ class AclMiddleware implements MiddlewareInterface
         $method = $request->getMethod();
         $action = $this->getAction($method);
         $resourceDO = $response->getContent();
+        $resourceNamespace = $resourceDO->getNamespace();
+        $userNamespace = $this->user->getNamespace();
         $AclResourceCommon = get_class($resourceDO);
         $AclResourceUnique = $resourceDO instanceof ResourceInterface
             ? $resourceDO->getResourceId()
             : null;
-        if (!$this->isAllowed($AclResourceCommon, $action)
-            || !$this->isAllowed($AclResourceUnique, $action)) {
 
-            return new EmptyResponse(403);
+        if (
+            // User have access to this type of resources regardless namespaces
+            $this->isAllowed($AclResourceCommon, $action, '')
+
+            // User have access to this unique resource regardless namespaces
+            || $this->isAllowed($AclResourceUnique, $action, '')
+
+            // User have access to this resource type in common namespace
+            || (
+                !$resourceNamespace
+                && $this->isAllowed($AclResourceCommon, $action, ResourceDOInterface::NAMESPACES_WILDCARD)
+                )
+
+            // User have access to this resource type in concrete selected namespace
+            || (
+                $resourceNamespace
+                && $this->isAllowed($AclResourceCommon, $action, $resourceNamespace)
+            )
+            || (
+                // This is a user home namespace
+                $resourceNamespace === $userNamespace
+
+                // User have access to the current action in his own namespace
+                && $this->isAllowed($AclResourceCommon, $action, UserInterface::NAMESPACES_WILDCARD)
+            )
+            || (
+                // This is an another user namespace
+                $resourceNamespace !== $userNamespace
+                && 0 === strpos($resourceNamespace, UserInterface::NAMESPACES)
+
+                // User have access to the current action in his own namespace
+                && $this->isAllowedForGuest($AclResourceCommon, $action, UserInterface::NAMESPACES_WILDCARD)
+            )
+        ) {
+
+            return $next($request, $response);
         }
 
-        return $next($request, $response);
+        return new EmptyResponse(403);
     }
 
 
@@ -72,6 +108,7 @@ class AclMiddleware implements MiddlewareInterface
                 __LINE__);
         }
     }
+
     /**
      * @param ResponseInterface $response
      * @return bool
@@ -106,15 +143,23 @@ class AclMiddleware implements MiddlewareInterface
         return $action;
     }
 
-    protected function isAllowed($aclResource, $action)
+    protected function isAllowed($aclResource, $action, $namespace = '')
     {
-        if (!$this->service->acl()->hasResource($aclResource)) {
+        if (!$this->service->acl()->hasResource($namespace . $aclResource)) {
 
-            // By default all users allowed to any resource actions
-            // if it is not yet registered in Acl
-            return true;
+            return false;
         }
 
-        return $this->user->can($aclResource, $action);
+        return $this->user->can($namespace . $aclResource, $action);
+    }
+
+    protected function isAllowedForGuest($aclResource, $action, $namespace = '')
+    {
+        if (!$this->service->acl()->hasResource($namespace . $aclResource)) {
+
+            return false;
+        }
+
+        return $this->service->acl()->isAllowed(Roles::GUEST, $namespace . $aclResource, $action);
     }
 }
