@@ -5,9 +5,6 @@ return [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
         ],
-        'types' => [
-            Staticus\Config\ConfigInterface::class => Staticus\Config\Config::class,
-        ],
     ],
     'staticus' => [
         // Directory for cached files
