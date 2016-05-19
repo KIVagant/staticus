@@ -11,9 +11,10 @@ return [
         'data_dir' => DATA_DIR,
 
         // List of allowed namespaces
+        // See the ACL config for each of them
         'namespaces' => [
-            'fractal',
-            'user/*', // @todo wildcards support
+            'fractal', // example static namespace
+            \Staticus\Auth\UserInterface::NAMESPACES_WILDCARD,
         ],
 
         // If true and resource name is not valid and contains bad symbols, their will be converted to '-' for the end-point url.
