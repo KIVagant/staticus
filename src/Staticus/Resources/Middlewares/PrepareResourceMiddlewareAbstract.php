@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Exceptions\WrongRequestException;
 use Staticus\Resources\ResourceDOInterface;
+use Zend\Diactoros\Response\EmptyResponse;
 
 abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
 {
@@ -30,7 +31,10 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
     )
     {
         parent::__invoke($request, $response, $next);
-        $this->fillResource();
+        if (!$this->fillResource()) {
+
+            return new EmptyResponse(404, $response->getHeaders());
+        }
 
         // Pass the resource to the next middleware
         $response = new ResourceDoResponse($this->resourceDO, $response->getStatusCode(), $response->getHeaders());
@@ -52,7 +56,10 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             , ResourceDOInterface::NAME_REG_SYMBOLS, $this->config->get('staticus.clean_resource_name'));
         $namespace = $this->defaultValidator('namespace', $namespace, true
             , ResourceDOInterface::NAMESPACE_REG_SYMBOLS, $this->config->get('staticus.clean_resource_name'));
-        $this->namespaceValidator($namespace);
+        if (!$this->namespaceValidator($namespace)) {
+
+            return false;
+        }
         $alt = static::getParamFromRequest('alt', $this->request);
         $alt = $this->cleanup($alt);
         $var = static::getParamFromRequest('var', $this->request);
@@ -84,6 +91,8 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
             $this->resourceDO->setType($type);
         }
         $this->fillResourceSpecialFields();
+
+        return true;
     }
     abstract protected function fillResourceSpecialFields();
 
@@ -152,7 +161,8 @@ abstract class PrepareResourceMiddlewareAbstract extends MiddlewareAbstract
                     return true;
                 }
             }
-            throw new WrongRequestException('Unknown namespace "' . $namespace . '"', __LINE__);
+
+            return false;
         }
 
         return true;
