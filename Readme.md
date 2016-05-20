@@ -18,11 +18,12 @@ see: https://github.com/aslushnikov/table-of-contents-preprocessor
 md-toc-filter ./Readme.md > Readme2.md
 -->
 - [Staticus](#staticus)
+    - [Dependencies](#dependencies)
     - [Contents](#contents)
     - [Disclaimer](#disclaimer)
     - [The basics](#the-basics)
     - [Query structure](#query-structure)
-    - [All Types](#all-types)
+    - [Supported HTTP Methods](#supported-http-methods)
         - [Parameters](#parameters)
             - [var: string, resource variant name](#var-string-resource-variant-name)
             - [alt: string, alternative resource name](#alt-string-alternative-resource-name)
@@ -52,6 +53,10 @@ md-toc-filter ./Readme.md > Readme2.md
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
     - [Installation and tests](#installation-and-tests)
+    - [Advanced usage](#advanced-usage)
+        - [HTTP-based authentication](#http-based-authentication)
+        - [Session-based authentication](#session-based-authentication)
+        - [Namespaces](#namespaces)
 
 ## Disclaimer
 
@@ -95,18 +100,20 @@ location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
 
 ## Query structure
 
-scheme:[//[user:password@]host[:port]][/path-to-home]/resource.type[?parameters]
+scheme:[//[user:password@]host[:port]][/path-to-home][/namespace/sub/namespace]/resource.type[?parameters]
 
-- **user:password**: поддерживается HTTP BASIC авторизация для модифицирующих запросов между проектами.
+- **user:password**: HTTP-based authentication for the administrator role.
 - **path-to-home**: проект может быть размещён во вложенном маршруте, это стоит учитывать при внешнем использовании,
   правильно формируя URL во View.
+- **namespace**: logically grouped resources with separate ACL rules.
+  Every session-authorised user has own namespace ```/user/{id}```.
 - **resource**: основное короткое имя ресурса. По одному и тому же адресу всегда должен возвращаться один и тот же ресурс,
   если его принудительно не заменить.
 - **type**: тип ресурса, гарантирующий возвращаемое расширение файла и mime-type для успешных запросов.
 - **parameters**: поддерживаются типовые параметры, но у разных типов ресурсов могут быть и собственные.
   Параметры влияют на возвращаемые данные. Могут передаваться в теле POST.
 
-## All Types
+## Supported HTTP Methods
 
 | Method | HTTP Statuses | Comment |
 |--------|---------------|---------|
@@ -141,7 +148,6 @@ PUT не поддерживается.
 Это значит, что при создании ресурса с указанием альтернативного текста также рекомендуется указывать имя варианта.
 Например, ```POST car.jpg?var=vagon&alt=вагон``` создаст вариант изображений для вагона.
 Чтобы получить созданное изображение для "alt=вагон", достаточно указать имя его варианта: ```GET car.jpg?var=vagon```
-
 
 #### v: integer, version id
 
@@ -183,7 +189,7 @@ PUT не поддерживается.
 
 ## Path structure
 
-- **/type/variant/version/[size/][other-type-specified/]uuid.type**
+- **[/namespace]/type/variant/version/[size/][other-type-specified/]uuid.type**
 - /jpg/def/0/0/22af64.jpg
 - /jpg/user1534/3/0/22af64.jpg
 - /jpg/fractal/0/30x40/22af64.jpg
@@ -540,3 +546,55 @@ Time: 180 ms, Memory: 6.75Mb
 
 OK (9 tests, 67 assertions)
 ```
+
+## Advanced usage
+
+### HTTP-based authentication
+
+This is a primary authentication.
+Used only for the administrator role. Look into ```AuthBasicMiddleware``` that activated in ```routes.global``` config.
+This middleware will setup ADMIN role for current User object regardless session-based login status.
+Look into ```acl.global``` config for ADMIN roles.
+
+### Session-based authentication
+
+The ```AuthSessionMiddleware``` allows you to use sessions from your project that includes 'Staticus' inside.
+You can transparently embed this project to yours just with Nginx rules.
+
+For example, if your basic project have domain ```https://my.domain.dev```, then you can put 'Staticus' to subpath:
+```https://my.domain.dev/static/``` and then all your files will accessible inside this route.
+This subpath called ```path-to-home``` in Query structure in this document.
+See ```etc/nginx/conf.d/staticus.conf``` with Nginx rules template for this case.
+
+In this situation, 'Staticus' will have clear access to cookies from basic domain. And to users sessions too.
+
+So, if your project used [Zend_Auth storage](http://framework.zend.com/manual/current/en/modules/zend.authentication.intro.html),
+the ```AuthSessionMiddleware``` will load it from ```Redis``` sessions
+and will look for this path: ```$_SESSION['Zend_Auth']->storage->user_id```.
+
+If you want to change session handler from Redis to something else, just replace
+```SessionManagerFactory``` to another one in the dependency section in this config: ```auth.global.php```.
+
+All that ```AuthSessionMiddleware``` need for the ACL rules and default user namespaces support – it is user_id.
+So you can replace the middleware to yours and realise this logic:
+
+```
+$this->user->login($storage->user_id, [Roles::USER]);
+$this->user->setNamespace(UserInterface::NAMESPACES . DIRECTORY_SEPARATOR . $storage->user_id);
+```
+
+### Namespaces
+
+You can group your resources in namespaces and setup different Access Control List rules for them.
+Setup the allowed namespaces list in the ```staticus.global``` config. You can use wildcard syntax here.
+
+The ```AclMiddleware``` will help to implement rules from the ```acl.global``` config.
+
+So, you can setup rules for different roles for any resource types for global namespace and special namespaces.
+
+By default:
+- any guests have READ access to any resources in any namespaces.
+- any authorised user has own namespace (started from ```/user/{id}```) and have ANY access to JPG-resources inside.
+- an administrator has ANY access to all resources.
+
+You can add or change this behaviour with ACL configuration or with adding another middleware.
