@@ -12,13 +12,11 @@ use Zend\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Resources\File\ResourceDO;
-use Zend\Diactoros\Response\JsonResponse;
 use Zend\Diactoros\UploadedFile;
 
 abstract class ActionPostAbstract extends MiddlewareAbstract
 {
     const RECREATE_COMMAND = 'recreate';
-    const SEARCH_COMMAND = 'search';
     const URI_COMMAND = 'uri';
     const CURL_TIMEOUT = 15;
     /**
@@ -26,12 +24,6 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
      * @var mixed
      */
     protected $generator;
-
-    /**
-     * Search provider
-     * @var mixed
-     */
-    protected $searcher;
 
     /**
      * @var ResourceDO
@@ -43,12 +35,11 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
     protected $filesystem;
 
     public function __construct(
-        ResourceDOInterface $resourceDO, FilesystemInterface $filesystem, $fractal, $generatorSearch)
+        ResourceDOInterface $resourceDO, FilesystemInterface $filesystem, $fractal)
     {
         $this->resourceDO = $resourceDO;
-        $this->generator = $fractal;
-        $this->searcher = $generatorSearch;
         $this->filesystem = $filesystem;
+        $this->generator = $fractal;
     }
 
     /**
@@ -71,7 +62,6 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
     }
 
     abstract protected function generate(ResourceDOInterface $resourceDO);
-    abstract protected function search(ResourceDOInterface $resourceDO);
 
     protected function action()
     {
@@ -81,7 +71,6 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
         $filePath = $this->resourceDO->getFilePath();
         $fileExists = is_file($filePath);
         $recreate = PrepareResourceMiddlewareAbstract::getParamFromRequest(static::RECREATE_COMMAND, $this->request);
-        $search = PrepareResourceMiddlewareAbstract::getParamFromRequest(static::SEARCH_COMMAND, $this->request);
         $uri = PrepareResourceMiddlewareAbstract::getParamFromRequest(static::URI_COMMAND, $this->request);
         $recreate = $fileExists && $recreate;
         $this->resourceDO->setNew(!$fileExists);
@@ -99,10 +88,6 @@ abstract class ActionPostAbstract extends MiddlewareAbstract
 
                 /** @see \Zend\Diactoros\Response::$phrases */
                 return new FileUploadedResponse($upload, 201, $headers);
-            } elseif ($search) {
-                $response = $this->search($this->resourceDO);
-
-                return new JsonResponse(['found' => $response]);
             } else {
                 $body = $this->generate($this->resourceDO);
 

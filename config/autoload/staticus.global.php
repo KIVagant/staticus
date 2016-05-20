@@ -4,6 +4,10 @@ return [
     'dependencies' => [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
+
+            Staticus\Auth\AuthBasicMiddleware::class => Staticus\Auth\AuthBasicMiddleware::class,
+            Staticus\Auth\AuthSessionMiddleware::class => Staticus\Auth\AuthSessionMiddleware::class,
+            Staticus\Acl\AclMiddleware::class => Staticus\Acl\AclMiddleware::class,
         ],
     ],
     'staticus' => [

@@ -45,7 +45,6 @@ md-toc-filter ./Readme.md > Readme2.md
             - [DELETE destroy: bool, remove without backup](#delete-destroy-bool-remove-without-backup)
             - [POST author: string, author](#post-author-string-author)
             - [POST uri=http Upload image by remote URI](#post-urihttp-upload-image-by-remote-uri)
-            - [POST search=1 Find images with search adapter](#post-search1-find-images-with-search-adapter)
     - [Path structure](#path-structure)
     - [JPG Type](#jpg-type)
         - [Special parameters](#special-parameters)
@@ -62,12 +61,13 @@ md-toc-filter ./Readme.md > Readme2.md
             - [Regeneration 2: The created file is a different](#regeneration-2-the-created-file-is-a-different)
             - [File Uploading](#file-uploading)
             - [File Remote Downloading](#file-remote-downloading)
-            - [File Search](#file-search)
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
     - [Installation and tests](#installation-and-tests)
     - [Advanced usage](#advanced-usage)
+        - [JPG searching with the special route /search/](#jpg-searching-with-the-special-route-search)
+            - [Search example](#search-example)
         - [HTTP-based authentication](#http-based-authentication)
         - [Session-based authentication](#session-based-authentication)
         - [Namespaces](#namespaces)
@@ -190,16 +190,12 @@ PUT не поддерживается.
 
 #### POST author: string, author
 
-Строка с информацией об авторе изменения в произвольном строковом формате. Требуется только для журналирования.
+TODO: not implemented yet
+Line with information about the author of the changes in an arbitrary string. Required only for logging.
 
 #### POST uri=http Upload image by remote URI
 
-Указанное в параметре uri изображение будет загружено на сервер.
-
-#### POST search=1 Find images with search adapter
-
-Будет выдан список файлов, найденных с помощью поискового адаптера.
-Выберете URI из этого списка и отправьте его с параметром uri=*ссылка*.
+Image, specified in the url parameter, will be uploaded to the server.
 
 ## Path structure
 
@@ -446,44 +442,6 @@ X-Powered-By: PHP/5.6.15
 }
 ```
 
-#### File Search
-
-```
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/welcome.jpg alt='school' search=1 recreate=1
-HTTP/1.1 200 OK
-Cache-Control: public
-Cache-Control: public
-Connection: keep-alive
-Content-Encoding: gzip
-Content-Type: application/json
-Date: Mon, 11 Apr 2016 01:25:52 GMT
-Server: nginx/1.9.7
-Transfer-Encoding: chunked
-Vary: Accept-Encoding
-X-Powered-By: PHP/5.6.15
-
-{
-    "found": {
-        "count": 10,
-        "items": [
-            {
-                "height": 675,
-                "size": 453573,
-                "thumbnailheight": 112,
-                "thumbnailurl": "https://somehots.somedomain/someurl",
-                "thumbnailwidth": 146,
-                "title": "FREE Back to School Party",
-                "url": "http://somehots.somedomain/wp-content/uploads/2013/02/welcome-back-to-school.jpg",
-                "width": 880
-            },
-            {...},
-        ],
-        "start": 0,
-        "total": "449000000"
-    }
-}
-```
-
 ### DELETE /*.mp3
 
 - Бекенд проверяет существование файла.
@@ -562,6 +520,55 @@ OK (9 tests, 67 assertions)
 ```
 
 ## Advanced usage
+
+### JPG searching with the special route /search/
+
+GET|POST /search/{resource_route}
+
+The file list found by a search adapter will be returned.
+
+1. Select a URL from the list.
+2. Send a POST request to any resource route with the same type and add the parameter uri=*chosen-uri*.
+
+You can attach another search adapters and actions for different resource types.
+
+#### Search example
+
+```
+$ http --verify no --auth Developer:12345 -f GET https://www.englishdom.dev/staticus/search/welcome.jpg alt='school'
+HTTP/1.1 200 OK
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Type: application/json
+Date: Mon, 11 Apr 2016 01:25:52 GMT
+Server: nginx/1.9.7
+Transfer-Encoding: chunked
+Vary: Accept-Encoding
+X-Powered-By: PHP/5.6.15
+
+{
+    "found": {
+        "count": 10,
+        "items": [
+            {
+                "height": 675,
+                "size": 453573,
+                "thumbnailheight": 112,
+                "thumbnailurl": "https://somehots.somedomain/someurl",
+                "thumbnailwidth": 146,
+                "title": "FREE Back to School Party",
+                "url": "http://somehots.somedomain/wp-content/uploads/2013/02/welcome-back-to-school.jpg",
+                "width": 880
+            },
+            {...},
+        ],
+        "start": 0,
+        "total": "449000000"
+    }
+}
+```
 
 ### HTTP-based authentication
 
