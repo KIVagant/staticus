@@ -114,7 +114,7 @@ return [
         /* JPG */
         [
             'name' => 'search-jpg',
-            'path' => '/{search:search}/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
+            'path' => '/{' . Staticus\Acl\Actions::ACTION_SEARCH . ':search}/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
                 Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
                 Staticus\Auth\AuthSessionMiddleware::class,

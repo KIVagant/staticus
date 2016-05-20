@@ -119,6 +119,11 @@ return [
             ResourceDOInterface::NAMESPACES_WILDCARD . Staticus\Resources\Image\ResourceImageDO::class => [
                 AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
                     . Staticus\Resources\File\ResourceDO::class,
+                AclService::PRIVILEGES => [
+                    Roles::USER => [
+                        Staticus\Acl\Actions::ACTION_SEARCH,
+                    ],
+                ],
             ],
             ResourceDOInterface::NAMESPACES_WILDCARD . Staticus\Resources\Jpg\ResourceDO::class => [
                 AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD

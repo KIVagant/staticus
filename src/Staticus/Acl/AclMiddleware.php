@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
 use Staticus\Exceptions\WrongRequestException;
+use Staticus\Resources\Middlewares\PrepareResourceMiddlewareAbstract;
 use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -42,9 +43,7 @@ class AclMiddleware implements MiddlewareInterface
     {
         /** @var $response ResourceDoResponse */
         $this->checkResponseOrDie($response);
-
-        $method = $request->getMethod();
-        $action = $this->getAction($method);
+        $action = $this->getAction($request);
         $resourceDO = $response->getContent();
         $resourceNamespace = $resourceDO->getNamespace();
         $userNamespace = $this->user->getNamespace();
@@ -119,11 +118,17 @@ class AclMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param $method
+     * @param ServerRequestInterface $request
      * @return string
      */
-    protected function getAction($method)
+    protected function getAction(ServerRequestInterface $request)
     {
+        if (PrepareResourceMiddlewareAbstract::getParamFromRequest(Actions::ACTION_SEARCH, $request)) {
+
+            return Actions::ACTION_SEARCH;
+        }
+
+        $method = $request->getMethod();
         switch ($method) {
             case 'GET':
                 $action = Actions::ACTION_READ;

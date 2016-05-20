@@ -530,7 +530,8 @@ The file list found by a search adapter will be returned.
 1. Select a URL from the list.
 2. Send a POST request to any resource route with the same type and add the parameter uri=*chosen-uri*.
 
-You can attach another search adapters and actions for different resource types.
+- You can attach another search adapters and actions for different resource types.
+- You can configure ACL config for searching with Actions::ACTION_SEARCH command.
 
 #### Search example
 
