@@ -5,42 +5,20 @@ use Staticus\Resources\ResourceDOInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Stream;
 
-class ResourceDoResponse extends Response implements FileResponseInterface
+class ResourceDoResponse extends Response implements ResourceDoResponseInterface
 {
-    /**
-     * @var resource
-     */
-    protected $resource;
-
     /**
      * @var ResourceDOInterface
      */
     protected $content;
 
-    /**
-     * @return resource
-     */
-    public function getResource()
-    {
-        return $this->resource;
-    }
-
-    /**
-     * @return ResourceDOInterface
-     */
     public function getContent()
     {
         return $this->content;
     }
 
-    /**
-     * @param ResourceDOInterface $content
-     */
-    public function setContent($content)
+    public function setContent(ResourceDOInterface $content)
     {
-        if (!$content instanceof ResourceDOInterface) {
-            throw new \RuntimeException('Content must be an instance of ResourceDOInterface', __LINE__);
-        }
         $this->content = $content;
     }
 

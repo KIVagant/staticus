@@ -31,11 +31,4 @@ class ActionPost extends ActionPostAbstract
 
         return $content;
     }
-    protected function search(ResourceDOInterface $resourceDO)
-    {
-        $query = $resourceDO->getName() . ' ' . $resourceDO->getNameAlternative();
-        $content = $this->searcher->generate($query);
-
-        return $content;
-    }
 }

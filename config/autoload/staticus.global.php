@@ -4,14 +4,22 @@ return [
     'dependencies' => [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\FastRouteRouter::class,
-        ],
-        'types' => [
-            Staticus\Config\Config::class => Staticus\Config\Config::class,
+
+            Staticus\Auth\AuthBasicMiddleware::class => Staticus\Auth\AuthBasicMiddleware::class,
+            Staticus\Auth\AuthSessionMiddleware::class => Staticus\Auth\AuthSessionMiddleware::class,
+            Staticus\Acl\AclMiddleware::class => Staticus\Acl\AclMiddleware::class,
         ],
     ],
     'staticus' => [
         // Directory for cached files
         'data_dir' => DATA_DIR,
+
+        // List of allowed namespaces
+        // See the ACL config for each of them
+        'namespaces' => [
+            'fractal', // custom namespace
+            \Staticus\Auth\UserInterface::NAMESPACES_WILDCARD,
+        ],
 
         // If true and resource name is not valid and contains bad symbols, their will be converted to '-' for the end-point url.
         // If false – Bad request response will return.

@@ -1,14 +1,17 @@
 <?php
 namespace Staticus\Resources;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Domain Object
  * @package Staticus\Resources\File
  */
-abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
+abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator, ResourceInterface
 {
     const TYPE = '';
     protected $uuid;
+    protected $namespace;
     protected $name;
     protected $nameAlternative;
     protected $type = self::TYPE;
@@ -88,6 +91,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
     public function generateFilePath()
     {
         return $this->getBaseDirectory()
+        . ($this->getNamespace() ? $this->getNamespace() . DIRECTORY_SEPARATOR : '')
         . $this->getType() . DIRECTORY_SEPARATOR
         . $this->getVariant() . DIRECTORY_SEPARATOR
         . $this->getVersion() . DIRECTORY_SEPARATOR
@@ -95,6 +99,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
     }
 
     /**
+     * Note: Uuid is not really unique, if you want full unique identifier, use hash sum from the full path, for example
      * @return mixed
      */
     public function getUuid()
@@ -104,6 +109,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
         }
         return $this->uuid;
     }
+
     /**
      * @return string
      */
@@ -114,11 +120,32 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
     /**
      * @param string $name
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setName($name)
     {
         $this->name = (string)$name;
+        $this->setUuid();
+        $this->setFilePath();
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param string $namespace
+     * @return ResourceDOInterface
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = (string)$namespace;
         $this->setUuid();
         $this->setFilePath();
 
@@ -135,7 +162,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
     /**
      * @param string $nameAlternative
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setNameAlternative($nameAlternative)
     {
@@ -155,7 +182,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
     }
     /**
      * @param string $type
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setType($type)
     {
@@ -179,7 +206,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
     /**
      * @param string $variant
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setVariant($variant = self::DEFAULT_VARIANT)
     {
@@ -202,7 +229,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
     /**
      * @param int $version
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setVersion($version = self::DEFAULT_VERSION)
     {
@@ -222,7 +249,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
     /**
      * @param string $author
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setAuthor($author)
     {
@@ -249,7 +276,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
     /**
      * @param string $dir
-     * @return ResourceFileDO
+     * @return ResourceDOInterface
      */
     public function setBaseDirectory($dir)
     {
@@ -335,7 +362,7 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
 
         return isset($propsNames[$this->itemPosition]);
     }
-    
+
     public function toArray()
     {
         $ar = [];
@@ -346,5 +373,16 @@ abstract class ResourceDOAbstract implements ResourceDOInterface, \Iterator
         unset($ar[0]);
 
         return $ar;
+    }
+
+    /**
+     * Unique resource identifier for ACL
+     * @return mixed
+     * @see \Zend\Permissions\Acl\Resource\ResourceInterface::getResourceId
+     * @see getFilePath
+     */
+    public function getResourceId()
+    {
+        return $this->getFilePath();
     }
 }

@@ -1,24 +1,29 @@
 <?php
 namespace Staticus\Auth;
 
-use Staticus\Config\Config;
+use Staticus\Acl\Roles;
+use Staticus\Config\ConfigInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Stratigility\MiddlewareInterface;
 
 /**
- * Слой авторизации, см. конфиг auth.global.php
- * Class AuthBasicMiddleware
- * @package Staticus\Auth
+ * http-auth layer, look into auth.global.php
  */
 class AuthBasicMiddleware implements MiddlewareInterface
 {
     protected $config;
 
-    public function __construct(Config $config)
+    /**
+     * @var User|UserInterface
+     */
+    protected $user;
+
+    public function __construct(ConfigInterface $config, UserInterface $user)
     {
         $this->config = $config->get('auth.basic');
+        $this->user = $user;
     }
 
     /**
@@ -34,22 +39,67 @@ class AuthBasicMiddleware implements MiddlewareInterface
         callable $next = null
     )
     {
-        $authToken = str_replace('Basic ', '', $request->getHeaderLine('authorization'));
-        foreach ($this->config['users'] as $user) {
-            if (isset($user['name']) && isset($user['pass'])
-                && (
-                (
-                    isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])
-                    && $_SERVER['PHP_AUTH_USER'] == $user['name']
-                    && $_SERVER['PHP_AUTH_PW'] == $user['pass']
-                )
-                || base64_encode($user['name'] . ':' . $user['pass']) == $authToken
-                )) {
+        if ($this->isAdminAuthentication($request)) {
+            $this->user->addRoles([Roles::ADMIN]);
+        }
 
-                return $next($request, $response);
+        return $next($request, $response);
+    }
+
+    /**
+     * @param string $login
+     * @param string $pass
+     * @return bool
+     */
+    protected function checkCredentials($login, $pass)
+    {
+        foreach ($this->config['users'] as $user) {
+            if (array_key_exists('name', $user) && array_key_exists('pass', $user)
+                && $login === $user['name']
+                && $pass === $user['pass']
+            ) {
+
+                return true;
             }
         }
 
-        return new EmptyResponse(401, ['WWW-Authenticate' => 'Basic realm="Staticus"']);
+        return false;
+    }
+
+    /**
+     * @param string $authHeader
+     * @return bool
+     */
+    protected function checkHeader($authHeader)
+    {
+        if ($authHeader) {
+            $authToken = str_replace('Basic ', '', $authHeader);
+            foreach ($this->config['users'] as $user) {
+                if (isset($user['name']) && isset($user['pass'])
+                    && $authToken === base64_encode($user['name'] . ':' . $user['pass'])
+                ) {
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return bool
+     */
+    protected function isAdminAuthentication(ServerRequestInterface $request)
+    {
+        return (
+            (
+                isset($_SERVER['PHP_AUTH_USER'])
+                && isset($_SERVER['PHP_AUTH_PW'])
+                && $this->checkCredentials($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])
+            )
+            || $this->checkHeader($request->getHeaderLine('authorization'))
+        );
     }
 }

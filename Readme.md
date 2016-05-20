@@ -7,6 +7,24 @@
 Nginx должен быть настроен таким образом, чтобы в свою очередь управлять внутренним кешированием,
 обеспечивая максимальную скорость повторной отдачи.
 
+## Dependencies
+
+- [league/flysystem](http://flysystem.thephpleague.com/) - partially used, full integration planned
+- [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) - used only in config files, can be removed
+- [zendframework/zend-expressive](https://github.com/zendframework/zend-expressive) - In theory, can be replaced
+  to another middleware-based framework, because PSR-7 interfaces used almost everywhere.
+- zendframework/zend-expressive-helpers - default for ZFE
+- zendframework/zend-stdlib - default for ZFE
+- zendframework/zend-expressive-fastroute – can be
+  replaced [to another router](https://github.com/zendframework/zend-expressive-router)
+- roave/security-advisories - default for ZFE
+- [aura/di](https://github.com/auraphp/Aura.Di) – can be replaced (maybe), see ```config/container.php```
+- [zendframework/zend-permissions-acl](https://github.com/zendframework/zend-permissions-acl)
+- [zendframework/zend-session](https://github.com/zendframework/zend-session) – only for AuthSessionMiddleware
+- [mtymek/expressive-config-manager](https://github.com/mtymek/expressive-config-manager) - can be removed,
+  only for ```config/config.php```
+- [newage/AudioManager](https://github.com/newage/AudioManager) - MPEG-type generator
+
 ## Contents
 
 <!---
@@ -14,11 +32,12 @@ see: https://github.com/aslushnikov/table-of-contents-preprocessor
 md-toc-filter ./Readme.md > Readme2.md
 -->
 - [Staticus](#staticus)
+    - [Dependencies](#dependencies)
     - [Contents](#contents)
     - [Disclaimer](#disclaimer)
     - [The basics](#the-basics)
     - [Query structure](#query-structure)
-    - [All Types](#all-types)
+    - [Supported HTTP Methods](#supported-http-methods)
         - [Parameters](#parameters)
             - [var: string, resource variant name](#var-string-resource-variant-name)
             - [alt: string, alternative resource name](#alt-string-alternative-resource-name)
@@ -26,7 +45,6 @@ md-toc-filter ./Readme.md > Readme2.md
             - [DELETE destroy: bool, remove without backup](#delete-destroy-bool-remove-without-backup)
             - [POST author: string, author](#post-author-string-author)
             - [POST uri=http Upload image by remote URI](#post-urihttp-upload-image-by-remote-uri)
-            - [POST search=1 Find images with search adapter](#post-search1-find-images-with-search-adapter)
     - [Path structure](#path-structure)
     - [JPG Type](#jpg-type)
         - [Special parameters](#special-parameters)
@@ -43,11 +61,16 @@ md-toc-filter ./Readme.md > Readme2.md
             - [Regeneration 2: The created file is a different](#regeneration-2-the-created-file-is-a-different)
             - [File Uploading](#file-uploading)
             - [File Remote Downloading](#file-remote-downloading)
-            - [File Search](#file-search)
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
     - [Installation and tests](#installation-and-tests)
+    - [Advanced usage](#advanced-usage)
+        - [JPG searching with the special route /search/](#jpg-searching-with-the-special-route-search)
+            - [Search example](#search-example)
+        - [HTTP-based authentication](#http-based-authentication)
+        - [Session-based authentication](#session-based-authentication)
+        - [Namespaces](#namespaces)
 
 ## Disclaimer
 
@@ -91,18 +114,20 @@ location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
 
 ## Query structure
 
-scheme:[//[user:password@]host[:port]][/path-to-home]/resource.type[?parameters]
+scheme:[//[user:password@]host[:port]][/path-to-home][/namespace/sub/namespace]/resource.type[?parameters]
 
-- **user:password**: поддерживается HTTP BASIC авторизация для модифицирующих запросов между проектами.
+- **user:password**: HTTP-based authentication for the administrator role.
 - **path-to-home**: проект может быть размещён во вложенном маршруте, это стоит учитывать при внешнем использовании,
   правильно формируя URL во View.
+- **namespace**: logically grouped resources with separate ACL rules.
+  Every session-authorised user has own namespace ```/user/{id}```.
 - **resource**: основное короткое имя ресурса. По одному и тому же адресу всегда должен возвращаться один и тот же ресурс,
   если его принудительно не заменить.
 - **type**: тип ресурса, гарантирующий возвращаемое расширение файла и mime-type для успешных запросов.
 - **parameters**: поддерживаются типовые параметры, но у разных типов ресурсов могут быть и собственные.
   Параметры влияют на возвращаемые данные. Могут передаваться в теле POST.
 
-## All Types
+## Supported HTTP Methods
 
 | Method | HTTP Statuses | Comment |
 |--------|---------------|---------|
@@ -138,7 +163,6 @@ PUT не поддерживается.
 Например, ```POST car.jpg?var=vagon&alt=вагон``` создаст вариант изображений для вагона.
 Чтобы получить созданное изображение для "alt=вагон", достаточно указать имя его варианта: ```GET car.jpg?var=vagon```
 
-
 #### v: integer, version id
 
 Каждый вариант ресурса содержит собственные версии.
@@ -166,20 +190,16 @@ PUT не поддерживается.
 
 #### POST author: string, author
 
-Строка с информацией об авторе изменения в произвольном строковом формате. Требуется только для журналирования.
+TODO: not implemented yet
+Line with information about the author of the changes in an arbitrary string. Required only for logging.
 
 #### POST uri=http Upload image by remote URI
 
-Указанное в параметре uri изображение будет загружено на сервер.
-
-#### POST search=1 Find images with search adapter
-
-Будет выдан список файлов, найденных с помощью поискового адаптера.
-Выберете URI из этого списка и отправьте его с параметром uri=*ссылка*.
+Image, specified in the url parameter, will be uploaded to the server.
 
 ## Path structure
 
-- **/type/variant/version/[size/][other-type-specified/]uuid.type**
+- **[/namespace]/type/variant/version/[size/][other-type-specified/]uuid.type**
 - /jpg/def/0/0/22af64.jpg
 - /jpg/user1534/3/0/22af64.jpg
 - /jpg/fractal/0/30x40/22af64.jpg
@@ -422,44 +442,6 @@ X-Powered-By: PHP/5.6.15
 }
 ```
 
-#### File Search
-
-```
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/welcome.jpg alt='school' search=1 recreate=1
-HTTP/1.1 200 OK
-Cache-Control: public
-Cache-Control: public
-Connection: keep-alive
-Content-Encoding: gzip
-Content-Type: application/json
-Date: Mon, 11 Apr 2016 01:25:52 GMT
-Server: nginx/1.9.7
-Transfer-Encoding: chunked
-Vary: Accept-Encoding
-X-Powered-By: PHP/5.6.15
-
-{
-    "found": {
-        "count": 10,
-        "items": [
-            {
-                "height": 675,
-                "size": 453573,
-                "thumbnailheight": 112,
-                "thumbnailurl": "https://somehots.somedomain/someurl",
-                "thumbnailwidth": 146,
-                "title": "FREE Back to School Party",
-                "url": "http://somehots.somedomain/wp-content/uploads/2013/02/welcome-back-to-school.jpg",
-                "width": 880
-            },
-            {...},
-        ],
-        "start": 0,
-        "total": "449000000"
-    }
-}
-```
-
 ### DELETE /*.mp3
 
 - Бекенд проверяет существование файла.
@@ -536,3 +518,105 @@ Time: 180 ms, Memory: 6.75Mb
 
 OK (9 tests, 67 assertions)
 ```
+
+## Advanced usage
+
+### JPG searching with the special route /search/
+
+GET|POST /search/{resource_route}
+
+The file list found by a search adapter will be returned.
+
+1. Select a URL from the list.
+2. Send a POST request to any resource route with the same type and add the parameter uri=*chosen-uri*.
+
+- You can attach another search adapters and actions for different resource types.
+- You can configure ACL config for searching with Actions::ACTION_SEARCH command.
+
+#### Search example
+
+```
+$ http --verify no --auth Developer:12345 -f GET https://www.englishdom.dev/staticus/search/welcome.jpg alt='school'
+HTTP/1.1 200 OK
+Cache-Control: public
+Cache-Control: public
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Type: application/json
+Date: Mon, 11 Apr 2016 01:25:52 GMT
+Server: nginx/1.9.7
+Transfer-Encoding: chunked
+Vary: Accept-Encoding
+X-Powered-By: PHP/5.6.15
+
+{
+    "found": {
+        "count": 10,
+        "items": [
+            {
+                "height": 675,
+                "size": 453573,
+                "thumbnailheight": 112,
+                "thumbnailurl": "https://somehots.somedomain/someurl",
+                "thumbnailwidth": 146,
+                "title": "FREE Back to School Party",
+                "url": "http://somehots.somedomain/wp-content/uploads/2013/02/welcome-back-to-school.jpg",
+                "width": 880
+            },
+            {...},
+        ],
+        "start": 0,
+        "total": "449000000"
+    }
+}
+```
+
+### HTTP-based authentication
+
+This is a primary authentication.
+Used only for the administrator role. Look into ```AuthBasicMiddleware``` that activated in ```routes.global``` config.
+This middleware will setup ADMIN role for current User object regardless session-based login status.
+Look into ```acl.global``` config for ADMIN roles.
+
+### Session-based authentication
+
+The ```AuthSessionMiddleware``` allows you to use sessions from your project that includes 'Staticus' inside.
+You can transparently embed this project to yours just with Nginx rules.
+
+For example, if your basic project have domain ```https://my.domain.dev```, then you can put 'Staticus' to subpath:
+```https://my.domain.dev/static/``` and then all your files will accessible inside this route.
+This subpath called ```path-to-home``` in Query structure in this document.
+See ```etc/nginx/conf.d/staticus.conf``` with Nginx rules template for this case.
+
+In this situation, 'Staticus' will have clear access to cookies from basic domain. And to users sessions too.
+
+So, if your project used [Zend_Auth storage](http://framework.zend.com/manual/current/en/modules/zend.authentication.intro.html),
+the ```AuthSessionMiddleware``` will load it from ```Redis``` sessions
+and will look for this path: ```$_SESSION['Zend_Auth']->storage->user_id```.
+
+If you want to change session handler from Redis to something else, just replace
+```SessionManagerFactory``` to another one in the dependency section in this config: ```auth.global.php```.
+
+All that ```AuthSessionMiddleware``` need for the ACL rules and default user namespaces support – it is user_id.
+So you can replace the middleware to yours and realise this logic:
+
+```
+$this->user->login($storage->user_id, [Roles::USER]);
+$this->user->setNamespace(UserInterface::NAMESPACES . DIRECTORY_SEPARATOR . $storage->user_id);
+```
+
+### Namespaces
+
+You can group your resources in namespaces and setup different Access Control List rules for them.
+Setup the allowed namespaces list in the ```staticus.global``` config. You can use wildcard syntax here.
+
+The ```AclMiddleware``` will help to implement rules from the ```acl.global``` config.
+
+So, you can setup rules for different roles for any resource types for global namespace and special namespaces.
+
+By default:
+- any guests have READ access to any resources in any namespaces.
+- any authorised user has own namespace (started from ```/user/{id}```) and have ANY access to JPG-resources inside.
+- an administrator has ANY access to all resources.
+
+You can add or change this behaviour with ACL configuration or with adding another middleware.

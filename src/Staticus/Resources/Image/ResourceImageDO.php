@@ -1,7 +1,6 @@
 <?php
 namespace Staticus\Resources\Image;
 use Staticus\Resources\ResourceDOAbstract;
-use Staticus\Resources\Image\ResourceImageDOInterface;
 
 /**
  * Domain Object
@@ -93,6 +92,7 @@ abstract class ResourceImageDO extends ResourceDOAbstract implements ResourceIma
     public function generateFilePath()
     {
         return $this->getBaseDirectory()
+            . ($this->getNamespace() ? $this->getNamespace() . DIRECTORY_SEPARATOR : '')
             . $this->getType() . DIRECTORY_SEPARATOR
             . $this->getVariant() . DIRECTORY_SEPARATOR
             . $this->getVersion() . DIRECTORY_SEPARATOR

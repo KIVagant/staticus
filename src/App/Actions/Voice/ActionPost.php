@@ -3,7 +3,6 @@ namespace App\Actions\Voice;
 
 use League\Flysystem\FilesystemInterface;
 use Staticus\Exceptions\ErrorException;
-use Staticus\Exceptions\WrongRequestException;
 use Staticus\Middlewares\ActionPostAbstract;
 use Staticus\Resources\Mpeg\ResourceDO;
 use Staticus\Resources\ResourceDOInterface;
@@ -37,9 +36,5 @@ class ActionPost extends ActionPostAbstract
         }
 
         return $content;
-    }
-    protected function search(ResourceDOInterface $resourceDO)
-    {
-        throw new WrongRequestException('Search not implemented yet for this resource type', __LINE__);
     }
 }
