@@ -75,6 +75,7 @@ return [
                     ],
             */
             // ---------------------------------------------------------------------------------------------------------
+            /** @see \Staticus\Acl\AclMiddleware that uses this config */
             // ADMIN RULES
             Staticus\Resources\File\ResourceDO::class => [
                 AclService::PRIVILEGES => [

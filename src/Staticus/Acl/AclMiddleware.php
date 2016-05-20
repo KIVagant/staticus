@@ -64,7 +64,7 @@ class AclMiddleware implements MiddlewareInterface
             || (
                 !$resourceNamespace
                 && $this->isAllowed($AclResourceCommon, $action, ResourceDOInterface::NAMESPACES_WILDCARD)
-                )
+            )
 
             // User have access to this resource type in concrete selected namespace
             || (
@@ -155,7 +155,7 @@ class AclMiddleware implements MiddlewareInterface
 
     protected function isAllowedForGuest($aclResource, $action, $namespace = '')
     {
-        if (!$this->service->acl()->hasResource($namespace . $aclResource)) {
+        if (!$aclResource || !$this->service->acl()->hasResource($namespace . $aclResource)) {
 
             return false;
         }
