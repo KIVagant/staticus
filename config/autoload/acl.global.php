@@ -20,6 +20,22 @@ return [
     ],
     'acl' => [
         AclService::ROLES => [
+            /* Roles registry.
+
+                // Use any role names, from predefined constants or your own
+                'MY_ROLE' => [
+                    // Role options can placed here. By default no options needed.
+                ],
+                'ANOTHER_ROLE' => [
+                    AclService::INHERIT => [
+                        'MY_ROLE',  // give all parent 'MY_ROLE' permissions for all resources by default
+                    ],
+                ],
+                Roles::ADMIN => [
+                    // ...
+                ],
+             */
+
             Roles::GUEST => [],
             Roles::USER => [
                 AclService::INHERIT => [
@@ -34,7 +50,30 @@ return [
             ],
         ],
         AclService::RESOURCES => [
+            /* Resources registry
 
+                    // place here any unique string that describes your resource
+                   'my.acl.resource.unique' => [
+
+                        // Place here the list of allowed actions for each registered roles (except inherits, of course).
+                        AclService::PRIVILEGES => [
+                            'MY_ROLE' => [
+
+                                // You can write here any string action or use predefined constants:
+                                Staticus\Acl\Actions::ACTION_READ,
+                                'search',
+                                'getAllowedFilters',
+                            ],
+                        ],
+                    ],
+                    'my.acl.resource.another' => [
+                        // extend all parent permissions
+                        AclService::INHERIT => 'my.acl.resource.unique',
+                        AclService::PRIVILEGES => [
+                            // add other privileges if needed
+                        ],
+                    ],
+            */
             // ---------------------------------------------------------------------------------------------------------
             // ADMIN RULES
             Staticus\Resources\File\ResourceDO::class => [
