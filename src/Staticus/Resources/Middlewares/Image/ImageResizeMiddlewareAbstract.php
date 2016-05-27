@@ -45,5 +45,7 @@ abstract class ImageResizeMiddlewareAbstract extends ImagePostProcessingMiddlewa
         $imagick = $this->getImagick($sourcePath);
         $imagick->adaptiveResizeImage($width, $height, true);
         $imagick->writeImage($destinationPath);
+        $imagick->clear();
+        $imagick->destroy();
     }
 }

@@ -50,5 +50,7 @@ abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingMiddleware
             $crop->getY()
         );
         $imagick->writeImage($destinationPath);
+        $imagick->clear();
+        $imagick->destroy();
     }
 }
