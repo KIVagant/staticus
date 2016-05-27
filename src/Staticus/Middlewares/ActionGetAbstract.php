@@ -57,7 +57,7 @@ abstract class ActionGetAbstract extends MiddlewareAbstract
      */
     protected function XAccelRedirect($path, $filename = '', $forceSaveDialog = false)
     {
-        $mime = mime_content_type($path);
+        $mime = $this->filesystem->getMimetype($path);
         if (!$mime) {
             throw new ErrorException('Mime content type can not be reached', __LINE__);
         }
