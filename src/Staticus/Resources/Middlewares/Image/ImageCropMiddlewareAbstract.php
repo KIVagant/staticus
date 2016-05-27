@@ -24,12 +24,12 @@ abstract class ImageCropMiddlewareAbstract extends ImagePostProcessingMiddleware
         if ($resourceDO->getSize() && $crop) {
             if ($resourceDO->isNew() // For POST method
                 || $resourceDO->isRecreate() // For POST method
-                || !is_file($resourceDO->getFilePath()) // For GET method
+                || !$this->filesystem->has($resourceDO->getFilePath()) // For GET method
             ) {
                 $targetResourceDO = $this->chooseTargetResource($response);
 
                 $defaultImagePath = $targetResourceDO->getFilePath();
-                if (is_file($defaultImagePath)) {
+                if ($this->filesystem->has($defaultImagePath)) {
                     $this->cropImage($defaultImagePath, $resourceDO->getFilePath(), $crop);
                 }
             }
