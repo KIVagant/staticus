@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2cc6d2aa06f080bcd61893564f88fc0d",
-    "content-hash": "144d68c98c89db66991c7d4c87efc99b",
+    "hash": "e4b49f3c4516dc974242000cbb91440c",
+    "content-hash": "62fffbb9c397895bd86bda939f8da36b",
     "packages": [
         {
             "name": "aura/di",
@@ -213,32 +213,34 @@
             "time": "2016-03-17 16:35:07"
         },
         {
-            "name": "newage/AudioManager",
-            "version": "0.0.1",
+            "name": "newage/audio-manager",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/newage/AudioManager.git",
-                "reference": "a87b8dd52b0dbca4f16bd68ce87dd414636e051b"
+                "reference": "f229da7f7371c6c505119d29ae4a3dafa1bb8292"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/newage/AudioManager/zipball/a87b8dd52b0dbca4f16bd68ce87dd414636e051b",
-                "reference": "a87b8dd52b0dbca4f16bd68ce87dd414636e051b",
+                "url": "https://api.github.com/repos/newage/AudioManager/zipball/f229da7f7371c6c505119d29ae4a3dafa1bb8292",
+                "reference": "f229da7f7371c6c505119d29ae4a3dafa1bb8292",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.8.*"
+                "phpmd/phpmd": "2.4.*",
+                "phpunit/phpunit": "4.8.*",
+                "squizlabs/php_codesniffer": "2.5.*"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "AudioManager": "src/",
-                    "Tests\\AudioManager": "tests/"
+                "psr-4": {
+                    "AudioManager\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -247,11 +249,7 @@
                 "speech",
                 "tts"
             ],
-            "support": {
-                "source": "https://github.com/newage/AudioManager/tree/0.0.1",
-                "issues": "https://github.com/newage/AudioManager/issues"
-            },
-            "time": "2015-09-22 12:11:09"
+            "time": "2016-04-25 08:16:14"
         },
         {
             "name": "nikic/fast-route",
