@@ -35,7 +35,6 @@
     ],
     "psr-4": {
       "App\\": "src/App/",
-      "Staticus\\": "src/Staticus/",
       "FractalManager\\": "src/FractalManager/",
       "SearchManager\\": "src/SearchManager/"
     }
