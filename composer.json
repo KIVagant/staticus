@@ -8,6 +8,8 @@
       "dev-develop": "1.1-dev"
     }
   },
+  "minimum-stability" : "dev",
+  "prefer-stable" : true,
   "require": {
     "vlucas/phpdotenv": "2.2",
     "php": "^5.5 || ^7.0",
