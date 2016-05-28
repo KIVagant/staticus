@@ -103,7 +103,7 @@ abstract class SaveResourceMiddlewareAbstract extends MiddlewareAbstract
         if (!$uri) {
             throw new SaveResourceErrorException('Unknown error: can\'t get uploaded file uri', __LINE__);
         }
-        $uploadedMime = mime_content_type($uri);
+        $uploadedMime = $this->filesystem->getMimetype($uri);
         if ($mime !== $uploadedMime) {
             /**
              * Try to remove unnecessary file because UploadFile object can be emulated
