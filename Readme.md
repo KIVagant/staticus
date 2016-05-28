@@ -1,11 +1,30 @@
 # Staticus
 
-Сервис обрабатывает запросы и отдаёт X-Accel-Redirect для Nginx, который отдаёт файл на закачку.
-В зависимости от запрошенного маршрута вызывается соответствующий прокси-слой,
-который обращается к провайдерам для генерации контента, кеширует результат и в следующий раз отдаёт тот же файл.
+In short: this service is an "invisible" layer, which dynamically looking for requested static files and tells to Nginx
+where they placed. "Pipeline post-processing", content generators and ACL support give to you a powerfull instrument
+for a files management on your web-service.
 
-Nginx должен быть настроен таким образом, чтобы в свою очередь управлять внутренним кешированием,
-обеспечивая максимальную скорость повторной отдачи.
+Quick example:
+
+```
+- POST https://www.your.project.dev/staticus/waxwing.mp3
+> File will be generated (if you have access) and placed to path like ~/mp3/def/0/22af64.mp3
+
+- GET https://www.your.project.dev/staticus/waxwing.mp3
+> The php-backend layer will be called once for the file path search, then file will be sended throught Nginx
+
+- GET https://www.your.project.dev/staticus/waxwing.mp3
+> File will be returned from Nginx cache
+```
+
+The service handles HTTP requests and gives
+[X-Accel-Redirect](https://www.nginx.com/resources/wiki/start/topics/examples/x-accel/) for Nginx,
+which will force the file downloading.
+
+Depending on the requested route the corresponding proxy layer is loaded, which refers to the providers to generate
+content, then caches the result and next time gives the file from cache.
+
+Nginx internal cache should be configured for providing a maximum speed of repeated requests. Read the example below.
 
 ## Dependencies
 
@@ -74,22 +93,21 @@ md-toc-filter ./Readme.md > Readme2.md
 
 ## Disclaimer
 
-- *Проект в стадии разработки*. Заявленная ниже функциональность пока ещё является техническим заданием
-  и не реализована в полном объёме. Если вы обнаружили расхождение в спецификации и реализации — задавайте вопросы.
-- Примеры показаны с использованием утилиты [jkbrzt/httpie](https://github.com/jkbrzt/httpie)
-- Если не переданы данные авторизации, генерация и удаление новых файлов не будет выполнена.
+- **Some parts of this readme still not translated**. If you can help with that – you are welcome with a PR.
+- Examples are shown by the utility [jkbrzt/httpie](https://github.com/jkbrzt/httpie)
+- All data operations such as reading, generation or deleting, controlled with the ACL config.
 
 ## The basics
 
-См. [fuse.conf](etc/nginx/conf.d/fuse.conf)
+Look for simple Nginx config example: [fuse.conf](etc/nginx/conf.d/fuse.conf)
 
-Основной host в Nginx проксирует запрос на вспомогательный хост и кеширует успешный результат:
+The main host in Nginx proxies a request to the "auxiliary host" (at himself in reality) and caches a successful result:
 
 ```
 proxy_pass http://127.0.0.1:8081;
 ```
 
-Вспомогательный host в Nginx проксирует запрос на backend.
+Auxiliary Nginx-host proxies a request to the backend (Staticus php-project).
 
 ```
 location / {
@@ -98,10 +116,11 @@ location / {
 }
 ```
 
-Backend обрабатывает запрос, генерирует контент и отдаёт заголовок X-Accel-Redirect,
-который сообщает Nginx, где брать конечный файл для выдачи.
+Backend processes the request, looks for file or generates the new content and sends the
+[X-Accel-Redirect](https://www.nginx.com/resources/wiki/start/topics/examples/x-accel/),
+which tells Nginx, where to take the final file for downloading.
 
-Nginx обрабатывает полученный маршрут согласно внутреннему location и отдаёт результат.
+Nginx processes the route according to the internal location configuration and sends the result to the client.
 
 ```
 location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
@@ -110,32 +129,31 @@ location ~* ^/data/(img|voice)/(.+)\.(jpg|jpeg|gif|png|mp3)$ {
 }
 ```
 
-На клиенте всё выглядит так, как будто просто получен статический файл.
+For the client, all looks like his just received a static file.
 
 ## Query structure
 
 scheme:[//[user:password@]host[:port]][/path-to-home][/namespace/sub/namespace]/resource.type[?parameters]
 
 - **user:password**: HTTP-based authentication for the administrator role.
-- **path-to-home**: проект может быть размещён во вложенном маршруте, это стоит учитывать при внешнем использовании,
-  правильно формируя URL во View.
+- **path-to-home**: project can be located in the sub-route, this is should be taken into account,
+  creating the right URLs in the client Views.
 - **namespace**: logically grouped resources with separate ACL rules.
   Every session-authorised user has own namespace ```/user/{id}```.
-- **resource**: основное короткое имя ресурса. По одному и тому же адресу всегда должен возвращаться один и тот же ресурс,
-  если его принудительно не заменить.
-- **type**: тип ресурса, гарантирующий возвращаемое расширение файла и mime-type для успешных запросов.
-- **parameters**: поддерживаются типовые параметры, но у разных типов ресурсов могут быть и собственные.
-  Параметры влияют на возвращаемые данные. Могут передаваться в теле POST.
+- **resource**: basic short name of the resource. With the same address the same resource always will be returned.
+- **type**: the type of resource that guarantees the return file extension and mime-type.
+- **parameters**: some parameters is supported by default, but different types of resources can have their own parameters.
+  Parameters affect the returned data. Can be sent in query or in the POST body.
 
 ## Supported HTTP Methods
 
 | Method | HTTP Statuses | Comment |
 |--------|---------------|---------|
-| GET | 404, 200 | Возвращает данные ресурса (которые могут кешироваться Nginx) |
-| POST | 201, 304 | Однократно создаёт ресурс по указанному маршруту, если не запрошено принудительное пересоздание |
-| DELETE | 204 | Удаляет ресурс актуальной или запрошенной версии или сообщает, что ресурс отсутствует |
+| GET | 404, 200 | Returns the resource data (which can be cached with Nginx) |
+| POST | 201, 304 | Once creates a resource on the specified route, unless the forcing re-creation will be requested |
+| DELETE | 204 | It removes the requested version of the resource or reports that the resource is not exists. |
 
-PUT не поддерживается.
+PUT is not supported.
 
 ### Parameters
 
@@ -201,10 +219,11 @@ Image, specified in the url parameter, will be uploaded to the server.
 
 - **[/namespace]/type/variant/version/[size/][other-type-specified/]uuid.type**
 - /jpg/def/0/0/22af64.jpg
-- /jpg/user1534/3/0/22af64.jpg
+- /jpg/user/3/0/22af64.jpg
 - /jpg/fractal/0/30x40/22af64.jpg
+- /jpg/some_module/0/100x110/22af64.jpg
+- /mp3/def/0/22af64.mp3
 - /mp3/def/1/22af64.mp3
-- /mp3/ivona/0/22af64.mp3
 
 ## JPG Type
 
@@ -233,7 +252,7 @@ TODO: filters support
 
 #### First request (without cache)
 ```
-$ http --verify no -h GET https://www.englishdom.dev/staticus/waxwing.mp3
+$ http --verify no -h GET https://www.your.project.dev/staticus/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -252,7 +271,7 @@ X-Proxy-Cache: MISS
 Nginx отдаёт файл из собственного кеша, уже не обращаясь на proxy_pass.
 
 ```
-$ http --verify no -h GET https://www.englishdom.dev/staticus/waxwing.mp3
+$ http --verify no -h GET https://www.your.project.dev/staticus/waxwing.mp3
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Cache-Control: public
@@ -283,7 +302,7 @@ X-Proxy-Cache: HIT
 $ find /var/www/cache/mp3 -type f -name *.mp3
 (nothing here)
 
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3
+$ http --verify no --auth Developer:12345 -f POST https://www.your.project.dev/staticus/waxwing.mp3
 HTTP/1.1 201 Created
 Cache-Control: public
 Cache-Control: public
@@ -314,7 +333,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 #### Secondary creation
 
 ```
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/WaxWing.mp3
+$ http --verify no --auth Developer:12345 -f POST https://www.your.project.dev/staticus/WaxWing.mp3
 HTTP/1.1 304 Not Modified
 Cache-Control: public
 Cache-Control: public
@@ -331,7 +350,7 @@ find /var/www/cache/mp3 -type f -name *.mp3
 #### Regeneration 1: Re-created file is identical to the existing
 
 ```
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 recreate=1
+$ http --verify no --auth Developer:12345 -f POST https://www.your.project.dev/staticus/waxwing.mp3 recreate=1
 HTTP/1.1 304 Not Modified
 Cache-Control: public
 Cache-Control: public
@@ -348,7 +367,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 #### Regeneration 2: The created file is a different
 
 ```
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 recreate=1
+$ http --verify no --auth Developer:12345 -f POST https://www.your.project.dev/staticus/waxwing.mp3 recreate=1
 HTTP/1.1 201 Created
 Cache-Control: public
 Cache-Control: public
@@ -383,7 +402,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 - Uploading will be ignored, if the version already exist. So, use 'recreate' param to force uploading.
 
 ```
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 \
+$ http --verify no --auth Developer:12345 -f POST https://www.your.project.dev/staticus/waxwing.mp3 \
   recreate=true var=uploaded file@/Users/kivagant/vagrant/staticus/test.mp3
 HTTP/1.1 201 Created
 Cache-Control: public
@@ -417,7 +436,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 #### File Remote Downloading
 
 ```
-$ http --verify no --auth Developer:12345 -f POST https://www.englishdom.dev/staticus/waxwing.mp3 var=remote uri='http://some.domain/new.mp3'
+$ http --verify no --auth Developer:12345 -f POST https://www.your.project.dev/staticus/waxwing.mp3 var=remote uri='http://some.domain/new.mp3'
 HTTP/1.1 201 Created
 Cache-Control: public
 Cache-Control: public
@@ -458,7 +477,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/0/2d5080a8ea20ec175c318d65d1429e94.mp3
 /var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3
 
-$ http --verify no --auth Developer:12345 DELETE https://www.englishdom.dev/staticus/waxwing.mp3
+$ http --verify no --auth Developer:12345 DELETE https://www.your.project.dev/staticus/waxwing.mp3
 HTTP/1.1 204 No Content
 Cache-Control: public
 Cache-Control: public
@@ -473,7 +492,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 /var/www/cache/mp3/def/2/2d5080a8ea20ec175c318d65d1429e94.mp3 # automatically backuped version
 /var/www/cache/mp3/def/1/2d5080a8ea20ec175c318d65d1429e94.mp3
 
-$ http --verify no GET https://www.englishdom.dev/staticus/waxwing.mp3\?nocache\=bzbzbz # skip nginx cache
+$ http --verify no GET https://www.your.project.dev/staticus/waxwing.mp3\?nocache\=bzbzbz # skip nginx cache
 HTTP/1.1 404 Not Found
 Connection: keep-alive
 Content-Length: 0
@@ -486,7 +505,7 @@ X-Powered-By: PHP/5.6.15
 #### Destroying
 
 ```
-$ http --verify no --auth Developer:12345 DELETE https://www.englishdom.dev/staticus/waxwing.mp3\?destroy\=1
+$ http --verify no --auth Developer:12345 DELETE https://www.your.project.dev/staticus/waxwing.mp3\?destroy\=1
 HTTP/1.1 204 No Content
 Cache-Control: public
 Cache-Control: public
@@ -536,7 +555,7 @@ The file list found by a search adapter will be returned.
 #### Search example
 
 ```
-$ http --verify no --auth Developer:12345 -f GET https://www.englishdom.dev/staticus/search/welcome.jpg alt='school'
+$ http --verify no --auth Developer:12345 -f GET https://www.your.project.dev/staticus/search/welcome.jpg alt='school'
 HTTP/1.1 200 OK
 Cache-Control: public
 Cache-Control: public
