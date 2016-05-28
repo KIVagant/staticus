@@ -522,7 +522,7 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 
 ## Installation and tests
 
-1. Copy **.env.develop** to **.env** and check the variables inside.
+1. Copy **.env.default** to **.env** and check the variables inside.
 2. Copy **phpunit.xml.dist** to **phpunit.xml**.
 
 ```
