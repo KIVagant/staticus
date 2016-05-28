@@ -21,13 +21,13 @@ class ActionPost extends ActionPostAbstract
      */
     protected function generate(ResourceDOInterface $resourceDO)
     {
+        /** @var Manager $generator */
+        $generator = $this->generator;
         $alternative = $resourceDO->getNameAlternative();
-        $voiceText = $alternative
-            ? $alternative
-            : $resourceDO->getName();
-        $content = $this->generator->read($voiceText);
-        $headers = $this->generator->getHeaders();
-        if (!isset($headers['http_code']) || $headers['http_code'] != 200) {
+        $voiceText = $alternative ?: $resourceDO->getName();
+        $content = $generator->read($voiceText);
+        $headers = $generator->getHeaders();
+        if (!array_key_exists('http_code', (array)$headers) || $headers['http_code'] != 200) {
             throw new ErrorException(
                 'Wrong http response code from voice provider '
                 . get_class($this->generator->getAdapter())
