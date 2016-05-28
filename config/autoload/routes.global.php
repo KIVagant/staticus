@@ -31,22 +31,29 @@ return [
 //            Staticus\Resources\File\PrepareResourceMiddleware::class => Staticus\Resources\File\PrepareResourceMiddleware::class,
 //            Staticus\Resources\File\SaveResourceMiddleware::class => Staticus\Resources\File\SaveResourceMiddleware::class,
 //            Staticus\Resources\File\ResourceResponseMiddleware::class => Staticus\Resources\File\ResourceResponseMiddleware::class,
+
             Staticus\Resources\Mpeg\PrepareResourceMiddleware::class => Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
             Staticus\Resources\Mpeg\SaveResourceMiddleware::class => Staticus\Resources\Mpeg\SaveResourceMiddleware::class,
             Staticus\Resources\Mpeg\ResourceResponseMiddleware::class => Staticus\Resources\Mpeg\ResourceResponseMiddleware::class,
+
 //            Staticus\Resources\Gif\PrepareResourceMiddleware::class => Staticus\Resources\Gif\PrepareResourceMiddleware::class,
 //            Staticus\Resources\Gif\PostProcessingMiddleware::class => Staticus\Resources\Gif\PostProcessingMiddleware::class,
 //            Staticus\Resources\Gif\SaveResourceMiddleware::class => Staticus\Resources\Gif\SaveResourceMiddleware::class,
 //            Staticus\Resources\Gif\ResourceResponseMiddleware::class => Staticus\Resources\Gif\ResourceResponseMiddleware::class,
+//            Staticus\Resources\Gif\StripMiddleware::class => Staticus\Resources\Gif\StripMiddleware::class,
+
             Staticus\Resources\Jpg\PrepareResourceMiddleware::class => Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
             Staticus\Resources\Jpg\ResizeMiddleware::class => Staticus\Resources\Jpg\ResizeMiddleware::class,
             Staticus\Resources\Jpg\CropMiddleware::class => Staticus\Resources\Jpg\CropMiddleware::class,
             Staticus\Resources\Jpg\SaveResourceMiddleware::class => Staticus\Resources\Jpg\SaveResourceMiddleware::class,
             Staticus\Resources\Jpg\ResourceResponseMiddleware::class => Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
+            Staticus\Resources\Jpg\StripMiddleware::class => Staticus\Resources\Jpg\StripMiddleware::class,
+
 //            Staticus\Resources\Png\SaveResourceMiddleware::class => Staticus\Resources\Png\SaveResourceMiddleware::class,
 //            Staticus\Resources\Png\PostProcessingMiddleware::class => Staticus\Resources\Png\PostProcessingMiddleware::class,
 //            Staticus\Resources\Png\PrepareResourceMiddleware::class => Staticus\Resources\Png\PrepareResourceMiddleware::class,
 //            Staticus\Resources\Png\ResourceResponseMiddleware::class => Staticus\Resources\Png\ResourceResponseMiddleware::class,
+//            Staticus\Resources\Png\StripMiddleware::class => Staticus\Resources\Png\StripMiddleware::class,
         ],
         'factories' => [
             AudioManager\Adapter\AdapterInterface::class => App\Actions\Voice\VoiceAdapterFactory::class,
@@ -148,6 +155,7 @@ return [
                 Staticus\Acl\AclMiddleware::class,
                 App\Actions\Image\ActionPost::class,
                 Staticus\Resources\Jpg\SaveResourceMiddleware::class,
+                Staticus\Resources\Jpg\StripMiddleware::class,
                 Staticus\Resources\Jpg\CropMiddleware::class,
                 Staticus\Resources\Jpg\ResizeMiddleware::class,
                 Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
