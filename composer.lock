@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e4b49f3c4516dc974242000cbb91440c",
-    "content-hash": "62fffbb9c397895bd86bda939f8da36b",
+    "hash": "c274ae3d4f2cab7cb9278297f5eb93db",
+    "content-hash": "6e4e997aea07b22b33ea5884bd1629ec",
     "packages": [
         {
             "name": "aura/di",
@@ -82,6 +82,58 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "time": "2014-12-30 15:22:37"
+        },
+        {
+            "name": "kivagant/staticus-core",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KIVagant/staticus-core.git",
+                "reference": "e8034641fa61e379c5dda0d86687ef0d5f63b94a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/e8034641fa61e379c5dda0d86687ef0d5f63b94a",
+                "reference": "e8034641fa61e379c5dda0d86687ef0d5f63b94a",
+                "shasum": ""
+            },
+            "require": {
+                "aura/di": "^3.1",
+                "league/flysystem": "^1.0",
+                "mtymek/expressive-config-manager": "^0.4.0",
+                "php": "^5.5 || ^7.0",
+                "roave/security-advisories": "dev-master",
+                "zendframework/zend-expressive": "^1.0",
+                "zendframework/zend-expressive-fastroute": "^1.0",
+                "zendframework/zend-expressive-helpers": "^2.0",
+                "zendframework/zend-permissions-acl": "^2.6",
+                "zendframework/zend-session": "^2.7",
+                "zendframework/zend-stdlib": "~2.7"
+            },
+            "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev",
+                    "dev-develop": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Staticus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache 2.0"
+            ],
+            "description": "The core part of Staticus Project. See more in the kivagant/staticus project on the GitHub.",
+            "keywords": [
+                "cache",
+                "download",
+                "nginx",
+                "staticus"
+            ],
+            "time": "2016-05-28 23:21:14"
         },
         {
             "name": "league/flysystem",
@@ -214,16 +266,16 @@
         },
         {
             "name": "newage/audio-manager",
-            "version": "1.0.3",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/newage/AudioManager.git",
-                "reference": "f229da7f7371c6c505119d29ae4a3dafa1bb8292"
+                "reference": "6ef2687c2fe54ee47c7f8431f3a15ac641cd2268"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/newage/AudioManager/zipball/f229da7f7371c6c505119d29ae4a3dafa1bb8292",
-                "reference": "f229da7f7371c6c505119d29ae4a3dafa1bb8292",
+                "url": "https://api.github.com/repos/newage/AudioManager/zipball/6ef2687c2fe54ee47c7f8431f3a15ac641cd2268",
+                "reference": "6ef2687c2fe54ee47c7f8431f3a15ac641cd2268",
                 "shasum": ""
             },
             "require": {
@@ -235,6 +287,11 @@
                 "squizlabs/php_codesniffer": "2.5.*"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "AudioManager\\": "src/"
@@ -244,12 +301,21 @@
             "license": [
                 "MIT"
             ],
+            "authors": [
+                {
+                    "name": "Vadim Leontiev",
+                    "email": "vadim.leontiev@gmail.com",
+                    "homepage": "https://github.com/newage",
+                    "role": "Developer"
+                }
+            ],
             "description": "Audio Manager for text-to-speech cloud services",
+            "homepage": "https://github.com/newage/AudioManager",
             "keywords": [
                 "speech",
                 "tts"
             ],
-            "time": "2016-04-25 08:16:14"
+            "time": "2016-05-28 11:19:45"
         },
         {
             "name": "nikic/fast-route",
@@ -349,12 +415,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "c5bfcbdb02684851e3215545502d0be51d3e4e13"
+                "reference": "96f1ef760845211c8acbb15970e706db1e4b2c5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c5bfcbdb02684851e3215545502d0be51d3e4e13",
-                "reference": "c5bfcbdb02684851e3215545502d0be51d3e4e13",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/96f1ef760845211c8acbb15970e706db1e4b2c5e",
+                "reference": "96f1ef760845211c8acbb15970e706db1e4b2c5e",
                 "shasum": ""
             },
             "conflict": {
@@ -414,7 +480,7 @@
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "twig/twig": "<1.20",
-                "typo3/cms": ">=6.2,<6.2.16|>=7,<7.1|>=7.1,<7.2|>=7.2,<7.3|>=7.3,<7.4|>=7.4,<7.5|>=7.5,<7.6|>=7.6,<7.6.1",
+                "typo3/cms": ">=6.2,<6.2.25|>=7,<7.1|>=7.1,<7.2|>=7.2,<7.3|>=7.3,<7.4|>=7.4,<7.5|>=7.5,<7.6|>=7.6,<7.6.8|>=8,<8.1.1",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.7|>=3,<3.0.1",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
@@ -460,7 +526,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-05-10 10:37:23"
+            "time": "2016-05-25 05:33:34"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -1696,16 +1762,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.25",
+            "version": "4.8.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6d1588a6542a52ed89636e5a9876bc7502bbb853"
+                "reference": "fc1d8cd5b5de11625979125c5639347896ac2c74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6d1588a6542a52ed89636e5a9876bc7502bbb853",
-                "reference": "6d1588a6542a52ed89636e5a9876bc7502bbb853",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fc1d8cd5b5de11625979125c5639347896ac2c74",
+                "reference": "fc1d8cd5b5de11625979125c5639347896ac2c74",
                 "shasum": ""
             },
             "require": {
@@ -1764,7 +1830,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-05-10 18:47:12"
+            "time": "2016-05-17 03:09:28"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1940,16 +2006,16 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "1.3.6",
+            "version": "1.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "2292b116f43c272ff4328083096114f84ea46a56"
+                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/2292b116f43c272ff4328083096114f84ea46a56",
-                "reference": "2292b116f43c272ff4328083096114f84ea46a56",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/4e8f0da10ac5802913afc151413bc8c53b6c2716",
+                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716",
                 "shasum": ""
             },
             "require": {
@@ -1986,7 +2052,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-05-04 07:59:13"
+            "time": "2016-05-17 03:18:57"
         },
         {
             "name": "sebastian/exporter",
@@ -2324,7 +2390,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "roave/security-advisories": 20
+        "roave/security-advisories": 20,
+        "kivagant/staticus-core": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
