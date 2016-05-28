@@ -32,6 +32,9 @@ return [
                 [600, 432], // Courses-int, exercises, group C
                 [300, 172], // Course lesson header image
             ],
+            'exif' => [
+                'strip' => env('IMAGE_STRIP', false),
+            ],
         ],
     ],
 ];
