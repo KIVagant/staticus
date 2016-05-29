@@ -51,7 +51,7 @@
   },
   "scripts": {
     "post-create-project-cmd": [
-      "cp .env.default .env",
+      "cp .env.dist .env",
       "cp phpunit.xml.dist phpunit.xml"
     ],
     "check": [
