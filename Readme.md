@@ -668,8 +668,8 @@ You can add or change this behaviour with ACL configuration or with adding anoth
 
 ## Contributors
 
-Andrew Yanakov <ayanakov at englishdom.com>
-Eugene Glotov <kivagant at gmail.com>
+- Andrew Yanakov <ayanakov at englishdom.com>
+- Eugene Glotov <kivagant at gmail.com>
 
 ## License
 
