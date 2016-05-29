@@ -55,7 +55,8 @@ md-toc-filter ./Readme.md > Readme2.md
     - [Dependencies](#dependencies)
     - [Contents](#contents)
     - [Disclaimer](#disclaimer)
-    - [The basics](#the-basics)
+    - [Installation and tests](#installation-and-tests)
+    - [The Nginx configuration](#the-nginx-configuration)
     - [Query structure](#query-structure)
     - [Supported HTTP Methods](#supported-http-methods)
         - [Parameters](#parameters)
@@ -84,13 +85,13 @@ md-toc-filter ./Readme.md > Readme2.md
         - [DELETE /*.mp3](#delete-mp3)
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
-    - [Installation and tests](#installation-and-tests)
     - [Advanced usage](#advanced-usage)
         - [JPG searching with the special route /search/](#jpg-searching-with-the-special-route-search)
             - [Search example](#search-example)
         - [HTTP-based authentication](#http-based-authentication)
         - [Session-based authentication](#session-based-authentication)
         - [Namespaces](#namespaces)
+        - [License](#license)
 
 ## Disclaimer
 
@@ -98,7 +99,42 @@ md-toc-filter ./Readme.md > Readme2.md
 - Examples are shown by the utility [jkbrzt/httpie](https://github.com/jkbrzt/httpie)
 - All data operations such as reading, generation or deleting, controlled with the ACL config.
 
-## The basics
+## Installation and tests
+
+1. This project works like ready-to-use application. So, you don't need to **require** it. Instead run:
+
+```
+$ composer create-project "kivagant/staticus":"dev-master"
+$ cd staticus
+```
+
+2. Open **.env** file for editing and setup the variables inside. First of all, **do not forget to setup the DATA_DIR**!
+
+3. **Important note:** The next step will try to create and delete test files.
+So, read the [License](#license), run and pray :)
+
+```
+$ composer run-script test
+> phpunit
+PHPUnit 4.8.24 by Sebastian Bergmann and contributors.
+
+.........
+
+Time: 180 ms, Memory: 6.75Mb
+
+OK (9 tests, 67 assertions)
+```
+
+Then you can run project without Nginx and works with it almost like in examples below. The only difference is that
+you can't see any files in GET requests because the only X-Accel-Redirect header will be sent.
+
+```
+$ composer run-script serve
+```
+
+But if you want to see a real dark magic, read the next part of this documentation.
+
+## The Nginx configuration
 
 Look for simple Nginx config example: [fuse.conf](etc/nginx/conf.d/fuse.conf)
 
@@ -521,29 +557,15 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 (nothing here)
 ```
 
-## Installation and tests
-
-1. Copy **.env.default** to **.env** and check the variables inside.
-2. Copy **phpunit.xml.dist** to **phpunit.xml**.
-
-```
-$ composer run-script serve
-$ composer run-script test
-> phpunit
-PHPUnit 4.8.24 by Sebastian Bergmann and contributors.
-
-.........
-
-Time: 180 ms, Memory: 6.75Mb
-
-OK (9 tests, 67 assertions)
-```
-
 ## Advanced usage
 
 ### JPG searching with the special route /search/
 
+Setup the GOOGLE_SEARCH_API_KEY and the GOOGLE_SEARCH_API_CX in your ```.env``` config.
+
+```
 GET|POST /search/{resource_route}
+```
 
 The file list found by a search adapter will be returned.
 
