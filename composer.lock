@@ -141,12 +141,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-fractal-manager.git",
-                "reference": "26afdb7437f0f70a9a5154e1633d1038500b25a0"
+                "reference": "d81d256fe88f2c616ff9f64c514c0ff42c411867"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/26afdb7437f0f70a9a5154e1633d1038500b25a0",
-                "reference": "26afdb7437f0f70a9a5154e1633d1038500b25a0",
+                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/d81d256fe88f2c616ff9f64c514c0ff42c411867",
+                "reference": "d81d256fe88f2c616ff9f64c514c0ff42c411867",
                 "shasum": ""
             },
             "require": {
@@ -162,14 +162,14 @@
             },
             "autoload": {
                 "psr-4": {
-                    "SearchManager\\": "src/"
+                    "FractalManager\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL"
             ],
-            "time": "2016-05-29 00:51:15"
+            "time": "2016-05-29 00:59:55"
         },
         {
             "name": "kivagant/staticus-search-manager",
