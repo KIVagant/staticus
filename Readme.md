@@ -139,7 +139,7 @@ But if you want to see a real dark magic, read the next part of this documentati
 
 ## The Nginx configuration
 
-Look for simple Nginx config example: [fuse.conf](etc/nginx/conf.d/fuse.conf)
+Look for simple Nginx config example: [staticus.conf](etc/nginx/conf.d/staticus.conf)
 
 The main host in Nginx proxies a request to the "auxiliary host" (at himself in reality) and caches a successful result:
 
