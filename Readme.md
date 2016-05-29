@@ -91,7 +91,8 @@ md-toc-filter ./Readme.md > Readme2.md
         - [HTTP-based authentication](#http-based-authentication)
         - [Session-based authentication](#session-based-authentication)
         - [Namespaces](#namespaces)
-        - [License](#license)
+    - [Contributors](#contributors)
+    - [License](#license)
 
 ## Disclaimer
 
@@ -662,6 +663,11 @@ By default:
 - an administrator has ANY access to all resources.
 
 You can add or change this behaviour with ACL configuration or with adding another middleware.
+
+## Contributors
+
+Andrew Yanakov <ayanakov at englishdom.com>
+Eugene Glotov <kivagant at gmail.com>
 
 ## License
 
