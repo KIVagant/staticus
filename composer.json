@@ -48,6 +48,10 @@
     }
   },
   "scripts": {
+    "post-create-project-cmd": [
+      "cp .env.default .env",
+      "cp phpunit.xml.dist phpunit.xml"
+    ],
     "check": [
       "@cs",
       "@test"
