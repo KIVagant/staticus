@@ -29,6 +29,8 @@ Nginx internal cache should be configured for providing a maximum speed of repea
 ## Dependencies
 
 - [kivagant/staticus-core](https://github.com/KIVagant/staticus-core) - the core part of this project
+- [kivagant/staticus-search-manager](https://github.com/KIVagant/staticus-search-manager) - Google API adapter
+- [kivagant/staticus-fractal-manager](https://github.com/KIVagant/staticus-fractal-manager) - simple fractal images generator
 - [league/flysystem](http://flysystem.thephpleague.com/) - partially used, full integration planned
 - [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) - used only in config files, can be removed
 - [zendframework/zend-expressive](https://github.com/zendframework/zend-expressive) - In theory, can be replaced

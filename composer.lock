@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c274ae3d4f2cab7cb9278297f5eb93db",
-    "content-hash": "6e4e997aea07b22b33ea5884bd1629ec",
+    "hash": "23085b6a4eff971d5b30c495e05cc674",
+    "content-hash": "4f0715ce044495da806effa04aa31db5",
     "packages": [
         {
             "name": "aura/di",
@@ -134,6 +134,78 @@
                 "staticus"
             ],
             "time": "2016-05-28 23:21:14"
+        },
+        {
+            "name": "kivagant/staticus-fractal-manager",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KIVagant/staticus-fractal-manager.git",
+                "reference": "26afdb7437f0f70a9a5154e1633d1038500b25a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/26afdb7437f0f70a9a5154e1633d1038500b25a0",
+                "reference": "26afdb7437f0f70a9a5154e1633d1038500b25a0",
+                "shasum": ""
+            },
+            "require": {
+                "kivagant/staticus-core": "dev-master",
+                "php": "^5.5 || ^7.0"
+            },
+            "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev",
+                    "dev-develop": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SearchManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "time": "2016-05-29 00:51:15"
+        },
+        {
+            "name": "kivagant/staticus-search-manager",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KIVagant/staticus-search-manager.git",
+                "reference": "93f3a6c219bf69dc72c7ea36366645dae0b962a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/93f3a6c219bf69dc72c7ea36366645dae0b962a0",
+                "reference": "93f3a6c219bf69dc72c7ea36366645dae0b962a0",
+                "shasum": ""
+            },
+            "require": {
+                "kivagant/staticus-core": "dev-master",
+                "php": "^5.5 || ^7.0"
+            },
+            "type": "project",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev",
+                    "dev-develop": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SearchManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache 2.0"
+            ],
+            "time": "2016-05-29 00:50:57"
         },
         {
             "name": "league/flysystem",
@@ -2388,12 +2460,14 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
-        "roave/security-advisories": 20,
-        "kivagant/staticus-core": 20
+        "kivagant/staticus-core": 20,
+        "kivagant/staticus-search-manager": 20,
+        "kivagant/staticus-fractal-manager": 20,
+        "roave/security-advisories": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^5.5 || ^7.0"
