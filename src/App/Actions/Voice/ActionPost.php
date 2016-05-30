@@ -38,7 +38,7 @@ class ActionPost extends ActionPostAbstract
                 'Wrong http response code from voice provider '
                 . get_class($this->generator->getAdapter())
                 . ': ' . $headers['http_code'] . '; Requested text: '
-                . $resourceDO->getName(), __LINE__);
+                . $resourceDO->getName());
         }
 
         return $content;
