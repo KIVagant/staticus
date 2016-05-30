@@ -26,6 +26,14 @@ content, then caches the result and next time gives the file from cache.
 
 Nginx internal cache should be configured for providing a maximum speed of repeated requests. Read the example below.
 
+With Staticus you will can:
+
+- call HTTP CRUD operations for different static files on your project without hard integration work;
+- generate any file resources by request: images, sounds, documents etc;
+- resize and crop images 'on the fly' when it requested from your frontend;
+- search for the new images in Google;
+- write your own operation layers and make this instrument more powerful!
+
 ## Dependencies
 
 Read [information about dependencies](Dependencies.md) used in the project.
