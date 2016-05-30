@@ -2,6 +2,7 @@
 
 if (env('ERROR_HANDLER', false)) {
     return [
+        'error_handler' => true,
         'dependencies' => [
             'invokables' => [
                 'Zend\Expressive\Whoops' => Whoops\Run::class,
@@ -21,5 +22,7 @@ if (env('ERROR_HANDLER', false)) {
         ],
     ];
 } else {
-    return [];
+    return [
+        'error_handler' => true,
+    ];
 }
