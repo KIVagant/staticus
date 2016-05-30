@@ -10,6 +10,11 @@ use AudioManager\Manager;
 
 class ActionPost extends ActionPostAbstract
 {
+    const LANG_RU = 'ru-RU';
+    const VOICE_RU = 'Tatyana';
+    const LANG_EN = 'en-US';
+    const VOICE_EN = 'Salli';
+
     public function __construct(ResourceDO $resourceDO, FilesystemInterface $filesystem, Manager $manager)
     {
         parent::__construct($resourceDO, $filesystem, $manager, null);
@@ -25,6 +30,7 @@ class ActionPost extends ActionPostAbstract
         $generator = $this->generator;
         $alternative = $resourceDO->getNameAlternative();
         $voiceText = $alternative ?: $resourceDO->getName();
+        $this->selectLanguage($voiceText);
         $content = $generator->read($voiceText);
         $headers = $generator->getHeaders();
         if (!array_key_exists('http_code', (array)$headers) || $headers['http_code'] != 200) {
@@ -36,5 +42,31 @@ class ActionPost extends ActionPostAbstract
         }
 
         return $content;
+    }
+
+    public function isRussian($text)
+    {
+        $matches = [];
+        preg_match('/[а-яё]+/ui', $text, $matches);
+
+        return !empty($matches);
+    }
+
+    /**
+     * @param $voiceText
+     * @todo LoD violation
+     */
+    protected function selectLanguage($voiceText)
+    {
+        $adapter = $this->generator->getAdapter();
+        /** @var \AudioManager\Adapter\Options\OptionsInterface $options */
+        $options = $adapter->getOptions();
+        if ($this->isRussian($voiceText)) {
+            $options->setLanguage(self::LANG_RU);
+            $options->setVoice(self::VOICE_RU);
+        } else {
+            $options->setLanguage(self::LANG_EN);
+            $options->setVoice(self::VOICE_EN);
+        }
     }
 }

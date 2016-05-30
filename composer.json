@@ -15,7 +15,7 @@
     "kivagant/staticus-core": "dev-master",
     "kivagant/staticus-search-manager": "dev-master",
     "kivagant/staticus-fractal-manager": "dev-master",
-    "newage/audio-manager": "^1.0",
+    "newage/audio-manager": "^1.1",
     "zendframework/zend-expressive": "^1.0",
     "zendframework/zend-expressive-helpers": "^2.0",
     "zendframework/zend-stdlib": "~2.7",
