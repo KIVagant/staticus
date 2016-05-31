@@ -43,6 +43,7 @@ return [
 //            Staticus\Resources\Gif\SaveResourceMiddleware::class => Staticus\Resources\Gif\SaveResourceMiddleware::class,
 //            Staticus\Resources\Gif\ResourceResponseMiddleware::class => Staticus\Resources\Gif\ResourceResponseMiddleware::class,
 //            Staticus\Resources\Gif\StripMiddleware::class => Staticus\Resources\Gif\StripMiddleware::class,
+//            Staticus\Resources\Gif\CompressMiddleware::class => Staticus\Resources\Gif\CompressMiddleware::class,
 
             Staticus\Resources\Jpg\PrepareResourceMiddleware::class => Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
             Staticus\Resources\Jpg\ResizeMiddleware::class => Staticus\Resources\Jpg\ResizeMiddleware::class,
@@ -50,12 +51,14 @@ return [
             Staticus\Resources\Jpg\SaveResourceMiddleware::class => Staticus\Resources\Jpg\SaveResourceMiddleware::class,
             Staticus\Resources\Jpg\ResourceResponseMiddleware::class => Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
             Staticus\Resources\Jpg\StripMiddleware::class => Staticus\Resources\Jpg\StripMiddleware::class,
+            Staticus\Resources\Jpg\CompressMiddleware::class => Staticus\Resources\Jpg\CompressMiddleware::class,
 
 //            Staticus\Resources\Png\SaveResourceMiddleware::class => Staticus\Resources\Png\SaveResourceMiddleware::class,
 //            Staticus\Resources\Png\PostProcessingMiddleware::class => Staticus\Resources\Png\PostProcessingMiddleware::class,
 //            Staticus\Resources\Png\PrepareResourceMiddleware::class => Staticus\Resources\Png\PrepareResourceMiddleware::class,
 //            Staticus\Resources\Png\ResourceResponseMiddleware::class => Staticus\Resources\Png\ResourceResponseMiddleware::class,
 //            Staticus\Resources\Png\StripMiddleware::class => Staticus\Resources\Png\StripMiddleware::class,
+//            Staticus\Resources\Png\CompressMiddleware::class => Staticus\Resources\Png\CompressMiddleware::class,
         ],
         'factories' => [
             AudioManager\Adapter\AdapterInterface::class => App\Actions\Voice\VoiceAdapterFactory::class,
@@ -182,6 +185,7 @@ return [
                 App\Actions\Image\ActionPost::class,
                 Staticus\Resources\Jpg\SaveResourceMiddleware::class,
                 Staticus\Resources\Jpg\StripMiddleware::class,
+                Staticus\Resources\Jpg\CompressMiddleware::class,
                 Staticus\Resources\Jpg\CropMiddleware::class,
                 Staticus\Resources\Jpg\ResizeMiddleware::class,
                 Staticus\Resources\Jpg\ResourceResponseMiddleware::class,

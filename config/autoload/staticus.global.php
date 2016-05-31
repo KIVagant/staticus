@@ -32,6 +32,15 @@ return [
                 [600, 432], // Courses-int, exercises, group C
                 [300, 172], // Course lesson header image
             ],
+
+            // After-saving compression
+            'compress' => [
+                'compress' => true, // allow compression
+                'quality' => 85, // compression in percents
+                'interlace' => Imagick::INTERLACE_PLANE, // interlacing style
+                'maxWidth' => 1024, // maximum allowed Width for a new image (when generated or downloaded)
+                'maxHeight' => 1024, // maximum allowed Height for a new image (when generated or downloaded)
+            ],
             'exif' => [
                 'strip' => env('IMAGE_STRIP', false),
             ],
