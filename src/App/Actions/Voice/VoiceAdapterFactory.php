@@ -43,7 +43,7 @@ class VoiceAdapterFactory
                 $adapter->getOptions()->setAccessKey($accessKey);
                 break;
             default:
-                throw new ErrorException('Not implemented functionality for voice provider: ' . $adapterName, __LINE__);
+                throw new ErrorException('Not implemented functionality for voice provider: ' . $adapterName);
         }
 
         return $adapter;
