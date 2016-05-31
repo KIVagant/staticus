@@ -12,11 +12,13 @@ return [
             App\Actions\Voice\ActionGet::class => App\Actions\Voice\ActionGet::class,
             App\Actions\Voice\ActionPost::class => App\Actions\Voice\ActionPost::class,
             App\Actions\Voice\ActionDelete::class => App\Actions\Voice\ActionDelete::class,
+            App\Actions\Voice\ActionList::class => App\Actions\Voice\ActionList::class,
 
             App\Actions\Image\ActionGet::class => App\Actions\Image\ActionGet::class,
             App\Actions\Image\ActionPost::class => App\Actions\Image\ActionPost::class,
             App\Actions\Image\ActionDelete::class => App\Actions\Image\ActionDelete::class,
             App\Actions\Image\ActionSearchJpg::class => App\Actions\Image\ActionSearchJpg::class,
+            App\Actions\Image\ActionList::class => App\Actions\Image\ActionList::class,
 
             AudioManager\Manager::class => AudioManager\Manager::class,
 
@@ -80,6 +82,18 @@ return [
     ],
     'routes' => [
         [
+            'name' => 'list-voice',
+            'path' => '/{' . Staticus\Acl\Actions::ACTION_LIST . ':list}/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
+            'middleware' => [
+                Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
+                Staticus\Auth\AuthSessionMiddleware::class,
+                Staticus\Auth\AuthBasicMiddleware::class,
+                Staticus\Acl\AclMiddleware::class,
+                App\Actions\Voice\ActionList::class,
+            ],
+            'allowed_methods' => ['GET', 'POST'],
+        ],
+        [
             'name' => 'get-voice',
             'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
             'middleware' => [
@@ -119,6 +133,18 @@ return [
         ],
 
         /* JPG */
+        [
+            'name' => 'list-jpg',
+            'path' => '/{' . Staticus\Acl\Actions::ACTION_LIST . ':list}/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
+            'middleware' => [
+                Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
+                Staticus\Auth\AuthSessionMiddleware::class,
+                Staticus\Auth\AuthBasicMiddleware::class,
+                Staticus\Acl\AclMiddleware::class,
+                App\Actions\Image\ActionList::class,
+            ],
+            'allowed_methods' => ['GET', 'POST'],
+        ],
         [
             'name' => 'search-jpg',
             'path' => '/{' . Staticus\Acl\Actions::ACTION_SEARCH . ':search}/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',

@@ -6,7 +6,7 @@ use Staticus\Middlewares\ActionListAbstract;
 use Staticus\Resources\Commands\FindImageSizesResourceCommand;
 use Staticus\Resources\Image\ResourceImageDOInterface;
 
-class ActionListJpg extends ActionListAbstract
+class ActionList extends ActionListAbstract
 {
     public function __construct(
         ResourceImageDOInterface $resourceDO
