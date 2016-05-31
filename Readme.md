@@ -563,7 +563,31 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 ```
 $ http --body --verify no --auth Developer:12345 GET https://www.your.project.dev/staticus/list/welcome.jpg
 {
-    "current": {
+    "options": [
+        {
+            "dimension": "0",
+            "size": 5322,
+            "timestamp": 1464692308,
+            "variant": "def",
+            "version": "0"
+        },
+        {
+            "dimension": "100x100",
+            "size": 2165,
+            "timestamp": 1464692314,
+            "variant": "def",
+            "version": "0"
+        },
+        {
+            "dimension": "0",
+            "size": 17055,
+            "timestamp": 1464692306,
+            "variant": "def",
+            "version": "1"
+        }
+    ],
+    "resource": {
+        "dimension": "0",
         "height": 0,
         "name": "welcome",
         "nameAlternative": "",
@@ -575,19 +599,7 @@ $ http --body --verify no --auth Developer:12345 GET https://www.your.project.de
         "variant": "def",
         "version": 0,
         "width": 0
-    },
-    "sizes": {
-        "v0": [
-            "100x100"
-        ],
-        "v1": [],
-        "v2": []
-    },
-    "versions": [
-        "0",
-        "1",
-        "2"
-    ]
+    }
 }
 ```
 
