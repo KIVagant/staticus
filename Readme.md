@@ -79,6 +79,7 @@ md-toc-filter ./Readme.md > Readme2.md
             - [Safety deletion](#safety-deletion)
             - [Destroying](#destroying)
     - [Advanced usage](#advanced-usage)
+        - [List all resource files](#list-all-resource-files)
         - [JPG searching with the special route /search/](#jpg-searching-with-the-special-route-search)
             - [Search example](#search-example)
         - [HTTP-based authentication](#http-based-authentication)
@@ -554,13 +555,48 @@ $ find /var/www/cache/mp3 -type f -name *.mp3
 
 ## Advanced usage
 
+### List all resource files
+
+- **GET|POST** /list/*{resource_route}*
+- **ACL Action**: list
+
+```
+$ http --body --verify no --auth Developer:12345 GET https://www.your.project.dev/staticus/list/welcome.jpg
+{
+    "current": {
+        "height": 0,
+        "name": "welcome",
+        "nameAlternative": "",
+        "namespace": "",
+        "new": false,
+        "recreate": false,
+        "type": "jpg",
+        "uuid": "40be4e59b9a2a2b5dffb918c0e86b3d7",
+        "variant": "def",
+        "version": 0,
+        "width": 0
+    },
+    "sizes": {
+        "v0": [
+            "100x100"
+        ],
+        "v1": [],
+        "v2": []
+    },
+    "versions": [
+        "0",
+        "1",
+        "2"
+    ]
+}
+```
+
 ### JPG searching with the special route /search/
 
 Setup the GOOGLE_SEARCH_API_KEY and the GOOGLE_SEARCH_API_CX in your ```.env``` config.
 
-```
-GET|POST /search/{resource_route}
-```
+- **GET|POST** /search/*{resource_route}*
+- **ACL Action**: search
 
 The file list found by a search adapter will be returned.
 
@@ -573,19 +609,7 @@ The file list found by a search adapter will be returned.
 #### Search example
 
 ```
-$ http --verify no --auth Developer:12345 -f GET https://www.your.project.dev/staticus/search/welcome.jpg alt='school'
-HTTP/1.1 200 OK
-Cache-Control: public
-Cache-Control: public
-Connection: keep-alive
-Content-Encoding: gzip
-Content-Type: application/json
-Date: Mon, 11 Apr 2016 01:25:52 GMT
-Server: nginx/1.9.7
-Transfer-Encoding: chunked
-Vary: Accept-Encoding
-X-Powered-By: PHP/5.6.15
-
+$ http --body --verify no --auth Developer:12345 -f GET https://www.your.project.dev/staticus/search/welcome.jpg alt='school'
 {
     "found": {
         "count": 10,
