@@ -3,7 +3,7 @@ namespace App\Actions\Image;
 
 use League\Flysystem\FilesystemInterface;
 use Staticus\Middlewares\ActionListAbstract;
-use Staticus\Resources\Commands\FindImageSizesResourceCommand;
+use Staticus\Resources\Image\ResourceImageDO;
 use Staticus\Resources\Image\ResourceImageDOInterface;
 
 class ActionList extends ActionListAbstract
@@ -16,24 +16,11 @@ class ActionList extends ActionListAbstract
         parent::__construct($resourceDO, $filesystem);
     }
 
-    public function action()
+    protected function allowedProperties()
     {
-        parent::action();
-        $sizes = [];
-        foreach ($this->actionResult['versions'] as $version) {
-            $resourceDO = clone $this->resourceDO;
-            $resourceDO->setVersion($version);
-            $resourceDO->setWidth();
-            $resourceDO->setHeight();
-            // JSON will remove string '0' keys, so add the prefix
-            $sizes['v' . $version] = $this->findSizes($resourceDO);
-        }
-        $this->actionResult['sizes'] = $sizes;
-    }
-    protected function findSizes(ResourceImageDOInterface $resourceDO)
-    {
-        $command = new FindImageSizesResourceCommand($resourceDO, $this->filesystem);
+        $allowed = parent::allowedProperties();
+        $allowed[] = ResourceImageDO::TOKEN_DIMENSION;
 
-        return $command();
+        return $allowed;
     }
 }
