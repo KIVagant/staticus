@@ -1,4 +1,6 @@
-# Dependencies
+# Staticus Dependencies
+
+This is a part of the [project documentation](Readme.md)
 
 - [kivagant/staticus-core](https://github.com/KIVagant/staticus-core) - the core part of this project
 - [kivagant/staticus-search-manager](https://github.com/KIVagant/staticus-search-manager) - Google API adapter
