@@ -90,7 +90,8 @@ md-toc-filter ./Readme.md > Readme2.md
 ## Disclaimer
 
 - **Some parts of this readme still not translated**. If you can help with that – you are welcome with a PR.
-- Examples are shown by the utility [jkbrzt/httpie](https://github.com/jkbrzt/httpie)
+- Examples are shown by the utility [jkbrzt/httpie](https://github.com/jkbrzt/httpie).
+  Hint: if you see some unexpected html in your console, use [your-command | html2text](https://pypi.python.org/pypi/html2text)
 - All data operations such as reading, generation or deleting, controlled with the ACL config.
 
 ## Installation and tests
