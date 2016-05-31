@@ -83,6 +83,7 @@ return [
                         Staticus\Acl\Actions::ACTION_READ,
                         Staticus\Acl\Actions::ACTION_WRITE,
                         Staticus\Acl\Actions::ACTION_SEARCH,
+                        Staticus\Acl\Actions::ACTION_LIST,
                         Staticus\Acl\Actions::ACTION_DELETE,
                     ]
                 ],
@@ -151,6 +152,7 @@ return [
                     Roles::USER => [
                         Staticus\Acl\Actions::ACTION_WRITE,
                         Staticus\Acl\Actions::ACTION_SEARCH,
+                        Staticus\Acl\Actions::ACTION_LIST,
                         Staticus\Acl\Actions::ACTION_DELETE,
                     ],
                 ],
