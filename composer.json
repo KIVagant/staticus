@@ -2,6 +2,14 @@
   "name": "kivagant/staticus",
   "type": "project",
   "license": "Apache 2.0",
+  "homepage": "https://github.com/KIVagant/staticus",
+  "description": "HTTP-based file proxy and file manager with the REST API",
+  "keywords": [
+    "file",
+    "manager",
+    "generator",
+    "api"
+  ],
   "extra": {
     "branch-alias": {
       "dev-master": "1.0-dev",
