@@ -176,7 +176,6 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
         $responsePost = $this->makeCropRequest($image, ['recreate' => '1']);
         $this->assertTrue($responsePost instanceof Response);
-        $this->assertTrue($responsePost instanceof ResourceDoResponse);
         /** @var EmptyResponse $responsePost */
         $this->assertEquals(200, $responsePost->getStatusCode());
         $this->assertFileExists($imagePath, $image->getFilePath());
