@@ -115,13 +115,12 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         /** @var JsonResponse $responseResource */
         $this->assertEquals($statusCode, $responseResource->getStatusCode());
 
-        $cropStr = 'null';
         $crop    = $image->getCrop();
-        if ($crop){
-            $cropStr = json_encode($crop->toArray());
-        }
+        $cropStr = $crop
+            ? '"crop":' . json_encode($crop->toArray()) . ','
+            : '';
 
-        $model = '{"resource":{"crop":' . $cropStr . ',"height":' . (int) $image->getHeight()
+        $model = '{"resource":{' . $cropStr . '"height":' . (int) $image->getHeight()
             . ',"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
             . '"nameAlternative":"","namespace":null,"new":true,'
             . '"recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'
