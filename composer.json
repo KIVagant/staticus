@@ -59,8 +59,10 @@
   },
   "scripts": {
     "post-create-project-cmd": [
-      "cp .env.dist .env",
-      "cp phpunit.xml.dist phpunit.xml"
+      "cp -n .env.dist .env | true",
+      "cp -n phpunit.xml.dist phpunit.xml | true",
+      "for i in `ls config/*.dist`; do cp -n $i `echo $i | sed 's/.php.dist/.php/'`; done | true",
+      "for i in `ls config/autoload/*.dist`; do cp -n $i `echo $i | sed 's/.php.dist/.php/'`; done | true"
     ],
     "check": [
       "@cs",
