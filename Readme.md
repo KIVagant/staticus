@@ -98,8 +98,8 @@ md-toc-filter ./Readme.md > Readme2.md
 ## Installation and tests
 
 Notice: composer will run ```post-create-project-cmd````.
-All distributive configuration files will be copied from their templates.
-If you do not trust to composer scripts, just add ```--no-scripts``` argument.
+All distributive configuration files will be copied without replacing from their templates.
+If you not trust to composer scripts, just add ```--no-scripts``` argument.
 
 1. This project works like ready-to-use application. So, you don't need to **require** it. Instead run:
 
