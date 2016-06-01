@@ -14,9 +14,9 @@ use SearchManager\Image\GoogleCustomSearchImage;
 use SearchManager\Image\SearchImageProviderProxy;
 use SearchManager\Manager;
 use Staticus\Config\Config;
-use Staticus\Diactoros\FileContentResponse\FileContentResponse;
-use Staticus\Diactoros\FileContentResponse\FileUploadedResponse;
-use Staticus\Diactoros\FileContentResponse\ResourceDoResponse;
+use Staticus\Diactoros\Response\FileContentResponse;
+use Staticus\Diactoros\Response\FileUploadedResponse;
+use Staticus\Diactoros\Response\ResourceDoResponse;
 use Staticus\Resources\Image\CropImageDO;
 use Staticus\Resources\Jpg\CropMiddleware;
 use Staticus\Resources\Jpg\ResourceDO;
@@ -115,13 +115,12 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         /** @var JsonResponse $responseResource */
         $this->assertEquals($statusCode, $responseResource->getStatusCode());
 
-        $cropStr = 'null';
         $crop    = $image->getCrop();
-        if ($crop){
-            $cropStr = json_encode($crop->toArray());
-        }
+        $cropStr = $crop
+            ? '"crop":' . json_encode($crop->toArray()) . ','
+            : '';
 
-        $model = '{"resource":{"crop":' . $cropStr . ',"height":' . (int) $image->getHeight()
+        $model = '{"resource":{' . $cropStr . '"height":' . (int) $image->getHeight()
             . ',"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
             . '"nameAlternative":"","namespace":null,"new":true,'
             . '"recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'
@@ -177,7 +176,6 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
         $responsePost = $this->makeCropRequest($image, ['recreate' => '1']);
         $this->assertTrue($responsePost instanceof Response);
-        $this->assertTrue($responsePost instanceof ResourceDoResponse);
         /** @var EmptyResponse $responsePost */
         $this->assertEquals(200, $responsePost->getStatusCode());
         $this->assertFileExists($imagePath, $image->getFilePath());

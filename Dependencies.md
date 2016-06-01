@@ -1,8 +1,11 @@
-# Dependencies
+# Staticus Dependencies
+
+This is a part of the [project documentation](Readme.md)
 
 - [kivagant/staticus-core](https://github.com/KIVagant/staticus-core) - the core part of this project
 - [kivagant/staticus-search-manager](https://github.com/KIVagant/staticus-search-manager) - Google API adapter
 - [kivagant/staticus-fractal-manager](https://github.com/KIVagant/staticus-fractal-manager) - simple fractal images generator
+- [Imagick](http://php.net/manual/en/book.imagick.php) - can be replaced in future, GD support in my TODO-list
 - [league/flysystem](http://flysystem.thephpleague.com/) - partially used, full integration planned
 - [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) - used only in config files, can be removed
 - [zendframework/zend-expressive](https://github.com/zendframework/zend-expressive) - In theory, can be replaced

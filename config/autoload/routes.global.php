@@ -12,11 +12,13 @@ return [
             App\Actions\Voice\ActionGet::class => App\Actions\Voice\ActionGet::class,
             App\Actions\Voice\ActionPost::class => App\Actions\Voice\ActionPost::class,
             App\Actions\Voice\ActionDelete::class => App\Actions\Voice\ActionDelete::class,
+            App\Actions\Voice\ActionList::class => App\Actions\Voice\ActionList::class,
 
             App\Actions\Image\ActionGet::class => App\Actions\Image\ActionGet::class,
             App\Actions\Image\ActionPost::class => App\Actions\Image\ActionPost::class,
             App\Actions\Image\ActionDelete::class => App\Actions\Image\ActionDelete::class,
             App\Actions\Image\ActionSearchJpg::class => App\Actions\Image\ActionSearchJpg::class,
+            App\Actions\Image\ActionList::class => App\Actions\Image\ActionList::class,
 
             AudioManager\Manager::class => AudioManager\Manager::class,
 
@@ -41,6 +43,7 @@ return [
 //            Staticus\Resources\Gif\SaveResourceMiddleware::class => Staticus\Resources\Gif\SaveResourceMiddleware::class,
 //            Staticus\Resources\Gif\ResourceResponseMiddleware::class => Staticus\Resources\Gif\ResourceResponseMiddleware::class,
 //            Staticus\Resources\Gif\StripMiddleware::class => Staticus\Resources\Gif\StripMiddleware::class,
+//            Staticus\Resources\Gif\CompressMiddleware::class => Staticus\Resources\Gif\CompressMiddleware::class,
 
             Staticus\Resources\Jpg\PrepareResourceMiddleware::class => Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
             Staticus\Resources\Jpg\ResizeMiddleware::class => Staticus\Resources\Jpg\ResizeMiddleware::class,
@@ -48,12 +51,14 @@ return [
             Staticus\Resources\Jpg\SaveResourceMiddleware::class => Staticus\Resources\Jpg\SaveResourceMiddleware::class,
             Staticus\Resources\Jpg\ResourceResponseMiddleware::class => Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
             Staticus\Resources\Jpg\StripMiddleware::class => Staticus\Resources\Jpg\StripMiddleware::class,
+            Staticus\Resources\Jpg\CompressMiddleware::class => Staticus\Resources\Jpg\CompressMiddleware::class,
 
 //            Staticus\Resources\Png\SaveResourceMiddleware::class => Staticus\Resources\Png\SaveResourceMiddleware::class,
 //            Staticus\Resources\Png\PostProcessingMiddleware::class => Staticus\Resources\Png\PostProcessingMiddleware::class,
 //            Staticus\Resources\Png\PrepareResourceMiddleware::class => Staticus\Resources\Png\PrepareResourceMiddleware::class,
 //            Staticus\Resources\Png\ResourceResponseMiddleware::class => Staticus\Resources\Png\ResourceResponseMiddleware::class,
 //            Staticus\Resources\Png\StripMiddleware::class => Staticus\Resources\Png\StripMiddleware::class,
+//            Staticus\Resources\Png\CompressMiddleware::class => Staticus\Resources\Png\CompressMiddleware::class,
         ],
         'factories' => [
             AudioManager\Adapter\AdapterInterface::class => App\Actions\Voice\VoiceAdapterFactory::class,
@@ -79,6 +84,18 @@ return [
         ],
     ],
     'routes' => [
+        [
+            'name' => 'list-voice',
+            'path' => '/{' . Staticus\Acl\Actions::ACTION_LIST . ':list}/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
+            'middleware' => [
+                Staticus\Resources\Mpeg\PrepareResourceMiddleware::class,
+                Staticus\Auth\AuthSessionMiddleware::class,
+                Staticus\Auth\AuthBasicMiddleware::class,
+                Staticus\Acl\AclMiddleware::class,
+                App\Actions\Voice\ActionList::class,
+            ],
+            'allowed_methods' => ['GET', 'POST'],
+        ],
         [
             'name' => 'get-voice',
             'path' => '/{name:.+}.{type:' . Staticus\Resources\Mpeg\ResourceDO::TYPE . '}',
@@ -120,6 +137,18 @@ return [
 
         /* JPG */
         [
+            'name' => 'list-jpg',
+            'path' => '/{' . Staticus\Acl\Actions::ACTION_LIST . ':list}/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
+            'middleware' => [
+                Staticus\Resources\Jpg\PrepareResourceMiddleware::class,
+                Staticus\Auth\AuthSessionMiddleware::class,
+                Staticus\Auth\AuthBasicMiddleware::class,
+                Staticus\Acl\AclMiddleware::class,
+                App\Actions\Image\ActionList::class,
+            ],
+            'allowed_methods' => ['GET', 'POST'],
+        ],
+        [
             'name' => 'search-jpg',
             'path' => '/{' . Staticus\Acl\Actions::ACTION_SEARCH . ':search}/{name:.+}.{type:' . Staticus\Resources\Jpg\ResourceDO::TYPE . '}',
             'middleware' => [
@@ -156,6 +185,7 @@ return [
                 App\Actions\Image\ActionPost::class,
                 Staticus\Resources\Jpg\SaveResourceMiddleware::class,
                 Staticus\Resources\Jpg\StripMiddleware::class,
+                Staticus\Resources\Jpg\CompressMiddleware::class,
                 Staticus\Resources\Jpg\CropMiddleware::class,
                 Staticus\Resources\Jpg\ResizeMiddleware::class,
                 Staticus\Resources\Jpg\ResourceResponseMiddleware::class,
