@@ -124,7 +124,9 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
             . ',"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
             . '"nameAlternative":"","namespace":null,"new":true,'
             . '"recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'
-            . '"variant":"def","version":0,"width":' . (int) $image->getWidth() . '},'
+            . '"variant":"def","version":0,"width":' . (int) $image->getWidth()
+            . ',"dimension":"0"'
+            . '},'
             . '"uri":"' . self::DEFAULT_RESOURCE_ENCODED . '.jpg"}';
         $this->assertEquals($model, $responseResource->getBody()->getContents());
 
