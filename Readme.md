@@ -97,6 +97,10 @@ md-toc-filter ./Readme.md > Readme2.md
 
 ## Installation and tests
 
+Notice: composer will run ```post-create-project-cmd````.
+All distributive configuration files will be copied without replacing from their templates.
+If you not trust to composer scripts, just add ```--no-scripts``` argument.
+
 1. This project works like ready-to-use application. So, you don't need to **require** it. Instead run:
 
 ```
@@ -701,7 +705,7 @@ You can add or change this behaviour with ACL configuration or with adding anoth
 
 ## License
 
-Made in the [EnglishDom online school](http://www.myenglishdom.com/).
+Made in the [EnglishDom online school](https://www.englishdom.com/en/).
 
 Copyright 2016 Eugene Glotov <kivagant at gmail.com>
 

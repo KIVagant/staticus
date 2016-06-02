@@ -5,6 +5,8 @@ if (env('ERROR_HANDLER', false)) {
         'error_handler' => true,
         'dependencies' => [
             'invokables' => [
+                // This handler will be used only
+                // if you will remove Staticus\Middlewares\ErrorHandler from middleware-pipeline.global.php config
                 'Zend\Expressive\Whoops' => Whoops\Run::class,
                 'Zend\Expressive\WhoopsPageHandler' => Whoops\Handler\PrettyPageHandler::class,
             ],
