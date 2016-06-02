@@ -4,6 +4,9 @@
         <testsuite name="Staticus">
             <directory>./test/StaticusTest</directory>
         </testsuite>
+        <testsuite name="StaticusCore">
+            <directory>./vendor/kivagant/staticus-core/src/test</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
