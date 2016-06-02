@@ -44,10 +44,11 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     const ROUTE_PREFIX = '/';
     const SIZE_X = 100;
     const SIZE_Y = 100;
-    const FILE_PATH_V0 = 'jpg/def/0/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
-    const FILE_PATH_V1 = 'jpg/def/1/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
-    const FILE_PATH_V2 = 'jpg/def/2/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
-    const FILE_PATH_V0_SIZE = 'jpg/def/0/' . self::SIZE_X . 'x'. self::SIZE_Y .'/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V0 = 'jpg/def/def/0/a20/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V1 = 'jpg/def/def/1/a20/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V2 = 'jpg/def/def/2/a20/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V0_SIZE = 'jpg/def/def/0/a20/' . self::SIZE_X . 'x'. self::SIZE_Y .'/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+
     // Cleanup and first test
     public function testDestroyAction()
     {
@@ -203,6 +204,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(201, $responsePost->getStatusCode());
         $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V2);
     }
+
     public function testDeleteAction()
     {
         $image = $this->prepareResource();
