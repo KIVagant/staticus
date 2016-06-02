@@ -254,13 +254,19 @@ Image, specified in the url parameter, will be uploaded to the server.
 
 ## Path structure
 
-- **[/namespace]/type/variant/version/[size/][other-type-specified/]uuid.type**
-- /jpg/def/0/0/22af64.jpg
-- /jpg/user/3/0/22af64.jpg
-- /jpg/fractal/0/30x40/22af64.jpg
-- /jpg/some_module/0/100x110/22af64.jpg
-- /mp3/def/0/22af64.mp3
-- /mp3/def/1/22af64.mp3
+Different resources types can have different path structure. The Resource object have path map specification inside.
+You can look into specification with method [ResourceDOInterface::getDirectoryTokens()](https://github.com/KIVagant/staticus-core/blob/master/src/Resources/ResourceDOInterface.php#L129)
+
+- **[/namespace]/type/shard_variant/variant/version/[size/][other-type-specified/]shard_uuid/uuid.type**
+- /jpg/def/def/0/0/22a/22af64.jpg
+- /jpg/use/user/3/0/22a/22af64.jpg
+- /jpg/fra/fractal/0/22a/30x40/22af64.jpg
+- /jpg/som/some_module/0/22a/100x110/22af64.jpg
+- /mp3/def/def/0/22a/22af64.mp3
+- /mp3/def/def/1/22a/22af64.mp3
+
+Notice: ```shard_variant```` and ```shard_uuid``` should help to avoid filesystem crash or critical response time.
+In examples below their can be skipped.
 
 ## JPG Type
 
