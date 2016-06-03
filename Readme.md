@@ -110,19 +110,15 @@ $ cd staticus
 
 2. Open **.env** file for editing and setup the variables inside. First of all, **do not forget to setup the DATA_DIR**!
 
-3. **Important note:** The next step will try to create and delete test files.
+3. **Important note:** The next step will try to create and delete test files (in [AcceptanceTest](test/StaticusTest/Actions/Fractal/AcceptanceTest.php).
 So, read the [License](#license), run and pray :)
 
 ```
 $ composer run-script test
 > phpunit
 PHPUnit 4.8.24 by Sebastian Bergmann and contributors.
-
-.........
-
-Time: 180 ms, Memory: 6.75Mb
-
-OK (9 tests, 67 assertions)
+...
+OK (85 tests, 377 assertions)
 ```
 
 Then you can run project without Nginx and works with it almost like in examples below. The only difference is that
