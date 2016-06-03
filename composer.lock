@@ -89,28 +89,27 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-core.git",
-                "reference": "e8034641fa61e379c5dda0d86687ef0d5f63b94a"
+                "reference": "95afbff892a0fb85b45d007ac1a303058c24ba72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/e8034641fa61e379c5dda0d86687ef0d5f63b94a",
-                "reference": "e8034641fa61e379c5dda0d86687ef0d5f63b94a",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/95afbff892a0fb85b45d007ac1a303058c24ba72",
+                "reference": "95afbff892a0fb85b45d007ac1a303058c24ba72",
                 "shasum": ""
             },
             "require": {
-                "aura/di": "^3.1",
                 "league/flysystem": "^1.0",
-                "mtymek/expressive-config-manager": "^0.4.0",
                 "php": "^5.5 || ^7.0",
-                "roave/security-advisories": "dev-master",
                 "zendframework/zend-expressive": "^1.0",
-                "zendframework/zend-expressive-fastroute": "^1.0",
                 "zendframework/zend-expressive-helpers": "^2.0",
                 "zendframework/zend-permissions-acl": "^2.6",
                 "zendframework/zend-session": "^2.7",
                 "zendframework/zend-stdlib": "~2.7"
             },
-            "type": "project",
+            "require-dev": {
+                "league/flysystem-memory": "^1.0"
+            },
+            "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.0-dev",
@@ -127,13 +126,14 @@
                 "Apache 2.0"
             ],
             "description": "The core part of Staticus Project. See more in the kivagant/staticus project on the GitHub.",
+            "homepage": "https://github.com/KIVagant/staticus-core",
             "keywords": [
-                "cache",
-                "download",
-                "nginx",
-                "staticus"
+                "api",
+                "file",
+                "generator",
+                "manager"
             ],
-            "time": "2016-05-28 23:21:14"
+            "time": "2016-06-03 16:22:25"
         },
         {
             "name": "kivagant/staticus-fractal-manager",
@@ -141,19 +141,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-fractal-manager.git",
-                "reference": "d81d256fe88f2c616ff9f64c514c0ff42c411867"
+                "reference": "c05d4c3fae35cca7b124a41d891f33de30481dcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/d81d256fe88f2c616ff9f64c514c0ff42c411867",
-                "reference": "d81d256fe88f2c616ff9f64c514c0ff42c411867",
+                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/c05d4c3fae35cca7b124a41d891f33de30481dcb",
+                "reference": "c05d4c3fae35cca7b124a41d891f33de30481dcb",
                 "shasum": ""
             },
             "require": {
                 "kivagant/staticus-core": "dev-master",
                 "php": "^5.5 || ^7.0"
             },
-            "type": "project",
+            "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.0-dev",
@@ -169,7 +169,13 @@
             "license": [
                 "LGPL"
             ],
-            "time": "2016-05-29 00:59:55"
+            "homepage": "https://github.com/KIVagant/staticus-fractal-manager",
+            "keywords": [
+                "api",
+                "fractal",
+                "generator"
+            ],
+            "time": "2016-05-31 15:35:30"
         },
         {
             "name": "kivagant/staticus-search-manager",
@@ -177,19 +183,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-search-manager.git",
-                "reference": "93f3a6c219bf69dc72c7ea36366645dae0b962a0"
+                "reference": "53fa12fc9b081a44ca1ed978c50ac909db5f37a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/93f3a6c219bf69dc72c7ea36366645dae0b962a0",
-                "reference": "93f3a6c219bf69dc72c7ea36366645dae0b962a0",
+                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/53fa12fc9b081a44ca1ed978c50ac909db5f37a9",
+                "reference": "53fa12fc9b081a44ca1ed978c50ac909db5f37a9",
                 "shasum": ""
             },
             "require": {
                 "kivagant/staticus-core": "dev-master",
                 "php": "^5.5 || ^7.0"
             },
-            "type": "project",
+            "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.0-dev",
@@ -205,7 +211,13 @@
             "license": [
                 "Apache 2.0"
             ],
-            "time": "2016-05-29 00:50:57"
+            "homepage": "https://github.com/KIVagant/staticus-search-manager",
+            "keywords": [
+                "api",
+                "google",
+                "search"
+            ],
+            "time": "2016-06-01 07:02:14"
         },
         {
             "name": "league/flysystem",
@@ -2382,16 +2394,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.6.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "1bcdf03b068a530ac1962ce671dead356eeba43b"
+                "reference": "fb72ed32f8418db5e7770be1653e62e0d6f5dd3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/1bcdf03b068a530ac1962ce671dead356eeba43b",
-                "reference": "1bcdf03b068a530ac1962ce671dead356eeba43b",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/fb72ed32f8418db5e7770be1653e62e0d6f5dd3d",
+                "reference": "fb72ed32f8418db5e7770be1653e62e0d6f5dd3d",
                 "shasum": ""
             },
             "require": {
@@ -2456,20 +2468,20 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-04-03 22:58:34"
+            "time": "2016-05-30 22:24:32"
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.0.6",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "0047c8366744a16de7516622c5b7355336afae96"
+                "reference": "eca51b7b65eb9be6af88ad7cc91685f1556f5c9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/0047c8366744a16de7516622c5b7355336afae96",
-                "reference": "0047c8366744a16de7516622c5b7355336afae96",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/eca51b7b65eb9be6af88ad7cc91685f1556f5c9a",
+                "reference": "eca51b7b65eb9be6af88ad7cc91685f1556f5c9a",
                 "shasum": ""
             },
             "require": {
@@ -2478,7 +2490,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -2505,7 +2517,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:55:57"
+            "time": "2016-05-26 21:46:24"
         }
     ],
     "aliases": [],
