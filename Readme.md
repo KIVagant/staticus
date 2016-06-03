@@ -246,7 +246,7 @@ PUT is not supported.
 #### POST author: string, author
 
 TODO: not implemented yet
-Line with information about the author of the changes in an arbitrary string. Required only for logging.
+The line with information about the author of the changes in an arbitrary string. Required only for logging.
 
 #### POST uri=http Upload image by remote URI
 
@@ -254,7 +254,7 @@ Image, specified in the url parameter, will be uploaded to the server.
 
 ## Path structure
 
-Different resources types can have different path structure. The Resource object have path map specification inside.
+Different resources types can have different path structure. The Resource object have a path map specification inside.
 You can look into specification with method [ResourceDOInterface::getDirectoryTokens()](https://github.com/KIVagant/staticus-core/blob/master/src/Resources/ResourceDOInterface.php#L129)
 
 - **[/namespace]/type/shard_variant/variant/version/[size/][other-type-specified/]shard_uuid/uuid.type**
@@ -266,7 +266,7 @@ You can look into specification with method [ResourceDOInterface::getDirectoryTo
 - /mp3/def/def/1/22a/22af64.mp3
 
 Notice: ```shard_variant```` and ```shard_uuid``` should help to avoid filesystem crash or critical response time.
-In examples below their can be skipped.
+In the examples below their can be skipped.
 
 ## JPG Type
 
