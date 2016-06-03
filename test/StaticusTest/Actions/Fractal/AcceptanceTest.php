@@ -123,7 +123,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
         $model = '{"resource":{' . $cropStr . '"height":' . (int) $image->getHeight()
             . ',"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
-            . '"nameAlternative":"","namespace":null,"new":true,'
+            . '"nameAlternative":"","namespace":"","new":true,'
             . '"recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'
             . '"variant":"def","version":0,"width":' . (int) $image->getWidth()
             . ',"dimension":"0"'
