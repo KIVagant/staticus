@@ -89,12 +89,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-core.git",
-                "reference": "4d09e6c59ef901669929a88c7f2ac6b3aec888ef"
+                "reference": "b6e3d6c02acd2a824100209f4a6cd5229c3e362d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/4d09e6c59ef901669929a88c7f2ac6b3aec888ef",
-                "reference": "4d09e6c59ef901669929a88c7f2ac6b3aec888ef",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/b6e3d6c02acd2a824100209f4a6cd5229c3e362d",
+                "reference": "b6e3d6c02acd2a824100209f4a6cd5229c3e362d",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 "generator",
                 "manager"
             ],
-            "time": "2016-06-03 20:57:55"
+            "time": "2016-06-03 22:05:48"
         },
         {
             "name": "kivagant/staticus-fractal-manager",
