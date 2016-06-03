@@ -178,6 +178,9 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
     public function testPostRecreateWithCrop()
     {
+        if (!class_exists(\Imagick::class)) {
+            $this->markTestSkipped('Imagick is not installed');
+        }
         $imagePath = $this->dataDir . static::FILE_PATH_V0_SIZE;
         if (file_exists($imagePath)) {
             unlink($imagePath);
