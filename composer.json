@@ -19,7 +19,7 @@
   "minimum-stability" : "dev",
   "prefer-stable" : true,
   "require": {
-    "php": "^5.5 || ^7.0",
+    "php": "^5.6 || ^7.0",
     "kivagant/staticus-core": "dev-master",
     "kivagant/staticus-search-manager": "dev-master",
     "kivagant/staticus-fractal-manager": "dev-master",

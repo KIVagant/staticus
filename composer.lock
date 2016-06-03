@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "72938edf4af35a9bc303d37521f5ef98",
-    "content-hash": "98529fcf6f9fad6dadf5c8658d083008",
+    "hash": "abdb7285e4cbcffc42825a6a24facfd6",
+    "content-hash": "cfebf176489a6cdb70116c584066d6c0",
     "packages": [
         {
             "name": "aura/di",
@@ -89,17 +89,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-core.git",
-                "reference": "0616a61817a0ce3a465bd21bd0cc947b3c113257"
+                "reference": "93026b2e90519744f1fc480e032e6991862796c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/0616a61817a0ce3a465bd21bd0cc947b3c113257",
-                "reference": "0616a61817a0ce3a465bd21bd0cc947b3c113257",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/93026b2e90519744f1fc480e032e6991862796c8",
+                "reference": "93026b2e90519744f1fc480e032e6991862796c8",
                 "shasum": ""
             },
             "require": {
                 "league/flysystem": "^1.0",
-                "php": "^5.5 || ^7.0",
+                "php": "^5.6 || ^7.0",
                 "zendframework/zend-expressive": "^1.0",
                 "zendframework/zend-expressive-helpers": "^2.0",
                 "zendframework/zend-permissions-acl": "^2.6",
@@ -133,7 +133,7 @@
                 "generator",
                 "manager"
             ],
-            "time": "2016-06-03 17:44:40"
+            "time": "2016-06-03 17:48:23"
         },
         {
             "name": "kivagant/staticus-fractal-manager",
@@ -141,17 +141,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-fractal-manager.git",
-                "reference": "c05d4c3fae35cca7b124a41d891f33de30481dcb"
+                "reference": "e8a3b86674ae9151e8813a89e2c1efa6264df77e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/c05d4c3fae35cca7b124a41d891f33de30481dcb",
-                "reference": "c05d4c3fae35cca7b124a41d891f33de30481dcb",
+                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/e8a3b86674ae9151e8813a89e2c1efa6264df77e",
+                "reference": "e8a3b86674ae9151e8813a89e2c1efa6264df77e",
                 "shasum": ""
             },
             "require": {
                 "kivagant/staticus-core": "dev-master",
-                "php": "^5.5 || ^7.0"
+                "php": "^5.6 || ^7.0"
             },
             "type": "library",
             "extra": {
@@ -175,7 +175,7 @@
                 "fractal",
                 "generator"
             ],
-            "time": "2016-05-31 15:35:30"
+            "time": "2016-06-03 17:48:23"
         },
         {
             "name": "kivagant/staticus-search-manager",
@@ -183,17 +183,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-search-manager.git",
-                "reference": "53fa12fc9b081a44ca1ed978c50ac909db5f37a9"
+                "reference": "47e6d263e060bbdaa4df4bbb5e06c2b156fd898f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/53fa12fc9b081a44ca1ed978c50ac909db5f37a9",
-                "reference": "53fa12fc9b081a44ca1ed978c50ac909db5f37a9",
+                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/47e6d263e060bbdaa4df4bbb5e06c2b156fd898f",
+                "reference": "47e6d263e060bbdaa4df4bbb5e06c2b156fd898f",
                 "shasum": ""
             },
             "require": {
                 "kivagant/staticus-core": "dev-master",
-                "php": "^5.5 || ^7.0"
+                "php": "^5.6 || ^7.0"
             },
             "type": "library",
             "extra": {
@@ -217,7 +217,7 @@
                 "google",
                 "search"
             ],
-            "time": "2016-06-01 07:02:14"
+            "time": "2016-06-03 17:48:23"
         },
         {
             "name": "league/flysystem",
@@ -2531,7 +2531,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.5 || ^7.0"
+        "php": "^5.6 || ^7.0"
     },
     "platform-dev": []
 }
