@@ -1,5 +1,14 @@
 # Staticus
 
+Application:
+[![Build Status](https://scrutinizer-ci.com/g/KIVagant/staticus/badges/build.png)](https://scrutinizer-ci.com/g/KIVagant/staticus/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KIVagant/staticus/badges/quality-score.png)](https://scrutinizer-ci.com/g/KIVagant/staticus/)
+[![Code Coverage](https://scrutinizer-ci.com/g/KIVagant/staticus/badges/coverage.png)](https://scrutinizer-ci.com/g/KIVagant/staticus/)
+Core:
+[![Build Status](https://scrutinizer-ci.com/g/KIVagant/staticus-core/badges/build.png)](https://scrutinizer-ci.com/g/KIVagant/staticus-core/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KIVagant/staticus-core/badges/quality-score.png)](https://scrutinizer-ci.com/g/KIVagant/staticus-core/)
+[![Code Coverage](https://scrutinizer-ci.com/g/KIVagant/staticus-core/badges/coverage.png)](https://scrutinizer-ci.com/g/KIVagant/staticus-core/)
+
 In short: this service is an "invisible" layer, which dynamically looking for requested static files and tells to Nginx
 where they placed. "Pipeline post-processing", content generators and ACL support give to you a powerfull instrument
 for a files management on your web-service.
