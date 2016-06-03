@@ -113,7 +113,7 @@ If you not trust to composer scripts, just add ```--no-scripts``` argument.
 1. This project works like ready-to-use application. So, you don't need to **require** it. Instead run:
 
 ```
-$ composer create-project "kivagant/staticus":"dev-master"
+$ composer create-project "kivagant/staticus"
 $ cd staticus
 ```
 
