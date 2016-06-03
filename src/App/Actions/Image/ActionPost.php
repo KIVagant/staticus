@@ -2,7 +2,6 @@
 namespace App\Actions\Image;
 
 use League\Flysystem\FilesystemInterface;
-use SearchManager\Manager as SearchManager;
 use Staticus\Middlewares\ActionPostAbstract;
 use Staticus\Resources\ResourceDOInterface;
 use Staticus\Resources\Image\ResourceImageDOInterface;
@@ -14,10 +13,9 @@ class ActionPost extends ActionPostAbstract
         ResourceImageDOInterface $resourceDO
         , FilesystemInterface $filesystem
         , FractalManager $fractal
-        , SearchManager $generatorSearch
     )
     {
-        parent::__construct($resourceDO, $filesystem, $fractal, $generatorSearch);
+        parent::__construct($resourceDO, $filesystem, $fractal);
     }
 
     /**
