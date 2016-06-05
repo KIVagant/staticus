@@ -190,10 +190,6 @@ return [
                     ],
                 ],
             ],
-            'fractal' . Staticus\Resources\Mpeg\ResourceDO::class => [
-                AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
-                    . Staticus\Resources\File\ResourceDO::class,
-            ],
             'fractal' . Staticus\Resources\Image\ResourceImageDO::class => [
                 AclService::INHERIT => ResourceDOInterface::NAMESPACES_WILDCARD
                     . Staticus\Resources\File\ResourceDO::class,
