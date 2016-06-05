@@ -201,43 +201,49 @@ PUT is not supported.
 
 #### var: string, resource variant name
 
-По-умолчанию используется вариант default (зарезервированное имя, которое не обязательно передавать).
-Для некоторых ресурсов может понадобиться хранение или генерация разных уникальных вариантов.
-Например, пользователь может загрузить собственный вариант ресурса или ресурс может быть сразу генерирован
-в нескольких вариантах.
+By default the 'def' variant is used.
+
+For some resources may need to store or generate different unique variants.
+For example, a user can upload his own version of a resource or a resource can be generated in several variants.
 
 #### alt: string, alternative resource name
 
-*Этот может параметр по-разному обрабатываться для разных типов.*
+*This parameter can be handled differently for different resource types.*
 
-*При создании ресурса* можно передать альтернативное имя.
+*When you create a resource*, you can pass an alternative name.
 
-Иногда основного имени ресурса недостаточно для правильной генерации данных или для обеспечения уникальности.
-Например, если основное короткое имя не в полной мере описывает ресурс или не хватает длины GET-запроса,
-или полное имя содержит Unicode-символы.
+Sometimes the main resource name is not enough to generate the correct data, or to ensure uniqueness.
+For example, if the common short name is not fully describes the resource, or lacks length of a GET-request,
+or full name contains Unicode-characters etc.
 
-В зависимости от типа ресурса, альтернативное имя может быть дополнительно обработано или проигнорировано.
-Например, оно будет использовано для озвучки *вместо основного имени*.
-А для поиска изображений — *вместе с основным именем*.
+Depending on the resource type, an alternate name can be further processed or ignored.
+For example, the alternative name will be used for voicing *instead of the common name*.
+And for the image searching – *along with the main name*.
 
-Ресурсы ```car.jpg```, ```car.jpg?alt=вагон``` и ```car.jpg?alt=машина``` считаются **разными ресурсами**.
-Альтернативное имя будет использовано при формировании **uuid** ресурса вместе с основным именем.
+Resources ```car.jpg```, ```car.jpg?alt=вагон``` and ```car.jpg?alt=машина``` considered as **different resources**.
+Alternative name will be used in the formation **uuid** resource together with the basic name.
 
 #### v: integer, version id
 
-Каждый вариант ресурса содержит собственные версии.
-По-умолчанию используется нулевая версия, которая отражает последнее актуальное состояние ресурса.
-Передавать v=0 не обязательно.
-Если стандартный или особый вариант ресурса изменяется (пересоздаётся или удаляется), то изменяемый вариант
-автоматически сохраняется в виде версии, которой присваивается автоинкрементный идентификатор.
-Удалённая нулевая версия не удаляет ресурс целиком.
-Если при изменении ресурса отправить указатель конкретной версии, её можно будет окончательно удалить или заменить.
-Если удалить версию в середине списка (например, v=2), появится "дырка": v=1: 200, v=2: 404, v=3: 200.
-Если удалить версию в конце списка, при очередно изменении появится другая версия с этим же номером:
-1. v=1: 200, v=2: 404 < удалена
-2. v=1: 200, v=2: 200 < добавлена заново после изменения нулевой версии
+Each version of a resource contains its own version.
+By **default the 0 version** used (and v=0 is not required), which reflects the *latest state* of the current resource.
 
-Чтобы удалить ресурс полностью, нужно добавить параметр **destroy**.
+If a standard or a special version of the resource is changed (recreated or deleted), the current zero-version
+is automatically saved as a new auto-increment version and the new zero-version will be created instead.
+
+When the zero version is deleted, it's just moved to a new auto-increment version and the other versions
+will be not deleted.
+
+When changing the resource you can send a pointer to the specific version and it can be completely removed or replaced.
+If the version in the middle of the list will be deleted (v=2 for example), a "hole" will be appear:
+v=1: 200, v=2: 404 Not found, v=3: 200.
+
+If you delete a version at the end of the list, the other version will be available at the next change to the same number:
+
+1. v=1: 200, v=2: 404 < removed
+2. v=1: 200, v=2: 200 < added again after changing the zero version
+
+For completely resource deleting, you need to send a **destroy** parameter.
 
 #### DELETE destroy: bool, remove without backup
 
