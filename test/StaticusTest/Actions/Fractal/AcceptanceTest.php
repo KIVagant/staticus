@@ -16,7 +16,6 @@ use SearchManager\Manager;
 use Staticus\Config\Config;
 use Staticus\Diactoros\Response\FileContentResponse;
 use Staticus\Diactoros\Response\FileUploadedResponse;
-use Staticus\Diactoros\Response\ResourceDoResponse;
 use Staticus\Resources\Image\CropImageDO;
 use Staticus\Resources\Jpg\CropMiddleware;
 use Staticus\Resources\Jpg\ResourceDO;
@@ -44,21 +43,35 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     const ROUTE_PREFIX = '/';
     const SIZE_X = 100;
     const SIZE_Y = 100;
-    const FILE_PATH_V0 = 'jpg/def/0/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
-    const FILE_PATH_V1 = 'jpg/def/1/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
-    const FILE_PATH_V2 = 'jpg/def/2/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
-    const FILE_PATH_V0_SIZE = 'jpg/def/0/' . self::SIZE_X . 'x'. self::SIZE_Y .'/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V0 = 'jpg/def/def/0/a20/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V1 = 'jpg/def/def/1/a20/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V2 = 'jpg/def/def/2/a20/0/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+    const FILE_PATH_V0_SIZE = 'jpg/def/def/0/a20/' . self::SIZE_X . 'x'. self::SIZE_Y .'/' . self::DEFAULT_RESOURCE_UUID . '.jpg';
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->resetFileSystem();
+        $this->dataDir = env('DATA_DIR', '/tmp/');
+    }
+
+
     // Cleanup and first test
     public function testDestroyAction()
     {
         $image = $this->prepareResource();
         $this->makeDeleteRequest($image, ['destroy' => '1']);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
     }
 
     public function testGetNotFound()
     {
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
         $image = $this->prepareResource();
         $response = $this->makeGetRequest($image);
         /** @var EmptyResponse $response */
@@ -67,21 +80,21 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
     public function testPostCreate()
     {
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
         $image = $this->prepareResource();
         $responsePost = $this->makePostRequest($image);
         $this->assertTrue($responsePost instanceof Response);
         $this->assertTrue($responsePost instanceof FileContentResponse);
         /** @var EmptyResponse $responsePost */
         $this->assertEquals(201, $responsePost->getStatusCode());
-        $responseSave = $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V0);
-        $responseResource = $this->subtestResourceResponseMiddleware($responseSave, $image, 201);
+        $responseSave = $this->subtestSaveResourceMiddleware($responsePost, $image, $this->dataDir . static::FILE_PATH_V0);
+        $this->subtestResourceResponseMiddleware($responseSave, $image, 201);
     }
 
     protected function subtestSaveResourceMiddleware($responsePost, ResourceDO $image, $filePath)
     {
-        $this->assertFileNotExists($filePath);
-        $action = new SaveResourceMiddleware($image, $this->getFileSystem());
+        $this->assertFalse($this->filesystem->has($filePath));
+        $action = new SaveResourceMiddleware($image, $this->resetFileSystem());
         $responseSave = null;
         $resourceRoute = $this->getResourceRoute($image);
         $action(new ServerRequest([$resourceRoute]), $responsePost, function (
@@ -93,7 +106,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         });
         $this->assertTrue($responseSave instanceof Response);
         $this->assertTrue($responseSave instanceof EmptyResponse);
-        $this->assertFileExists($filePath, $image->getFilePath());
+        $this->assertTrue($this->filesystem->has($filePath), $image->getFilePath());
 
         return $responseSave;
     }
@@ -122,30 +135,28 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
         $model = '{"resource":{' . $cropStr . '"height":' . (int) $image->getHeight()
             . ',"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
-            . '"nameAlternative":"","namespace":null,"new":true,'
+            . '"nameAlternative":"","namespace":"","new":true,'
             . '"recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'
             . '"variant":"def","version":0,"width":' . (int) $image->getWidth()
             . ',"dimension":"0"'
             . '},'
             . '"uri":"' . self::DEFAULT_RESOURCE_ENCODED . '.jpg"}';
         $this->assertEquals($model, $responseResource->getBody()->getContents());
-
-        return $responseResource;
     }
 
     public function testGetFound()
     {
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
         $image = $this->prepareResource();
         $response = $this->makeGetRequest($image);
         /** @var EmptyResponse $response */
         $this->assertEquals(200, $response->getStatusCode());
-        $model = [realpath(env('DATA_DIR') . static::FILE_PATH_V0)];
+        $model = [realpath($this->dataDir . static::FILE_PATH_V0)];
         $this->assertEquals($model, $response->getHeader('X-Accel-Redirect'));
     }
     public function testPostNotModified()
     {
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
         $image = $this->prepareResource();
         $responsePost = $this->makePostRequest($image);
         $this->assertTrue($responsePost instanceof Response);
@@ -155,23 +166,26 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     }
     public function testPostRecreate()
     {
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
         $image = $this->prepareResource();
         $responsePost = $this->makePostRequest($image, ['recreate' => '1']);
         $this->assertTrue($responsePost instanceof Response);
         $this->assertTrue($responsePost instanceof FileContentResponse);
         /** @var EmptyResponse $responsePost */
         $this->assertEquals(201, $responsePost->getStatusCode());
-        $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V1);
+        $this->subtestSaveResourceMiddleware($responsePost, $image, $this->dataDir . static::FILE_PATH_V1);
     }
 
     public function testPostRecreateWithCrop()
     {
-        $imagePath = env('DATA_DIR') . static::FILE_PATH_V0_SIZE;
+        if (!class_exists(\Imagick::class)) {
+            $this->markTestSkipped('Imagick is not installed');
+        }
+        $imagePath = $this->dataDir . static::FILE_PATH_V0_SIZE;
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
         $image = $this->prepareResource();
         $this->appendCropToDO($image);
         $this->appendSize($image);
@@ -180,7 +194,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($responsePost instanceof Response);
         /** @var EmptyResponse $responsePost */
         $this->assertEquals(200, $responsePost->getStatusCode());
-        $this->assertFileExists($imagePath, $image->getFilePath());
+        $this->assertTrue($this->filesystem->has($imagePath), $image->getFilePath());
         list($width, $height) = getimagesize($imagePath);
         $this->assertEquals($width, $image->getCrop()->getWidth());
         $this->assertEquals($height, $image->getCrop()->getHeight());
@@ -192,17 +206,18 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
 
     public function testPostUpload()
     {
-        $uploadedFiles = [new UploadedFile(env('DATA_DIR') . static::FILE_PATH_V0, 123, UPLOAD_ERR_OK)];
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V2);
+        $uploadedFiles = [new UploadedFile($this->dataDir . static::FILE_PATH_V0, 123, UPLOAD_ERR_OK)];
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V2));
         $image = $this->prepareResource();
         $responsePost = $this->makePostRequest($image, ['recreate' => '1'], $uploadedFiles);
         $this->assertTrue($responsePost instanceof Response);
         $this->assertTrue($responsePost instanceof FileUploadedResponse);
         /** @var EmptyResponse $responsePost */
         $this->assertEquals(201, $responsePost->getStatusCode());
-        $this->subtestSaveResourceMiddleware($responsePost, $image, env('DATA_DIR') . static::FILE_PATH_V2);
+        $this->subtestSaveResourceMiddleware($responsePost, $image, $this->dataDir . static::FILE_PATH_V2);
     }
+
     public function testDeleteAction()
     {
         $image = $this->prepareResource();
@@ -210,22 +225,22 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         // First, delete the special version 2
         $image->setVersion(2);
         $this->makeDeleteRequest($image);
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V0);
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V1);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V2);
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V1));
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V2));
 
         // Second, delete the basic version (backup version will created)
         $image->setVersion(0);
         $this->makeDeleteRequest($image);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V0);
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V1);
-        $this->assertFileExists(env('DATA_DIR') . static::FILE_PATH_V2);
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V1));
+        $this->assertTrue($this->filesystem->has($this->dataDir . static::FILE_PATH_V2));
 
         // And now destroy all created files (test cleanup)
         $this->makeDeleteRequest($image, ['destroy' => '1']);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V0);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V1);
-        $this->assertFileNotExists(env('DATA_DIR') . static::FILE_PATH_V2);
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V0));
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V1));
+        $this->assertFalse($this->filesystem->has($this->dataDir . static::FILE_PATH_V2));
     }
 
     protected function prepareResource()
@@ -236,7 +251,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $image->setVariant();
         $image->setVersion();
         $image->setRecreate();
-        $image->setBaseDirectory(env('DATA_DIR'));
+        $image->setBaseDirectory($this->dataDir);
         $image->setAuthor('');
         $image->setWidth();
         $image->setHeight();
@@ -292,7 +307,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     {
         $resourceRoute = $this->getResourceRoute($image);
         $request = new ServerRequest([$resourceRoute]);
-        $action = new ActionGet($image, $this->getFileSystem());
+        $action = new ActionGet($image, $this->resetFileSystem());
         $response = $this->invokeAction($request, $action, $image);
         $this->assertTrue($response instanceof Response);
         $this->assertTrue($response instanceof EmptyResponse);
@@ -305,7 +320,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
         $request = new ServerRequest([$resourceRoute], $uploadedFiles, null, null, 'php://input', [], [], [], $parsedBody);
         $fractalManager = $this->fractalManagerFactory();
         $searchManager = $this->searchManagerFactory();
-        $action = new ActionPost($image, $this->getFileSystem(), $fractalManager, $searchManager);
+        $action = new ActionPost($image, $this->resetFileSystem(), $fractalManager, $searchManager);
         $response = $this->invokeAction($request, $action, $image);
 
         return $response;
@@ -315,7 +330,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     {
         $resourceRoute = $this->getResourceRoute($image);
         $request = new ServerRequest([$resourceRoute], $uploadedFiles, null, null, 'php://input', [], [], [], $parsedBody);
-        $action = new CropMiddleware($image, $this->getFileSystem());
+        $action = new CropMiddleware($image, $this->resetFileSystem());
 
         $response = new EmptyResponse(200, [
             'Content-Type' => 'image/jpg',
@@ -330,7 +345,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     {
         $resourceRoute = $this->getResourceRoute($image);
         $request = new ServerRequest([$resourceRoute], [], null, null, 'php://input', [], [], $queryParams);
-        $action = new ActionDelete($image, $this->getFileSystem());
+        $action = new ActionDelete($image, $this->resetFileSystem());
         $response = $this->invokeAction($request, $action, $image);
         $this->assertTrue($response instanceof Response);
         $this->assertTrue($response instanceof EmptyResponse);
@@ -374,11 +389,11 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Filesystem
      */
-    protected function getFileSystem()
+    protected function resetFileSystem()
     {
         $adapter = new Local('/'); // can't be replaced to env('DATA_DIR') until all file operations will be refactored
-        $filesystem = new Filesystem($adapter);
+        $this->filesystem = new Filesystem($adapter);
 
-        return $filesystem;
+        return $this->filesystem;
     }
 }

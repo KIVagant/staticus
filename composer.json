@@ -19,10 +19,10 @@
   "minimum-stability" : "dev",
   "prefer-stable" : true,
   "require": {
-    "php": "^5.5 || ^7.0",
-    "kivagant/staticus-core": "dev-master",
-    "kivagant/staticus-search-manager": "dev-master",
-    "kivagant/staticus-fractal-manager": "dev-master",
+    "php": "^5.6 || ^7.0",
+    "kivagant/staticus-core": "^1.0",
+    "kivagant/staticus-search-manager": "^1.0",
+    "kivagant/staticus-fractal-manager": "^1.0",
     "newage/audio-manager": "^1.1",
     "zendframework/zend-expressive": "^1.0",
     "zendframework/zend-expressive-helpers": "^2.0",
@@ -39,7 +39,8 @@
   "require-dev": {
     "phpunit/phpunit": "^4.8",
     "squizlabs/php_codesniffer": "^2.3",
-    "filp/whoops": "^1.1 || ^2.0"
+    "filp/whoops": "^1.1 || ^2.0",
+    "league/flysystem-memory": "^1.0"
   },
   "autoload" : {
     "files": [

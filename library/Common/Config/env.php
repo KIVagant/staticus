@@ -1,7 +1,7 @@
 <?php
 
 // Environments helpers from Laravel Framework
-if ( ! function_exists('value'))
+if (!function_exists('value'))
 {
     /**
      * Return the default value of the given value.
@@ -14,7 +14,7 @@ if ( ! function_exists('value'))
         return $value instanceof Closure ? $value() : $value;
     }
 }
-if ( ! function_exists('env'))
+if (!function_exists('env'))
 {
     /**
      * Gets the value of an environment variable. Supports boolean, empty and null.
@@ -27,7 +27,9 @@ if ( ! function_exists('env'))
     {
         $value = getenv($key);
 
-        if ($value === false) return value($default);
+        if ($value === false) {
+            return value($default);
+        }
 
         switch (strtolower($value))
         {

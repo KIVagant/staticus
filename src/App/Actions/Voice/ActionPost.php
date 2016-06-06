@@ -17,7 +17,7 @@ class ActionPost extends ActionPostAbstract
 
     public function __construct(ResourceDO $resourceDO, FilesystemInterface $filesystem, Manager $manager)
     {
-        parent::__construct($resourceDO, $filesystem, $manager, null);
+        parent::__construct($resourceDO, $filesystem, $manager);
     }
     /**
      * @param ResourceDOInterface $resourceDO
