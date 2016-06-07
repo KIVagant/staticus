@@ -94,7 +94,18 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
     protected function subtestSaveResourceMiddleware($responsePost, ResourceDO $image, $filePath)
     {
         $this->assertFalse($this->filesystem->has($filePath));
-        $action = new SaveResourceMiddleware($image, $this->resetFileSystem());
+        $config = [
+            'staticus' => [
+                'magic_defaults' => [
+                    'allow' => true,
+                    'variant' => true,
+                    'version' => true,
+                    'size' => true,
+                ]
+            ]
+        ];
+        $config = new Config($config);
+        $action = new SaveResourceMiddleware($image, $this->resetFileSystem(), $config);
         $responseSave = null;
         $resourceRoute = $this->getResourceRoute($image);
         $action(new ServerRequest([$resourceRoute]), $responsePost, function (

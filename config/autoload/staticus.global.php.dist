@@ -24,6 +24,26 @@ return [
         // If true and resource name is not valid and contains bad symbols, their will be converted to '-' for the end-point url.
         // If false – Bad request response will return.
         'clean_resource_name' => true,
+
+        /**
+         * Then new resource file is created, if one of path-specific properties is different from defaults,
+         * this resource can be copied to the default path, if it was not created before (for accessing by shortest urls)
+         *
+         * For example, if you create a version 5 for resource, version 0 will be created too.
+         *
+         * Parameters below helps you to manage this behaviour.
+         *
+         * @see \Staticus\Resources\Middlewares\SaveResourceMiddlewareAbstract::copyFileToDefaults
+         * @see \Staticus\Resources\Middlewares\Image\SaveImageMiddlewareAbstract::copyFileToDefaults
+         */
+        'magic_defaults' => [
+
+            // Allow copying to defaults paths: the global switcher
+            'allow' => true,
+            'variant' => true, // copy newly created variant to 'def' variant if not exist
+            'version' => true, // copy newly created version to 0-version if not exist
+            'dimension' => true, // copy newly created image sizes to default 0-size if not exist
+        ],
         'images' => [
             // Allowed sizes: [[w, h], [w, h]]
             'sizes' => [
