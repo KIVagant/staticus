@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f09f1821645ca012e81b56177a446e01",
+    "hash": "c83aa0084b19c9475c86d9e65146bdde",
     "content-hash": "19f34a461c37be561f81aa614ef20e6e",
     "packages": [
         {
@@ -85,16 +85,16 @@
         },
         {
             "name": "kivagant/staticus-core",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-core.git",
-                "reference": "eb79c4980bea63f1f858abffcd94ed24405ca654"
+                "reference": "b2c1a8006a9756394880313adc2d4c3e8f5c77cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/eb79c4980bea63f1f858abffcd94ed24405ca654",
-                "reference": "eb79c4980bea63f1f858abffcd94ed24405ca654",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/b2c1a8006a9756394880313adc2d4c3e8f5c77cf",
+                "reference": "b2c1a8006a9756394880313adc2d4c3e8f5c77cf",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 "generator",
                 "manager"
             ],
-            "time": "2016-06-06 00:10:12"
+            "time": "2016-06-10 15:23:28"
         },
         {
             "name": "kivagant/staticus-fractal-manager",
