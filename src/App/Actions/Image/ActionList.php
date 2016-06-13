@@ -28,7 +28,7 @@ class ActionList extends ActionListAbstract
      * @param string $token
      * @param string $value
      * @param array $query
-     * @return string
+     * @return array
      */
     protected function transformTokenToRoute($token, $value, array $query)
     {
