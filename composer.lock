@@ -85,16 +85,16 @@
         },
         {
             "name": "kivagant/staticus-core",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-core.git",
-                "reference": "80fdd0f38497eb1c485efca709025631b6f49050"
+                "reference": "69dd905f1e7a6cd317a2352219ef17a04c9c2fc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/80fdd0f38497eb1c485efca709025631b6f49050",
-                "reference": "80fdd0f38497eb1c485efca709025631b6f49050",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/69dd905f1e7a6cd317a2352219ef17a04c9c2fc7",
+                "reference": "69dd905f1e7a6cd317a2352219ef17a04c9c2fc7",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 "generator",
                 "manager"
             ],
-            "time": "2016-06-13 10:03:31"
+            "time": "2016-06-13 17:31:38"
         },
         {
             "name": "kivagant/staticus-fractal-manager",
@@ -173,16 +173,16 @@
         },
         {
             "name": "kivagant/staticus-search-manager",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-search-manager.git",
-                "reference": "bbc65a958ab94f599e1cda422e1fe919f1661d41"
+                "reference": "f40139bddfa03d5aaac6c959ea2e775253227959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/bbc65a958ab94f599e1cda422e1fe919f1661d41",
-                "reference": "bbc65a958ab94f599e1cda422e1fe919f1661d41",
+                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/f40139bddfa03d5aaac6c959ea2e775253227959",
+                "reference": "f40139bddfa03d5aaac6c959ea2e775253227959",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
                 "google",
                 "search"
             ],
-            "time": "2016-06-03 23:05:32"
+            "time": "2016-06-13 17:31:38"
         },
         {
             "name": "league/flysystem",
