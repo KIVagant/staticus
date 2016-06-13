@@ -628,7 +628,7 @@ $ http --body --verify no --auth Developer:12345 GET https://www.your.project.de
 
 Setup the GOOGLE_SEARCH_API_KEY and the GOOGLE_SEARCH_API_CX in your ```.env``` config.
 
-- **GET|POST** /search/*{resource_route}*
+- **GET|POST** /search/*{resource_route}?cursor=integer*
 - **ACL Action**: search
 
 The file list found by a search adapter will be returned.
@@ -638,11 +638,12 @@ The file list found by a search adapter will be returned.
 
 - You can attach another search adapters and actions for different resource types.
 - You can configure ACL config for searching with Actions::ACTION_SEARCH command.
+- Only users with the 'adimn' role can use cursor attribute.
 
 #### Search example
 
 ```
-$ http --body --verify no --auth Developer:12345 -f GET https://www.your.project.dev/staticus/search/welcome.jpg alt='school'
+$ http --body --verify no --auth Developer:12345 -f GET https://www.your.project.dev/staticus/search/welcome.jpg\?alt\='school'\&cursor\=11
 {
     "found": {
         "count": 10,
@@ -659,7 +660,7 @@ $ http --body --verify no --auth Developer:12345 -f GET https://www.your.project
             },
             {...},
         ],
-        "start": 0,
+        "start": 10,
         "total": "449000000"
     }
 }
