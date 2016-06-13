@@ -23,4 +23,24 @@ class ActionList extends ActionListAbstract
 
         return $allowed;
     }
+
+    /**
+     * @param string $token
+     * @param string $value
+     * @param array $query
+     * @return string
+     */
+    protected function transformTokenToRoute($token, $value, array $query)
+    {
+        $query = parent::transformTokenToRoute($token, $value, $query);
+        switch ($token) {
+            case ResourceImageDO::TOKEN_DIMENSION:
+                if ((int)$value !== ResourceImageDO::DEFAULT_DIMENSION) {
+                    $query['size'] = $value;
+                }
+                break;
+        }
+
+        return $query;
+    }
 }
