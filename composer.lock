@@ -137,16 +137,16 @@
         },
         {
             "name": "kivagant/staticus-fractal-manager",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-fractal-manager.git",
-                "reference": "621592e30159176be43704068dc03a2336bd7644"
+                "reference": "892bf785c87dc46db7b9cba8c95885f24b3d344f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/621592e30159176be43704068dc03a2336bd7644",
-                "reference": "621592e30159176be43704068dc03a2336bd7644",
+                "url": "https://api.github.com/repos/KIVagant/staticus-fractal-manager/zipball/892bf785c87dc46db7b9cba8c95885f24b3d344f",
+                "reference": "892bf785c87dc46db7b9cba8c95885f24b3d344f",
                 "shasum": ""
             },
             "require": {
@@ -169,7 +169,7 @@
                 "fractal",
                 "generator"
             ],
-            "time": "2016-06-03 23:02:14"
+            "time": "2016-07-04 00:22:35"
         },
         {
             "name": "kivagant/staticus-search-manager",
