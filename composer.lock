@@ -173,16 +173,16 @@
         },
         {
             "name": "kivagant/staticus-search-manager",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-search-manager.git",
-                "reference": "f40139bddfa03d5aaac6c959ea2e775253227959"
+                "reference": "bb5983ff88ed65ec359823a9308f2dd1ba46c3af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/f40139bddfa03d5aaac6c959ea2e775253227959",
-                "reference": "f40139bddfa03d5aaac6c959ea2e775253227959",
+                "url": "https://api.github.com/repos/KIVagant/staticus-search-manager/zipball/bb5983ff88ed65ec359823a9308f2dd1ba46c3af",
+                "reference": "bb5983ff88ed65ec359823a9308f2dd1ba46c3af",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
                 "google",
                 "search"
             ],
-            "time": "2016-06-13 17:31:38"
+            "time": "2016-06-16 15:40:59"
         },
         {
             "name": "league/flysystem",
