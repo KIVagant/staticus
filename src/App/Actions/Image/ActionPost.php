@@ -19,11 +19,22 @@ class ActionPost extends ActionPostAbstract
     }
 
     /**
-     * @param ResourceDOInterface $resourceDO
+     * @param ResourceDOInterface|ResourceImageDOInterface $resourceDO
      * @return mixed
      */
     protected function generate(ResourceDOInterface $resourceDO)
     {
+        // Do not generate image when resizing or cropping is requested
+        if ($this->resourceDO->getDimension()) {
+
+            // If recreation for current size is asked, just remove previous file
+            // Without this next middlewares will try to resize exist file
+            if ($this->resourceDO->isRecreate()) {
+                $this->filesystem->delete($this->resourceDO->getFilePath());
+            }
+
+            return null;
+        }
         $query = $resourceDO->getName() . ' ' . $resourceDO->getNameAlternative();
         $content = $this->generator->generate($query);
 
