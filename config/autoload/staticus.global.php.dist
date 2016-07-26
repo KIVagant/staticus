@@ -58,6 +58,9 @@ return [
                 'maxWidth' => 1024, // maximum allowed Width for a new image (when generated or downloaded)
                 'maxHeight' => 1024, // maximum allowed Height for a new image (when generated or downloaded)
             ],
+            'resize' => [
+                'autocrop' => true, // Auto-crop image when resizing (do not change proportions)
+            ],
             'exif' => [
                 'strip' => env('IMAGE_STRIP', false),
             ],
