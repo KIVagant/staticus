@@ -3,6 +3,7 @@ namespace App\Actions\Image;
 
 use SearchManager\Manager as SearchManager;
 use Staticus\Auth\UserInterface;
+use Staticus\Config\ConfigInterface;
 use Staticus\Middlewares\ActionSearchAbstract;
 use Staticus\Resources\Image\ResourceImageDOInterface;
 
@@ -13,9 +14,10 @@ class ActionSearchJpg extends ActionSearchAbstract
         ResourceImageDOInterface $resourceDO
         , SearchManager $manager
         , UserInterface $user
+        , ConfigInterface $config
     )
     {
-        parent::__construct($resourceDO, $manager, $user);
+        parent::__construct($resourceDO, $manager, $user, $config);
         $this->user = $user;
     }
 

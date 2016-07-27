@@ -65,5 +65,9 @@ return [
                 'strip' => env('IMAGE_STRIP', false),
             ],
         ],
+        'search' => [ // Look into ACL config for global access configuration
+            // Allow search pagination for not-admin roles
+            'allow_cursor_for_users' => false,
+        ],
     ],
 ];
