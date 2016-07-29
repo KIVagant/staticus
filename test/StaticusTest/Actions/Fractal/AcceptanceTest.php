@@ -144,7 +144,7 @@ class AcceptanceTest extends \PHPUnit_Framework_TestCase
             ? '"crop":' . json_encode($crop->toArray()) . ','
             : '';
 
-        $model = '{"resource":{' . $cropStr . '"height":' . (int) $image->getHeight()
+        $model = '{"resource":{' . $cropStr . '"body":"","height":' . (int) $image->getHeight()
             . ',"name":"' . self::DEFAULT_RESOURCE_ENCODED . '",'
             . '"nameAlternative":"","namespace":"","new":true,'
             . '"recreate":false,"type":"jpg","uuid":"' . self::DEFAULT_RESOURCE_UUID . '",'

@@ -28,8 +28,18 @@ class ActionPost extends ActionPostAbstract
     {
         /** @var Manager $generator */
         $generator = $this->generator;
+
+        // If a body is exist, it will be used as the text for voicing
+        $body = $resourceDO->getBody();
+
+        // If an alternative name is exist, it will be used when body is empty
         $alternative = $resourceDO->getNameAlternative();
-        $voiceText = $alternative ?: $resourceDO->getName();
+
+        // The main resource name will be used, if no body and no alt exist
+        $voiceText = $body ?: (
+            $alternative ?: $resourceDO->getName()
+        );
+
         $this->selectLanguage($voiceText);
         $content = $generator->read($voiceText);
         $headers = $generator->getHeaders();

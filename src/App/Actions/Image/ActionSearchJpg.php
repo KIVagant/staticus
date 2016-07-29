@@ -39,6 +39,8 @@ class ActionSearchJpg extends ActionSearchAbstract
      */
     protected function getQuery()
     {
-        return $this->resourceDO->getName() . ' ' . $this->resourceDO->getNameAlternative();
+        $body = $this->resourceDO->getBody();
+
+        return $body ?: $this->resourceDO->getName() . ' ' . $this->resourceDO->getNameAlternative();
     }
 }

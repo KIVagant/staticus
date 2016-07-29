@@ -223,6 +223,13 @@ And for the image searching – *along with the main name*.
 Resources ```car.jpg```, ```car.jpg?alt=вагон``` and ```car.jpg?alt=машина``` considered as **different resources**.
 Alternative name will be used in the formation **uuid** resource together with the basic name.
 
+#### body: string, additional information for resource creation
+
+Sometimes is not enough to use URI variables for resource creation.
+For example, when you need to create some audio-file with uri: ```/my-audio.mp3``` with a big text (for voicing) inside,
+you can send the body argument through HTTP POST body. The resource will have short url (without alt=...) and,
+in the same time, correct long data inside.
+
 #### v: integer, version id
 
 Each version of a resource contains its own version.
@@ -636,9 +643,11 @@ The file list found by a search adapter will be returned.
 1. Select a URL from the list.
 2. Send a POST request to any resource route with the same type and add the parameter uri=*chosen-uri*.
 
-- You can attach another search adapters and actions for different resource types.
+- You can attach another search adapters and actions for different resource types (and change search behaviour).
 - You can configure ACL config for searching with Actions::ACTION_SEARCH command.
 - Only users with the 'adimn' role can use cursor attribute.
+- By default, 'name' and 'alt' will be used together for more correct searching.
+- By default, the POST 'body' argument will be used instead of 'name' and 'alt' if passed (can be used as searching string).
 
 #### Search example
 
