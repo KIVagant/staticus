@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c83aa0084b19c9475c86d9e65146bdde",
-    "content-hash": "19f34a461c37be561f81aa614ef20e6e",
+    "hash": "b90763dc27ab23fbe2ed6357b86a891d",
+    "content-hash": "24abb36d2506c09e027f7a9e3de3f130",
     "packages": [
         {
             "name": "aura/di",
@@ -85,16 +85,16 @@
         },
         {
             "name": "kivagant/staticus-core",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-core.git",
-                "reference": "3841d4bd68f4c7a2dbb2a2ee14786fcd6037395d"
+                "reference": "8aea8c22c9e1af1b95e4d22e9da25023bd684f8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/3841d4bd68f4c7a2dbb2a2ee14786fcd6037395d",
-                "reference": "3841d4bd68f4c7a2dbb2a2ee14786fcd6037395d",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/8aea8c22c9e1af1b95e4d22e9da25023bd684f8b",
+                "reference": "8aea8c22c9e1af1b95e4d22e9da25023bd684f8b",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 "generator",
                 "manager"
             ],
-            "time": "2016-07-29 09:38:06"
+            "time": "2016-08-03 08:43:45"
         },
         {
             "name": "kivagant/staticus-fractal-manager",
