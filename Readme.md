@@ -9,7 +9,7 @@ Core:
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KIVagant/staticus-core/badges/quality-score.png)](https://scrutinizer-ci.com/g/KIVagant/staticus-core/)
 [![Code Coverage](https://scrutinizer-ci.com/g/KIVagant/staticus-core/badges/coverage.png)](https://scrutinizer-ci.com/g/KIVagant/staticus-core/)
 
-In short: this service is an "invisible" layer, which dynamically looking for requested static files and tells to Nginx
+In short: this [PSR-7](http://www.php-fig.org/psr/psr-7/) based service is an "invisible" layer, which dynamically looking for requested static files and tells to Nginx
 where they placed. "Pipeline post-processing", content generators and ACL support give to you a powerfull instrument
 for a files management on your web-service.
 
@@ -41,7 +41,7 @@ With Staticus you will can:
 - generate any file resources by request: images, sounds, documents etc;
 - resize and crop images 'on the fly' when it requested from your frontend;
 - search for the new images in Google;
-- write your own operation layers and make this instrument more powerful!
+- write your own operation layers (middlewares) and make this instrument more powerful!
 
 ## Dependencies
 
