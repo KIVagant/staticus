@@ -18,6 +18,7 @@ return [
             \League\Flysystem\Adapter\Local::class => [
                 'options' => [
                     'root' => '/', // Must be a root dir until all file operations will be refactored with Filesystem
+                    'writeFlags' => 0
                 ]
             ],
         ],
