@@ -4,7 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b90763dc27ab23fbe2ed6357b86a891d",
     "content-hash": "24abb36d2506c09e027f7a9e3de3f130",
     "packages": [
         {
@@ -54,7 +53,7 @@
                 "di",
                 "di container"
             ],
-            "time": "2016-03-23 15:13:49"
+            "time": "2016-03-23T15:13:49+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -81,20 +80,20 @@
                 "MIT"
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
-            "time": "2014-12-30 15:22:37"
+            "time": "2014-12-30T15:22:37+00:00"
         },
         {
             "name": "kivagant/staticus-core",
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KIVagant/staticus-core.git",
-                "reference": "4e6707b485fa52a20fd5f8aae5f747f1fdccc8e3"
+                "reference": "fd5f445e03d4df62c5a8cd184ce07d24a9ed418d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/4e6707b485fa52a20fd5f8aae5f747f1fdccc8e3",
-                "reference": "4e6707b485fa52a20fd5f8aae5f747f1fdccc8e3",
+                "url": "https://api.github.com/repos/KIVagant/staticus-core/zipball/fd5f445e03d4df62c5a8cd184ce07d24a9ed418d",
+                "reference": "fd5f445e03d4df62c5a8cd184ce07d24a9ed418d",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +132,7 @@
                 "generator",
                 "manager"
             ],
-            "time": "2016-10-21 16:56:42"
+            "time": "2017-03-29T09:14:04+00:00"
         },
         {
             "name": "kivagant/staticus-fractal-manager",
@@ -169,7 +168,7 @@
                 "fractal",
                 "generator"
             ],
-            "time": "2016-07-04 00:22:35"
+            "time": "2016-07-04T00:22:35+00:00"
         },
         {
             "name": "kivagant/staticus-search-manager",
@@ -205,7 +204,7 @@
                 "google",
                 "search"
             ],
-            "time": "2016-06-16 15:40:59"
+            "time": "2016-06-16T15:40:59+00:00"
         },
         {
             "name": "league/flysystem",
@@ -288,7 +287,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2016-06-03 19:11:39"
+            "time": "2016-06-03T19:11:39+00:00"
         },
         {
             "name": "mtymek/expressive-config-manager",
@@ -334,7 +333,8 @@
                 }
             ],
             "description": "Lightweight library for merging and caching application config",
-            "time": "2016-03-17 16:35:07"
+            "abandoned": "zendframework/zend-config-aggregator",
+            "time": "2016-03-17T16:35:07+00:00"
         },
         {
             "name": "newage/audio-manager",
@@ -387,7 +387,7 @@
                 "speech",
                 "tts"
             ],
-            "time": "2016-05-28 11:19:45"
+            "time": "2016-05-28T11:19:45+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -430,7 +430,7 @@
                 "router",
                 "routing"
             ],
-            "time": "2016-03-25 23:46:52"
+            "time": "2016-03-25T23:46:52+00:00"
         },
         {
             "name": "psr/http-message",
@@ -479,7 +479,7 @@
                 "request",
                 "response"
             ],
-            "time": "2015-05-04 20:22:00"
+            "time": "2015-05-04T20:22:00+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -598,7 +598,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-05-25 05:33:34"
+            "time": "2016-05-25T05:33:34+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -649,7 +649,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2015-12-29 15:10:30"
+            "time": "2015-12-29T15:10:30+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
@@ -699,7 +699,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2016-03-17 18:02:05"
+            "time": "2016-03-17T18:02:05+00:00"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -743,7 +743,7 @@
                 "escaper",
                 "zf2"
             ],
-            "time": "2015-06-03 14:05:37"
+            "time": "2015-06-03T14:05:37+00:00"
         },
         {
             "name": "zendframework/zend-eventmanager",
@@ -797,7 +797,7 @@
                 "events",
                 "zf2"
             ],
-            "time": "2016-02-18 20:53:00"
+            "time": "2016-02-18T20:53:00+00:00"
         },
         {
             "name": "zendframework/zend-expressive",
@@ -867,7 +867,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2016-01-28 15:49:52"
+            "time": "2016-01-28T15:49:52+00:00"
         },
         {
             "name": "zendframework/zend-expressive-fastroute",
@@ -918,7 +918,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2016-05-03 18:00:32"
+            "time": "2016-05-03T18:00:32+00:00"
         },
         {
             "name": "zendframework/zend-expressive-helpers",
@@ -974,7 +974,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2016-01-18 19:53:28"
+            "time": "2016-01-18T19:53:28+00:00"
         },
         {
             "name": "zendframework/zend-expressive-router",
@@ -1027,7 +1027,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2016-01-18 20:10:33"
+            "time": "2016-01-18T20:10:33+00:00"
         },
         {
             "name": "zendframework/zend-expressive-template",
@@ -1076,7 +1076,7 @@
                 "expressive",
                 "template"
             ],
-            "time": "2016-01-28 15:44:23"
+            "time": "2016-01-28T15:44:23+00:00"
         },
         {
             "name": "zendframework/zend-hydrator",
@@ -1134,7 +1134,7 @@
                 "hydrator",
                 "zf2"
             ],
-            "time": "2016-02-18 22:38:26"
+            "time": "2016-02-18T22:38:26+00:00"
         },
         {
             "name": "zendframework/zend-permissions-acl",
@@ -1183,7 +1183,7 @@
                 "acl",
                 "zf2"
             ],
-            "time": "2016-02-03 21:46:45"
+            "time": "2016-02-03T21:46:45+00:00"
         },
         {
             "name": "zendframework/zend-session",
@@ -1249,7 +1249,7 @@
                 "session",
                 "zf2"
             ],
-            "time": "2016-05-11 17:01:53"
+            "time": "2016-05-11T17:01:53+00:00"
         },
         {
             "name": "zendframework/zend-stdlib",
@@ -1308,7 +1308,7 @@
                 "stdlib",
                 "zf2"
             ],
-            "time": "2016-04-12 21:17:31"
+            "time": "2016-04-12T21:17:31+00:00"
         },
         {
             "name": "zendframework/zend-stratigility",
@@ -1360,7 +1360,7 @@
                 "middleware",
                 "psr-7"
             ],
-            "time": "2016-03-24 22:10:30"
+            "time": "2016-03-24T22:10:30+00:00"
         }
     ],
     "packages-dev": [
@@ -1416,7 +1416,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14 21:17:01"
+            "time": "2015-06-14T21:17:01+00:00"
         },
         {
             "name": "filp/whoops",
@@ -1476,7 +1476,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2016-04-07 06:16:25"
+            "time": "2016-04-07T06:16:25+00:00"
         },
         {
             "name": "league/flysystem-memory",
@@ -1525,7 +1525,7 @@
             "keywords": [
                 "league"
             ],
-            "time": "2015-06-26 18:25:54"
+            "time": "2015-06-26T18:25:54+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1574,7 +1574,7 @@
                     "email": "mike.vanriel@naenius.com"
                 }
             ],
-            "time": "2015-02-03 12:10:50"
+            "time": "2015-02-03T12:10:50+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -1636,7 +1636,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-02-15 07:46:21"
+            "time": "2016-02-15T07:46:21+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1698,7 +1698,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-10-06 15:47:00"
+            "time": "2015-10-06T15:47:00+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1745,7 +1745,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2015-06-21 13:08:43"
+            "time": "2015-06-21T13:08:43+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -1786,7 +1786,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21 13:50:34"
+            "time": "2015-06-21T13:50:34+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -1830,7 +1830,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12 18:03:57"
+            "time": "2016-05-12T18:03:57+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -1879,7 +1879,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2015-09-15 10:49:45"
+            "time": "2015-09-15T10:49:45+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -1951,7 +1951,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-05-17 03:09:28"
+            "time": "2016-05-17T03:09:28+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2007,7 +2007,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-10-02 06:51:40"
+            "time": "2015-10-02T06:51:40+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -2071,7 +2071,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2015-07-26 15:48:44"
+            "time": "2015-07-26T15:48:44+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -2123,7 +2123,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-08 07:14:41"
+            "time": "2015-12-08T07:14:41+00:00"
         },
         {
             "name": "sebastian/environment",
@@ -2173,7 +2173,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-05-17 03:18:57"
+            "time": "2016-05-17T03:18:57+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -2239,7 +2239,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2015-06-21 07:55:53"
+            "time": "2015-06-21T07:55:53+00:00"
         },
         {
             "name": "sebastian/global-state",
@@ -2290,7 +2290,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2015-10-12 03:26:01"
+            "time": "2015-10-12T03:26:01+00:00"
         },
         {
             "name": "sebastian/recursion-context",
@@ -2343,7 +2343,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2015-11-11 19:50:13"
+            "time": "2015-11-11T19:50:13+00:00"
         },
         {
             "name": "sebastian/version",
@@ -2378,7 +2378,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2015-06-21 13:59:46"
+            "time": "2015-06-21T13:59:46+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -2456,7 +2456,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-05-30 22:24:32"
+            "time": "2016-05-30T22:24:32+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -2505,7 +2505,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-05-26 21:46:24"
+            "time": "2016-05-26T21:46:24+00:00"
         }
     ],
     "aliases": [],
